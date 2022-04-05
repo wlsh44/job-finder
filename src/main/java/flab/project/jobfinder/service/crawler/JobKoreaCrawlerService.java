@@ -1,6 +1,7 @@
 package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
 import org.jsoup.nodes.Document;
 
@@ -15,8 +16,21 @@ public class JobKoreaCrawlerService implements CrawlerService {
         StringBuilder queryParams = new StringBuilder("stext=");
         String location = getLocation(dto);
         String career = getCareer(dto);
-        queryParams.append(dto.getSearchText()).append(location);
+        String job = getJobType(dto);
+
+        queryParams.append(dto.getSearchText()).append(location).append(career).append(job);
+
         return queryParams.toString();
+    }
+
+    private String getJobType(DetailedSearchDto dto) {
+        if (dto.getJobType() == null) {
+            return "";
+        }
+        String jobType = dto.getJobType().stream()
+                .map(JobType::jobkoreaCode)
+                .collect(Collectors.joining(JOBKOREA_DELIMITER));
+        return "&jobtype=" + jobType;
     }
 
     private String getLocation(DetailedSearchDto dto) {
