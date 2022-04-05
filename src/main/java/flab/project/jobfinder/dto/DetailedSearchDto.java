@@ -1,6 +1,6 @@
 package flab.project.jobfinder.dto;
 
-import flab.project.jobfinder.util.CarrerType;
+import flab.project.jobfinder.util.CareerType;
 import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
 import flab.project.jobfinder.util.PayType;
@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Optional;
 
 @Builder
 @AllArgsConstructor
@@ -37,11 +36,11 @@ public class DetailedSearchDto {
 
     @Getter
     public static class Career {
-        private final CarrerType careerType;
+        private final CareerType careerType;
         private final String minCareer;
         private final String maxCareer;
 
-        public Career(CarrerType careerType, String minCareer, String maxCareer) {
+        public Career(CareerType careerType, String minCareer, String maxCareer) {
             this.careerType = careerType;
             this.minCareer = minCareer;
             this.maxCareer = maxCareer;
