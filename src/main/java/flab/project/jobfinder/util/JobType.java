@@ -12,4 +12,8 @@ public enum JobType {
     JobType(String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;
     }
+
+    public String jobkoreaCode() {
+        return jobkoreaCode;
+    }
 }
