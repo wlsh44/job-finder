@@ -11,12 +11,12 @@ import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 
 public class JobKoreaCrawlerService implements CrawlerService {
 
-    private String detailedSearchOption(DetailedSearchDto dto) {
-        StringBuilder url = new StringBuilder(JOBKOREA_URL);
+    private String detailedSearchQueryParams(DetailedSearchDto dto) {
+        StringBuilder queryParams = new StringBuilder("?stext=");
         String location = getLocation(dto);
 
-        url.append("stext=").append(dto.getSearchText()).append(location);
-        return url.toString();
+        queryParams.append(dto.getSearchText()).append(location);
+        return queryParams.toString();
     }
 
     private String getLocation(DetailedSearchDto dto) {
@@ -32,7 +32,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
 
     @Override
     public Document crawling(DetailedSearchDto dto) {
-        String url = JOBKOREA_URL + detailedSearchOption(dto);
+        String url = JOBKOREA_URL + detailedSearchQueryParams(dto);
 
         return null;
     }
