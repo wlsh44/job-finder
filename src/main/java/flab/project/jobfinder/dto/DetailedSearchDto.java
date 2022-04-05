@@ -37,13 +37,13 @@ public class DetailedSearchDto {
     @Getter
     public static class Career {
         private final CareerType careerType;
-        private final String minCareer;
-        private final String maxCareer;
+        private final String careerMin;
+        private final String careerMax;
 
-        public Career(CareerType careerType, String minCareer, String maxCareer) {
+        public Career(CareerType careerType, String careerMin, String careerMax) {
             this.careerType = careerType;
-            this.minCareer = minCareer;
-            this.maxCareer = maxCareer;
+            this.careerMin = careerMin;
+            this.careerMax = careerMax;
         }
     }
 }
