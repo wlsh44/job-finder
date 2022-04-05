@@ -2,6 +2,7 @@ package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.util.CareerType;
+import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static flab.project.jobfinder.util.CareerType.*;
+import static flab.project.jobfinder.util.JobType.*;
 import static flab.project.jobfinder.util.Location.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +40,7 @@ class JobKoreaCrawlerServiceTest {
 
         @ParameterizedTest(name = "{index} => {0} = {1}")
         @MethodSource("provideLocation")
-        @DisplayName("정상 url 출력")
+        @DisplayName("정상 url 리턴")
         void getLocation테스트_정상출력해야됨(List<Location> locations, String expected) {
             DetailedSearchDto dto = DetailedSearchDto.builder().location(locations).build();
 
@@ -48,7 +50,7 @@ class JobKoreaCrawlerServiceTest {
         }
 
         @Test
-        @DisplayName("빈 문자열 출력")
+        @DisplayName("빈 문자열 리턴")
         void getLocation테스트_빈_문자열_리턴해야됨() {
             DetailedSearchDto dto = DetailedSearchDto.builder().build();
 
@@ -76,7 +78,7 @@ class JobKoreaCrawlerServiceTest {
 
         @ParameterizedTest(name = "{index} => {0}, {1}, {2} = {3}")
         @MethodSource("provideCareer")
-        @DisplayName("정상 url 출력")
+        @DisplayName("정상 url 리턴")
         void getCareer테스트_정상출력해야됨(CareerType careerType, String careerMin, String careerMax, String expected) {
             DetailedSearchDto dto = DetailedSearchDto.builder().career(new DetailedSearchDto.Career(careerType, careerMin, careerMax)).build();
 
@@ -86,7 +88,7 @@ class JobKoreaCrawlerServiceTest {
         }
 
         @Test
-        @DisplayName("빈 문자열 출력")
+        @DisplayName("빈 문자열 리턴")
         void getLocation테스트_빈_문자열_리턴해야됨() {
             DetailedSearchDto dto = DetailedSearchDto.builder().build();
 
@@ -95,4 +97,40 @@ class JobKoreaCrawlerServiceTest {
             assertThat(url).isEqualTo("");
         }
     }
+
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    @DisplayName("getJobType 메소드 테스트")
+    class getJobTypeTest {
+
+        private Stream<Arguments> provideJob() {
+            return Stream.of(
+                    Arguments.of(List.of(FULL_TIME, PART_TIME), "&jobtype=1%2C2"),
+                    Arguments.of(List.of(FULL_TIME, FREELANCER), "&jobtype=1%2C6"),
+                    Arguments.of(List.of(FULL_TIME, INTERN, MILITARY), "&jobtype=1%2C3%2C9")
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => {0} = {1}")
+        @MethodSource("provideJob")
+        @DisplayName("정상 url 리턴")
+        void getLocation테스트_정상출력해야됨(List<JobType> jobType, String expected) {
+            DetailedSearchDto dto = DetailedSearchDto.builder().jobType(jobType).build();
+
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+
+            assertThat(url).isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("빈 문자열 리턴")
+        void getLocation테스트_빈_문자열_리턴해야됨() {
+            DetailedSearchDto dto = DetailedSearchDto.builder().build();
+
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+
+            assertThat(url).isEqualTo("");
+        }
+    }
+
 }
