@@ -4,6 +4,7 @@ import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.util.CareerType;
 import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
+import flab.project.jobfinder.util.PayType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 import static flab.project.jobfinder.util.CareerType.*;
 import static flab.project.jobfinder.util.JobType.*;
 import static flab.project.jobfinder.util.Location.*;
+import static flab.project.jobfinder.util.PayType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobKoreaCrawlerServiceTest {
@@ -60,6 +62,40 @@ class JobKoreaCrawlerServiceTest {
         }
     }
 
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    @DisplayName("getJobType 메소드 테스트")
+    class getJobTypeTest {
+
+        private Stream<Arguments> provideJob() {
+            return Stream.of(
+                    Arguments.of(List.of(FULL_TIME, PART_TIME), "&jobtype=1%2C2"),
+                    Arguments.of(List.of(FULL_TIME, FREELANCER), "&jobtype=1%2C6"),
+                    Arguments.of(List.of(FULL_TIME, INTERN, MILITARY), "&jobtype=1%2C3%2C9")
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => {0} = {1}")
+        @MethodSource("provideJob")
+        @DisplayName("정상 url 리턴")
+        void getLocation테스트_정상출력해야됨(List<JobType> jobType, String expected) {
+            DetailedSearchDto dto = DetailedSearchDto.builder().jobType(jobType).build();
+
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+
+            assertThat(url).isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("빈 문자열 리턴")
+        void getLocation테스트_빈_문자열_리턴해야됨() {
+            DetailedSearchDto dto = DetailedSearchDto.builder().build();
+
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+
+            assertThat(url).isEqualTo("");
+        }
+    }
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
@@ -100,37 +136,39 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("getJobType 메소드 테스트")
-    class getJobTypeTest {
+    @DisplayName("getPay 메소드 테스트")
+    class getPayTest {
 
-        private Stream<Arguments> provideJob() {
+        private Stream<Arguments> providePay() {
             return Stream.of(
-                    Arguments.of(List.of(FULL_TIME, PART_TIME), "&jobtype=1%2C2"),
-                    Arguments.of(List.of(FULL_TIME, FREELANCER), "&jobtype=1%2C6"),
-                    Arguments.of(List.of(FULL_TIME, INTERN, MILITARY), "&jobtype=1%2C3%2C9")
+                    Arguments.of(ANNUAL, "1000", "2000", "&payType=1&payMin=1000&payMax=2000"),
+                    Arguments.of(ANNUAL, "5000", "6000", "&payType=1&payMin=5000&payMax=6000"),
+                    Arguments.of(MONTH, null, "3000", "&payType=2&payMax=3000"),
+                    Arguments.of(WEEK, "30", null, "&payType=3&payMin=30"),
+                    Arguments.of(WEEK, null, "50", "&payType=3&payMax=50"),
+                    Arguments.of(MONTH, null, null, "&payType=2")
             );
         }
 
-        @ParameterizedTest(name = "{index} => {0} = {1}")
-        @MethodSource("provideJob")
+        @ParameterizedTest(name = "{index} => {0}, {1}, {2} = {3}")
+        @MethodSource("providePay")
         @DisplayName("정상 url 리턴")
-        void getLocation테스트_정상출력해야됨(List<JobType> jobType, String expected) {
-            DetailedSearchDto dto = DetailedSearchDto.builder().jobType(jobType).build();
+        void getPay테스트_정상출력해야됨(PayType payType, String payMin, String payMax, String expected) {
+            DetailedSearchDto dto = DetailedSearchDto.builder().pay(new DetailedSearchDto.Pay(payType, payMin, payMax)).build();
 
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getPay", dto);
 
             assertThat(url).isEqualTo(expected);
         }
 
         @Test
         @DisplayName("빈 문자열 리턴")
-        void getLocation테스트_빈_문자열_리턴해야됨() {
+        void getPay테스트_빈_문자열_리턴해야됨() {
             DetailedSearchDto dto = DetailedSearchDto.builder().build();
 
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getPay", dto);
 
             assertThat(url).isEqualTo("");
         }
     }
-
 }
