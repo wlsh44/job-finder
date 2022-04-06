@@ -5,6 +5,8 @@ import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
 import org.jsoup.nodes.Document;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_DELIMITER;
@@ -13,14 +15,25 @@ import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 public class JobKoreaCrawlerService implements CrawlerService {
 
     private String detailedSearchQueryParams(DetailedSearchDto dto) {
-        StringBuilder queryParams = new StringBuilder("stext=");
+        StringBuilder queryParams = new StringBuilder();
+        String searchText = getSearchText(dto);
         String location = getLocation(dto);
         String career = getCareer(dto);
         String job = getJobType(dto);
         String pay = getPay(dto);
-        queryParams.append(dto.getSearchText()).append(location).append(career).append(job);
+
+        queryParams.append(searchText).append(location).append(career).append(job).append(pay);
 
         return queryParams.toString();
+    }
+
+    private String getSearchText(DetailedSearchDto dto) {
+        if (dto.getSearchText() == null) {
+            return "";
+        }
+        String encoded = URLEncoder.encode(dto.getSearchText(), StandardCharsets.UTF_8);
+
+        return "&stext=" + encoded;
     }
 
     private String getJobType(DetailedSearchDto dto) {
