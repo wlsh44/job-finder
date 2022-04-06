@@ -24,13 +24,13 @@ public class DetailedSearchDto {
     @Getter
     public static class Pay {
         private final PayType payType;
-        private final String minPay;
-        private final String maxPay;
+        private final String payMin;
+        private final String payMax;
 
-        public Pay(PayType payType, String minPay, String maxPay) {
+        public Pay(PayType payType, String payMin, String payMax) {
             this.payType = payType;
-            this.minPay = minPay;
-            this.maxPay = maxPay;
+            this.payMin = payMin;
+            this.payMax = payMax;
         }
     }
 
