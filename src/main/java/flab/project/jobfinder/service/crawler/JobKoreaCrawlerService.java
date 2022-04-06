@@ -33,7 +33,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
         }
         String encoded = URLEncoder.encode(dto.getSearchText(), StandardCharsets.UTF_8);
 
-        return "&stext=" + encoded;
+        return "stext=" + encoded;
     }
 
     private String getJobType(DetailedSearchDto dto) {
