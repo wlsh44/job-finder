@@ -7,7 +7,6 @@ import flab.project.jobfinder.util.Location;
 import flab.project.jobfinder.util.PayType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static flab.project.jobfinder.util.CareerType.*;
-import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 import static flab.project.jobfinder.util.JobType.*;
 import static flab.project.jobfinder.util.Location.*;
 import static flab.project.jobfinder.util.PayType.*;
@@ -35,9 +33,9 @@ class JobKoreaCrawlerServiceTest {
 
         private Stream<Arguments> provideSearchText() {
             return Stream.of(
-                    Arguments.of("spring", "&stext=spring"),
-                    Arguments.of("spring boot", "&stext=spring+boot"),
-                    Arguments.of("docker", "&stext=docker")
+                    Arguments.of("spring", "stext=spring"),
+                    Arguments.of("spring boot", "stext=spring+boot"),
+                    Arguments.of("docker", "stext=docker")
             );
         }
 
@@ -184,4 +182,36 @@ class JobKoreaCrawlerServiceTest {
         }
     }
 
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    @DisplayName("detailedSearchQueryParams 메서드 테스트")
+    class detailedSearchQueryParamsTest {
+
+        private Stream<Arguments> provideDto() {
+            return Stream.of(
+                    Arguments.of(DetailedSearchDto.builder().build(), ""),
+                    Arguments.of(DetailedSearchDto.builder().searchText("spring").build(), "stext=spring"),
+                    Arguments.of(DetailedSearchDto.builder().searchText("spring boot")
+                            .career(new DetailedSearchDto.Career(JUNIOR, null, "2")).build()
+                            , "stext=spring+boot&careerType=1&careerMax=2"),
+                    Arguments.of(DetailedSearchDto.builder().searchText("웹 서비스")
+                            .location(List.of(GANGNAM, BUNDANG))
+                            .pay(new DetailedSearchDto.Pay(ANNUAL, "4000", null)).build()
+                            , "stext=%EC%9B%B9+%EC%84%9C%EB%B9%84%EC%8A%A4&local=I010%2CB150&payType=1&payMin=4000"),
+                    Arguments.of(DetailedSearchDto.builder().searchText("react 웹 프런트")
+                            .location(List.of(DONGDAEMUN, EUNPYEONG, YONGSAN))
+                            .jobType(List.of(MILITARY)).build()
+                            , "stext=react+%EC%9B%B9+%ED%94%84%EB%9F%B0%ED%8A%B8&local=I110%2CI220%2CI210&jobtype=9")
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => {1}")
+        @MethodSource("provideDto")
+        @DisplayName("정상 url 리턴")
+        void 정상_url_리턴(DetailedSearchDto dto, String expected) {
+            String result = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "detailedSearchQueryParams", dto);
+
+            assertThat(result).isEqualTo(expected);
+        }
+    }
 }
