@@ -17,7 +17,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
         String location = getLocation(dto);
         String career = getCareer(dto);
         String job = getJobType(dto);
-
+        String pay = getPay(dto);
         queryParams.append(dto.getSearchText()).append(location).append(career).append(job);
 
         return queryParams.toString();
@@ -60,7 +60,23 @@ public class JobKoreaCrawlerService implements CrawlerService {
             params.append("&careerMax=").append(career.getCareerMax());
         }
         return params.toString();
+    }
 
+    private String getPay(DetailedSearchDto dto) {
+        if (dto.getPay() == null) {
+            return "";
+        }
+        StringBuilder params = new StringBuilder();
+        DetailedSearchDto.Pay pay = dto.getPay();
+
+        params.append("&payType=").append(pay.getPayType().jobkoreaCode());
+        if (pay.getPayMin() != null) {
+            params.append("&payMin=").append(pay.getPayMin());
+        }
+        if (pay.getPayMax() != null) {
+            params.append("&payMax=").append(pay.getPayMax());
+        }
+        return params.toString();
     }
 
     @Override
