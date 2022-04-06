@@ -10,4 +10,8 @@ public enum PayType {
     PayType (String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;
     }
+
+    public String jobkoreaCode() {
+        return jobkoreaCode;
+    }
 }
