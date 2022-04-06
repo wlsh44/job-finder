@@ -1,7 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.util.jobkorea.*;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
