@@ -5,7 +5,7 @@ public enum PayType {
     MONTH("2"),
     WEEK("3");
 
-    private String jobkoreaCode;
+    private final String jobkoreaCode;
 
     PayType (String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;

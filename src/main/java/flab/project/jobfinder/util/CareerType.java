@@ -5,7 +5,7 @@ public enum CareerType {
     SENIOR("2"),
     ANY("4");
 
-    private String jobkoreaCode;
+    private final String jobkoreaCode;
 
     CareerType(String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;

@@ -7,7 +7,7 @@ public enum JobType {
     FREELANCER("6"),
     MILITARY("9");
 
-    private String jobkoreaCode;
+    private final String jobkoreaCode;
 
     JobType(String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;

@@ -45,8 +45,8 @@ public enum Location {
     GANGWON("강원", "A000"),
     JEJU("제주", "N000");
 
-    private String koName;
-    private String jobkoreaCode;
+    private final String koName;
+    private final String jobkoreaCode;
 
     Location(String koName, String jobkoreaCode) {
         this.koName = koName;
