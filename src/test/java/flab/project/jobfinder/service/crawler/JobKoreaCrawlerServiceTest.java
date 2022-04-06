@@ -5,18 +5,22 @@ import flab.project.jobfinder.util.CareerType;
 import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
 import flab.project.jobfinder.util.PayType;
+import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static flab.project.jobfinder.util.CareerType.*;
+import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 import static flab.project.jobfinder.util.JobType.*;
 import static flab.project.jobfinder.util.Location.*;
 import static flab.project.jobfinder.util.PayType.*;
@@ -25,6 +29,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JobKoreaCrawlerServiceTest {
 
     JobKoreaCrawlerService jobKoreaCrawlerService = new JobKoreaCrawlerService();
+
+    @Test
+    void 크롤링_정상_작동_테스트() {
+        DetailedSearchDto dto = DetailedSearchDto.builder().searchText("spring").build();
+
+        Document result = jobKoreaCrawlerService.crawling(dto);
+
+        assertThat(result).isNotNull();
+        assertThat(result.connection().response().statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
