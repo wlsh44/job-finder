@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static flab.project.jobfinder.util.CareerType.*;
+import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 import static flab.project.jobfinder.util.JobType.*;
 import static flab.project.jobfinder.util.Location.*;
 import static flab.project.jobfinder.util.PayType.*;
@@ -29,7 +30,7 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("getLocation 메소드 테스트")
+    @DisplayName("getLocation 메서드 테스트")
     class getLocationTest {
 
         private Stream<Arguments> provideLocation() {
@@ -64,12 +65,12 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("getJobType 메소드 테스트")
+    @DisplayName("getJobType 메서드 테스트")
     class getJobTypeTest {
 
         private Stream<Arguments> provideJob() {
             return Stream.of(
-                    Arguments.of(List.of(FULL_TIME, PART_TIME), "&jobtype=1%2C2"),
+                    Arguments.of(List.of(FULL_TIME, TEMPORARY), "&jobtype=1%2C2"),
                     Arguments.of(List.of(FULL_TIME, FREELANCER), "&jobtype=1%2C6"),
                     Arguments.of(List.of(FULL_TIME, INTERN, MILITARY), "&jobtype=1%2C3%2C9")
             );
@@ -99,7 +100,7 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("getCareer 메소드 테스트")
+    @DisplayName("getCareer 메서드 테스트")
     class getCareerTest {
 
         private Stream<Arguments> provideCareer() {
@@ -136,7 +137,7 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("getPay 메소드 테스트")
+    @DisplayName("getPay 메서드 테스트")
     class getPayTest {
 
         private Stream<Arguments> providePay() {
@@ -169,6 +170,18 @@ class JobKoreaCrawlerServiceTest {
             String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getPay", dto);
 
             assertThat(url).isEqualTo("");
+        }
+    }
+
+    @Nested
+    @DisplayName("detailedSearchQueryParams 메서드 테스트")
+    class detailedSearchQueryParamsTest {
+
+        private Stream<Arguments> provideDto() {
+            return Stream.of(
+                    Arguments.of(DetailedSearchDto.builder().searchText("spring").build(), JOBKOREA_URL + "stext=spring"),
+                    Arguments.of(DetailedSearchDto.builder().searchText("spring").career().build(), JOBKOREA_URL + "stext=spring")
+            )
         }
     }
 }
