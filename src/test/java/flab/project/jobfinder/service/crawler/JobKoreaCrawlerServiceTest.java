@@ -30,6 +30,31 @@ class JobKoreaCrawlerServiceTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
+    @DisplayName("getSearchText 메서드 테스트")
+    class getSearchTextTest {
+
+        private Stream<Arguments> provideSearchText() {
+            return Stream.of(
+                    Arguments.of("spring", "&stext=spring"),
+                    Arguments.of("spring boot", "&stext=spring+boot"),
+                    Arguments.of("docker", "&stext=docker")
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => {0} = {1}")
+        @MethodSource("provideSearchText")
+        @DisplayName("정상 url 리턴")
+        void getSearchText테스트_정상출력해야됨(String searchText, String expected) {
+            DetailedSearchDto dto = DetailedSearchDto.builder().searchText(searchText).build();
+
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getSearchText", dto);
+
+            assertThat(url).isEqualTo(expected);
+        }
+    }
+
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
     @DisplayName("getLocation 메서드 테스트")
     class getLocationTest {
 
@@ -50,16 +75,6 @@ class JobKoreaCrawlerServiceTest {
             String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getLocation", dto);
 
             assertThat(url).isEqualTo(expected);
-        }
-
-        @Test
-        @DisplayName("빈 문자열 리턴")
-        void getLocation테스트_빈_문자열_리턴해야됨() {
-            DetailedSearchDto dto = DetailedSearchDto.builder().build();
-
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getLocation", dto);
-
-            assertThat(url).isEqualTo("");
         }
     }
 
@@ -85,16 +100,6 @@ class JobKoreaCrawlerServiceTest {
             String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
 
             assertThat(url).isEqualTo(expected);
-        }
-
-        @Test
-        @DisplayName("빈 문자열 리턴")
-        void getLocation테스트_빈_문자열_리턴해야됨() {
-            DetailedSearchDto dto = DetailedSearchDto.builder().build();
-
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getJobType", dto);
-
-            assertThat(url).isEqualTo("");
         }
     }
 
@@ -122,16 +127,6 @@ class JobKoreaCrawlerServiceTest {
             String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getCareer", dto);
 
             assertThat(url).isEqualTo(expected);
-        }
-
-        @Test
-        @DisplayName("빈 문자열 리턴")
-        void getLocation테스트_빈_문자열_리턴해야됨() {
-            DetailedSearchDto dto = DetailedSearchDto.builder().build();
-
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getCareer", dto);
-
-            assertThat(url).isEqualTo("");
         }
     }
 
@@ -161,27 +156,32 @@ class JobKoreaCrawlerServiceTest {
 
             assertThat(url).isEqualTo(expected);
         }
+    }
 
-        @Test
-        @DisplayName("빈 문자열 리턴")
-        void getPay테스트_빈_문자열_리턴해야됨() {
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    @DisplayName("빈 문자열 리턴")
+    class blankReturnTest {
+
+        private Stream<Arguments> provideMethod() {
+            return Stream.of(
+                    Arguments.of("getSearchText"),
+                    Arguments.of("getLocation"),
+                    Arguments.of("getPay"),
+                    Arguments.of("getCareer"),
+                    Arguments.of("getJobType")
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => {0}")
+        @MethodSource("provideMethod")
+        void 빈_문자열_리턴해야됨(String methodName) {
             DetailedSearchDto dto = DetailedSearchDto.builder().build();
 
-            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, "getPay", dto);
+            String url = ReflectionTestUtils.invokeMethod(jobKoreaCrawlerService, methodName, dto);
 
             assertThat(url).isEqualTo("");
         }
     }
 
-    @Nested
-    @DisplayName("detailedSearchQueryParams 메서드 테스트")
-    class detailedSearchQueryParamsTest {
-
-        private Stream<Arguments> provideDto() {
-            return Stream.of(
-                    Arguments.of(DetailedSearchDto.builder().searchText("spring").build(), JOBKOREA_URL + "stext=spring"),
-                    Arguments.of(DetailedSearchDto.builder().searchText("spring").career().build(), JOBKOREA_URL + "stext=spring")
-            )
-        }
-    }
 }
