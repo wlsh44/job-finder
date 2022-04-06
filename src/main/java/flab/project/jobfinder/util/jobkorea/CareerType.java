@@ -1,13 +1,13 @@
-package flab.project.jobfinder.util;
+package flab.project.jobfinder.util.jobkorea;
 
-public enum PayType {
-    ANNUAL("1"),
-    MONTH("2"),
-    WEEK("3");
+public enum CareerType {
+    JUNIOR("1"),
+    SENIOR("2"),
+    ANY("4");
 
     private final String jobkoreaCode;
 
-    PayType (String jobkoreaCode) {
+    CareerType(String jobkoreaCode) {
         this.jobkoreaCode = jobkoreaCode;
     }
 

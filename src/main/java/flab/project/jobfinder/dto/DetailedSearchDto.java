@@ -1,9 +1,9 @@
 package flab.project.jobfinder.dto;
 
-import flab.project.jobfinder.util.CareerType;
-import flab.project.jobfinder.util.JobType;
-import flab.project.jobfinder.util.Location;
-import flab.project.jobfinder.util.PayType;
+import flab.project.jobfinder.util.jobkorea.CareerType;
+import flab.project.jobfinder.util.jobkorea.JobType;
+import flab.project.jobfinder.util.jobkorea.Location;
+import flab.project.jobfinder.util.jobkorea.PayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

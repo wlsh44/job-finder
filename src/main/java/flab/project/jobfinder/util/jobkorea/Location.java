@@ -1,4 +1,4 @@
-package flab.project.jobfinder.util;
+package flab.project.jobfinder.util.jobkorea;
 
 public enum Location {
     SEOUL("서울시", "I100"),

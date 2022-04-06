@@ -1,4 +1,4 @@
-package flab.project.jobfinder.util;
+package flab.project.jobfinder.util.jobkorea;
 
 public class JobKoreaConst {
     public static final String JOBKOREA_URL = "https://www.jobkorea.co.kr/Search/?";
