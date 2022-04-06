@@ -3,8 +3,12 @@ package flab.project.jobfinder.service.crawler;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.util.JobType;
 import flab.project.jobfinder.util.Location;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
@@ -12,7 +16,23 @@ import java.util.stream.Collectors;
 import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_DELIMITER;
 import static flab.project.jobfinder.util.JobKoreaConst.JOBKOREA_URL;
 
+@Slf4j
+@Service
 public class JobKoreaCrawlerService implements CrawlerService {
+
+    @Override
+    public Document crawling(DetailedSearchDto dto) {
+        String url = JOBKOREA_URL + detailedSearchQueryParams(dto);
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+
+            return doc;
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
 
     private String detailedSearchQueryParams(DetailedSearchDto dto) {
         StringBuilder queryParams = new StringBuilder();
@@ -90,12 +110,5 @@ public class JobKoreaCrawlerService implements CrawlerService {
             params.append("&payMax=").append(pay.getPayMax());
         }
         return params.toString();
-    }
-
-    @Override
-    public Document crawling(DetailedSearchDto dto) {
-        String url = JOBKOREA_URL + detailedSearchQueryParams(dto);
-
-        return null;
     }
 }
