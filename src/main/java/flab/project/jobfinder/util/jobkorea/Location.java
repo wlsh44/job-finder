@@ -45,16 +45,16 @@ public enum Location {
     GANGWON("강원", "A000"),
     JEJU("제주", "N000");
 
-    private final String koName;
+    private final String district;
     private final String jobkoreaCode;
 
-    Location(String koName, String jobkoreaCode) {
-        this.koName = koName;
+    Location(String district, String jobkoreaCode) {
+        this.district = district;
         this.jobkoreaCode = jobkoreaCode;
     }
 
     public String koName() {
-        return koName;
+        return district;
     }
 
     public String jobkoreaCode() {
