@@ -1,4 +1,4 @@
-package flab.project.jobfinder.util.jobkorea;
+package flab.project.jobfinder.enums;
 
 public enum JobType {
     FULL_TIME("1"),

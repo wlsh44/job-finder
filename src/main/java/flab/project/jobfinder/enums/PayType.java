@@ -1,4 +1,4 @@
-package flab.project.jobfinder.util.jobkorea;
+package flab.project.jobfinder.enums;
 
 public enum PayType {
     ANNUAL("1"),

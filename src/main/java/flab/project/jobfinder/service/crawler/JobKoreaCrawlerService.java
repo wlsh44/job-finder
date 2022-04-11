@@ -1,19 +1,13 @@
 package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.util.jobkorea.JobType;
-import flab.project.jobfinder.util.jobkorea.Location;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
-import static flab.project.jobfinder.util.jobkorea.JobKoreaConst.JOBKOREA_DELIMITER;
 import static flab.project.jobfinder.util.jobkorea.JobKoreaConst.JOBKOREA_URL;
 import static flab.project.jobfinder.util.jobkorea.JobKoreaCrawlerServiceUtil.*;
 

@@ -1,6 +1,8 @@
 package flab.project.jobfinder.util.jobkorea;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.enums.JobType;
+import flab.project.jobfinder.enums.Location;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

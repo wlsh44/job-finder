@@ -1,6 +1,10 @@
 package flab.project.jobfinder.util.jobkorea;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.enums.CareerType;
+import flab.project.jobfinder.enums.JobType;
+import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.PayType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.TestInstance;
@@ -12,13 +16,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static flab.project.jobfinder.util.jobkorea.CareerType.*;
-import static flab.project.jobfinder.util.jobkorea.CareerType.ANY;
-import static flab.project.jobfinder.util.jobkorea.JobType.*;
-import static flab.project.jobfinder.util.jobkorea.JobType.MILITARY;
-import static flab.project.jobfinder.util.jobkorea.Location.*;
-import static flab.project.jobfinder.util.jobkorea.Location.JONGNO;
-import static flab.project.jobfinder.util.jobkorea.PayType.*;
+import static flab.project.jobfinder.enums.CareerType.*;
+import static flab.project.jobfinder.enums.CareerType.ANY;
+import static flab.project.jobfinder.enums.JobType.*;
+import static flab.project.jobfinder.enums.JobType.MILITARY;
+import static flab.project.jobfinder.enums.Location.*;
+import static flab.project.jobfinder.enums.Location.JONGNO;
+import static flab.project.jobfinder.enums.PayType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobKoreaCrawlerServiceUtilTest {
