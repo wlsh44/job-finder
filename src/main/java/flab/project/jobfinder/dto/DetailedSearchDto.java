@@ -1,25 +1,23 @@
 package flab.project.jobfinder.dto;
 
-import flab.project.jobfinder.util.jobkorea.CareerType;
-import flab.project.jobfinder.util.jobkorea.JobType;
-import flab.project.jobfinder.util.jobkorea.Location;
-import flab.project.jobfinder.util.jobkorea.PayType;
-import lombok.AllArgsConstructor;
+import flab.project.jobfinder.enums.CareerType;
+import flab.project.jobfinder.enums.JobType;
+import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.PayType;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Builder
-@AllArgsConstructor
 @Getter
-public class DetailedSearchDto {
+public abstract class DetailedSearchDto {
 
-    private final String searchText;
-    private final List<Location> location;
-    private final List<JobType> jobType;
-    private final Pay pay;
-    private final Career career;
+    protected final String searchText;
+    protected final List<Location> location;
+    protected final List<JobType> jobType;
+    protected final Pay pay;
+    protected final Career career;
 
     @Getter
     public static class Pay {
@@ -46,4 +44,6 @@ public class DetailedSearchDto {
             this.careerMax = careerMax;
         }
     }
+
+    public abstract String toQueryParams();
 }

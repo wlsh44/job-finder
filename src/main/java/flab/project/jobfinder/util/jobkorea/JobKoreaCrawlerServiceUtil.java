@@ -6,47 +6,47 @@ import flab.project.jobfinder.enums.Location;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.util.jobkorea.JobKoreaConst.JOBKOREA_DELIMITER;
 
 public class JobKoreaCrawlerServiceUtil {
 
-    public static String getSearchText(DetailedSearchDto dto) {
-        if (dto.getSearchText() == null) {
+    public static String toSearchTextParam(String searchText) {
+        if (searchText == null) {
             return "";
         }
-        String encoded = URLEncoder.encode(dto.getSearchText(), StandardCharsets.UTF_8);
+        String encoded = URLEncoder.encode(searchText, StandardCharsets.UTF_8);
 
         return "stext=" + encoded;
     }
 
-    public static String getJobType(DetailedSearchDto dto) {
-        if (dto.getJobType() == null) {
+    public static String toJobTypeParam(List<JobType> jobTypes) {
+        if (jobTypes == null) {
             return "";
         }
-        String jobType = dto.getJobType().stream()
+        String jobType = jobTypes.stream()
                 .map(JobType::jobkoreaCode)
                 .collect(Collectors.joining(JOBKOREA_DELIMITER));
         return "&jobtype=" + jobType;
     }
 
-    public static String getLocation(DetailedSearchDto dto) {
-        if (dto.getLocation() == null) {
+    public static String toLocationParam(List<Location> locations) {
+        if (locations == null) {
             return "";
         }
-        String location = dto.getLocation().stream()
+        String location = locations.stream()
                 .map(Location::jobkoreaCode)
                 .collect(Collectors.joining(JOBKOREA_DELIMITER));
         return "&local=" + location;
     }
 
-    public static String getCareer(DetailedSearchDto dto) {
-        if (dto.getCareer() == null) {
+    public static String toCareerParam(DetailedSearchDto.Career career) {
+        if (career == null) {
             return "";
         }
         StringBuilder params = new StringBuilder();
-        DetailedSearchDto.Career career = dto.getCareer();
 
         if (career.getCareerType() != null) {
             params.append("&careerType=").append(career.getCareerType().jobkoreaCode());
@@ -60,12 +60,11 @@ public class JobKoreaCrawlerServiceUtil {
         return params.toString();
     }
 
-    public static String getPay(DetailedSearchDto dto) {
-        if (dto.getPay() == null) {
+    public static String toPayParam(DetailedSearchDto.Pay pay) {
+        if (pay == null) {
             return "";
         }
         StringBuilder params = new StringBuilder();
-        DetailedSearchDto.Pay pay = dto.getPay();
 
         params.append("&payType=").append(pay.getPayType().jobkoreaCode());
         if (pay.getPayMin() != null) {
