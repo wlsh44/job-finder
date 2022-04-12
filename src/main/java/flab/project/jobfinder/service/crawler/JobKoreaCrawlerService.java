@@ -17,7 +17,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
 
     @Override
     public Document crawling(DetailedSearchDto dto) {
-        String url = JOBKOREA_URL + detailedSearchQueryParams(dto);
+        String url = JOBKOREA_URL + dto.toQueryParams();
 
         try {
             Document doc = Jsoup.connect(url).get();
@@ -28,19 +28,4 @@ public class JobKoreaCrawlerService implements CrawlerService {
         }
         return null;
     }
-
-    private String detailedSearchQueryParams(DetailedSearchDto dto) {
-        StringBuilder queryParams = new StringBuilder();
-        String searchText = getSearchText(dto);
-        String location = getLocation(dto);
-        String career = getCareer(dto);
-        String job = getJobType(dto);
-        String pay = getPay(dto);
-
-        queryParams.append(searchText).append(location).append(career).append(job).append(pay);
-
-        return queryParams.toString();
-    }
-
-
 }
