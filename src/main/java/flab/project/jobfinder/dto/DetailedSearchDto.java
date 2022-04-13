@@ -6,10 +6,11 @@ import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Builder
+@SuperBuilder
 @Getter
 public abstract class DetailedSearchDto {
 

@@ -1,10 +1,11 @@
 package flab.project.jobfinder.dto;
 
 import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
 import static flab.project.jobfinder.util.jobkorea.JobKoreaCrawlerServiceUtil.*;
 
-@Builder
+@SuperBuilder
 public class JobKoreaDetailedSearchDto extends DetailedSearchDto {
 
     @Override
