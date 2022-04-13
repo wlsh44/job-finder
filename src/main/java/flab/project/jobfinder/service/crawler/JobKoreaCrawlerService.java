@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 import static flab.project.jobfinder.util.jobkorea.JobKoreaConst.JOBKOREA_URL;
-import static flab.project.jobfinder.util.jobkorea.JobKoreaCrawlerServiceUtil.*;
 
 @Slf4j
 @Service
