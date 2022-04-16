@@ -10,9 +10,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@SuperBuilder
+@Builder
 @Getter
-public abstract class DetailedSearchDto {
+public class DetailedSearchDto {
 
     protected final String searchText;
     protected final List<Location> location;
@@ -45,6 +45,4 @@ public abstract class DetailedSearchDto {
             this.careerMax = careerMax;
         }
     }
-
-    public abstract String toQueryParams();
 }
