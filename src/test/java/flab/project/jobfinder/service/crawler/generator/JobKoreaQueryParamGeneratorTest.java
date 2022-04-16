@@ -77,5 +77,4 @@ class JobKoreaQueryParamGeneratorTest {
                         , "stext=react+%EC%9B%B9+%ED%94%84%EB%9F%B0%ED%8A%B8&local=I110%2CI220%2CI210&jobtype=9")
         );
     }
-
 }
