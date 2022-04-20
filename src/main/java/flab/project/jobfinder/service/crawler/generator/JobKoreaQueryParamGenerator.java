@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class JobKoreaQueryParamGenerator {
+public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     private final JobKoreaConfig config;
 
+    @Override
     public String toQueryParams(DetailedSearchDto dto) {
         StringBuilder queryParams = new StringBuilder();
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
