@@ -20,7 +20,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
     private final JobKoreaConfig config;
 
     @Override
-    public Document crawling(DetailedSearchDto dto) {
+    public Document crawl(DetailedSearchDto dto) {
         String url = config.getUrl() + paramGenerator.toQueryParams(dto);
 
         try {
