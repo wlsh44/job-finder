@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "jobkorea")
-public class JobKoreaConfig {
+public class JobKoreaPropertiesConfig {
     private String url;
     private String delimiter;
+
 }

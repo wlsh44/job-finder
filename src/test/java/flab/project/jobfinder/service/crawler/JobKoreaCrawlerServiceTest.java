@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.config.JobKoreaConfig;
+import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import org.jsoup.nodes.Document;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@EnableConfigurationProperties(value = JobKoreaConfig.class)
+@EnableConfigurationProperties(value = JobKoreaPropertiesConfig.class)
 @TestPropertySource("classpath:application-test.properties")
 class JobKoreaCrawlerServiceTest {
 
@@ -26,7 +26,7 @@ class JobKoreaCrawlerServiceTest {
     JobKoreaCrawlerService jobKoreaCrawlerService;
 
     @Mock
-    JobKoreaConfig jobKoreaConfig;
+    JobKoreaPropertiesConfig jobKoreaPropertiesConfig;
 
     @Mock
     JobKoreaQueryParamGenerator paramGenerator;
@@ -37,7 +37,7 @@ class JobKoreaCrawlerServiceTest {
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText(givenText).build();
 
         when(paramGenerator.toQueryParams(dto)).thenReturn("stext=" + givenText);
-        when(jobKoreaConfig.getUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
+        when(jobKoreaPropertiesConfig.getUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
 
         Document result = jobKoreaCrawlerService.crawl(dto);
 

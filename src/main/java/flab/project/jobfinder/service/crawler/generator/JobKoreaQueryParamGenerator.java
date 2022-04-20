@@ -1,11 +1,10 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.config.JobKoreaConfig;
+import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -13,11 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
-    private final JobKoreaConfig config;
+    private final JobKoreaPropertiesConfig config;
 
     @Override
     public String toQueryParams(DetailedSearchDto dto) {

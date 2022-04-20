@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.config.JobKoreaConfig;
+import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
@@ -10,9 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -32,7 +30,7 @@ class JobKoreaQueryParamGeneratorTest {
     JobKoreaQueryParamGenerator jobKoreaQueryParamGenerator;
 
     @Mock
-    JobKoreaConfig config;
+    JobKoreaPropertiesConfig config;
 
     @ParameterizedTest(name = "{index} => {1}")
     @MethodSource("provideDto")
