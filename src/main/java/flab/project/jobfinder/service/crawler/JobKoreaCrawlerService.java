@@ -27,7 +27,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
 
     @Override
     public Document crawl(DetailedSearchDto dto, int pageNum) {
-        String url = config.getUrl() + paramGenerator.toQueryParams(dto, pageNum);
+        String url = config.getSearchUrl() + paramGenerator.toQueryParams(dto, pageNum);
 
         try {
             Document doc = Jsoup.connect(url).get();

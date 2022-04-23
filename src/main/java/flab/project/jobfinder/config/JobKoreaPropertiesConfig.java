@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "jobkorea")
 public class JobKoreaPropertiesConfig {
     private String url;
+    private String searchUrl;
     private String delimiter;
     private String selector;
 }
