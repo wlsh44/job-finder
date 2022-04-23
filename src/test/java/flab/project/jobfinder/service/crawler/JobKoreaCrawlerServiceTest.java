@@ -32,9 +32,9 @@ class JobKoreaCrawlerServiceTest {
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText(givenText).build();
 
         when(paramGenerator.toQueryParams(dto, 1)).thenReturn("stext=" + givenText);
-        when(jobKoreaPropertiesConfig.getUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
+        when(jobKoreaPropertiesConfig.getSearchUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
 
-        Document result = jobKoreaCrawlerService.crawl(dto);
+        Document result = jobKoreaCrawlerService.crawl(dto, 1);
 
         assertThat(result).isNotNull();
         assertThat(result.connection().response().statusCode()).isEqualTo(HttpStatus.OK.value());
