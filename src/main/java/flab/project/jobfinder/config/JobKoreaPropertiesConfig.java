@@ -12,5 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class JobKoreaPropertiesConfig {
     private String url;
     private String delimiter;
-
+    private String selector;
 }
