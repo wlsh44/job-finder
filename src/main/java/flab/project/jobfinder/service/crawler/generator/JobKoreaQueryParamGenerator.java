@@ -71,6 +71,6 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toPageNumParam(int pageNum) {
-        return pageNum > 1 ? "&Page_No=" + pageNum : null;
+        return "&Page_No=" + pageNum;
     }
 }
