@@ -31,7 +31,7 @@ class JobKoreaCrawlerServiceTest {
         String givenText = "spring";
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText(givenText).build();
 
-        when(paramGenerator.toQueryParams(dto)).thenReturn("stext=" + givenText);
+        when(paramGenerator.toQueryParams(dto, 1)).thenReturn("stext=" + givenText);
         when(jobKoreaPropertiesConfig.getUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
 
         Document result = jobKoreaCrawlerService.crawl(dto);

@@ -18,15 +18,16 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     private final JobKoreaPropertiesConfig config;
 
     @Override
-    public String toQueryParams(DetailedSearchDto dto) {
+    public String toQueryParams(DetailedSearchDto dto, int pageNum) {
         StringBuilder queryParams = new StringBuilder();
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
         String jobParam = Optional.ofNullable(dto.getJobType()).map(this::toJobTypeParam).orElse("");
         String payParam = Optional.ofNullable(dto.getPay()).map(this::toPayParam).orElse("");
+        String pageNumParam = toPageNumParam(pageNum);
 
-        queryParams.append(searchTextParam).append(locationParam).append(careerParam).append(jobParam).append(payParam);
+        queryParams.append(searchTextParam).append(locationParam).append(careerParam).append(jobParam).append(payParam).append(pageNumParam);
 
         return queryParams.toString();
     }
@@ -67,5 +68,9 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         Optional.ofNullable(pay.getPayMin()).ifPresent(x -> params.append("&payMin=").append(x));
         Optional.ofNullable(pay.getPayMax()).ifPresent(x -> params.append("&payMax=").append(x));
         return params.toString();
+    }
+
+    private String toPageNumParam(int pageNum) {
+        return pageNum > 1 ? "&Page_No=" + pageNum : null;
     }
 }

@@ -36,7 +36,7 @@ class JobKoreaQueryParamGeneratorTest {
     @MethodSource("provideDto")
     @DisplayName("정상 url 리턴")
     void 정상_url_리턴(DetailedSearchDto dto, String expected) {
-        String result =  jobKoreaQueryParamGenerator.toQueryParams(dto);
+        String result =  jobKoreaQueryParamGenerator.toQueryParams(dto, 1);
 
         assertThat(result).isEqualTo(expected);
     }
@@ -47,7 +47,7 @@ class JobKoreaQueryParamGeneratorTest {
     void 정상_url_리턴_Delimiter_사용(DetailedSearchDto dto, String expected) {
         when(config.getDelimiter()).thenReturn("%2C");
 
-        String result =  jobKoreaQueryParamGenerator.toQueryParams(dto);
+        String result =  jobKoreaQueryParamGenerator.toQueryParams(dto, 1);
 
         assertThat(result).isEqualTo(expected);
     }
