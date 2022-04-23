@@ -1,10 +1,11 @@
 package flab.project.jobfinder.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 
-@AllArgsConstructor
+@Builder
 public class ParseDto {
     private String title;
+    private String corp;
     private String url;
     private String location;
     private String pay;
