@@ -35,6 +35,7 @@ public class JobKoreaParseHandler implements ParseHandler {
                     .date(parseDate(optionElement))
                     .jobType(parseJobType(optionElement))
                     .techStack(parseTechStack(etcElement))
+                    .platform(config.getPlatform())
                     .build();
             parseDtoList.add(parseDto);
         }

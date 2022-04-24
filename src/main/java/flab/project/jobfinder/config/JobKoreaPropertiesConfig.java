@@ -14,4 +14,5 @@ public class JobKoreaPropertiesConfig {
     private String searchUrl;
     private String delimiter;
     private String selector;
+    private String platform;
 }

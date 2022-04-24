@@ -13,4 +13,5 @@ public class ParseDto {
     private String jobType;
     private String career;
     private String date;
+    private String platform;
 }
