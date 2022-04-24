@@ -5,12 +5,13 @@ import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
 
 @Builder
-@Getter
+@Data
 public class DetailedSearchDto {
 
     protected final String searchText;
