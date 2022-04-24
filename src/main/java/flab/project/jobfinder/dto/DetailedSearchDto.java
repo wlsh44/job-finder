@@ -4,27 +4,28 @@ import flab.project.jobfinder.enums.CareerType;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DetailedSearchDto {
 
-    protected final String searchText;
-    protected final List<Location> location;
-    protected final List<JobType> jobType;
-    protected final Pay pay;
-    protected final Career career;
+    private String searchText;
+    private List<Location> location;
+    private List<JobType> jobType;
+    private Pay pay;
+    private Career career;
 
-    @Getter
+    @Data
+    @NoArgsConstructor
     public static class Pay {
-        private final PayType payType;
-        private final String payMin;
-        private final String payMax;
+        private PayType payType;
+        private String payMin;
+        private String payMax;
 
         public Pay(PayType payType, String payMin, String payMax) {
             this.payType = payType;
@@ -33,11 +34,12 @@ public class DetailedSearchDto {
         }
     }
 
-    @Getter
+    @Data
+    @NoArgsConstructor
     public static class Career {
-        private final CareerType careerType;
-        private final String careerMin;
-        private final String careerMax;
+        private CareerType careerType;
+        private String careerMin;
+        private String careerMax;
 
         public Career(CareerType careerType, String careerMin, String careerMax) {
             this.careerType = careerType;
