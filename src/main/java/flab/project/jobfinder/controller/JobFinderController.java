@@ -2,7 +2,7 @@ package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.ParseDto;
-import flab.project.jobfinder.service.perser.ParserService;
+import flab.project.jobfinder.service.JobFindService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobFinderController {
 
-    private final ParserService jobKoreaParserService;
+    private final JobFindService jobKoreaJobFindService;
 
     @GetMapping("/job-find")
     public String getJobFindForm() {
@@ -31,7 +31,7 @@ public class JobFinderController {
         List<ParseDto> list = new ArrayList<>();
 
         log.info(dto.toString());
-        List<ParseDto> jobKoreaList = jobKoreaParserService.parse(dto);
+        List<ParseDto> jobKoreaList = jobKoreaJobFindService.find(dto);
         list.addAll(jobKoreaList);
         model.addAttribute("list", list);
         for (ParseDto parseDto : jobKoreaList) {
