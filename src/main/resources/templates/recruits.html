@@ -2,31 +2,34 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Recruits</title>
 </head>
 <body>
-<div>
-    <button th:onclick="|location.href='@{/job-find}'|">뒤로</button>
-</div>
-<table>
-    <tr th:each="recruit: ${list}">
-        <td>
-            <div th:text="${recruit.corp}"></div>
-            <div th:text="${recruit.platform}"></div>
-        </td>
-        <td>
-            <div>
-                <a th:href="${recruit.url}" th:text="${recruit.title}"></a>
+<div class="container">
+    <div>
+        <button th:onclick="|location.href='@{/job-find}'|">뒤로</button>
+    </div>
+    <table class="table">
+        <tr th:each="recruit: ${list}">
+            <td>
+                <div th:text="${recruit.corp}"></div>
+                <div th:text="${recruit.platform}"></div>
+            </td>
+            <td>
                 <div>
-                    <span th:text="${recruit.location}"></span>
-                    <span th:text="${recruit.jobType}"></span>
-                    <span th:text="${recruit.career}"></span>
-                    <span th:text="${recruit.date}"></span>
+                    <a th:href="${recruit.url}" th:text="${recruit.title}"></a>
+                    <div>
+                        <span th:text="${recruit.location}"></span>
+                        <span th:text="${recruit.jobType}"></span>
+                        <span th:text="${recruit.career}"></span>
+                        <span th:text="${recruit.date}"></span>
+                    </div>
                 </div>
-            </div>
-            <div th:text="${recruit.techStack}"></div>
-        </td>
-    </tr>
-</table>
+                <div th:text="${recruit.techStack}"></div>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
