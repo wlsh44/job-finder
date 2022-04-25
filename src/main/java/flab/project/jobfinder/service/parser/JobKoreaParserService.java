@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.perser;
+package flab.project.jobfinder.service.parser;
 
 import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.ParseDto;

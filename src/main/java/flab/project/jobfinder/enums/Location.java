@@ -1,7 +1,7 @@
 package flab.project.jobfinder.enums;
 
 public enum Location {
-    SEOUL("서울시", "I100"),
+    SEOUL("서울", "I100"),
     GANGNAM("강남구", "I010"),
     GANGDONG("강동구", "I020"),
     GANGBUK("강북구", "I030"),
@@ -27,7 +27,7 @@ public enum Location {
     JONGNO("종로구", "I230"),
     JUNG("중구", "I240"),
     JUNGRANG("중랑구", "I250"),
-    GYEONGGI("경기도", "B000"),
+    GYEONGGI("경기", "B000"),
     BUNDANG("분당구", "B150"),
     INCHEON("인천", "K000"),
     DAEJEON("대전", "G000"),

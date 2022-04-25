@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.perser;
+package flab.project.jobfinder.service.parser;
 
 import flab.project.jobfinder.dto.ParseDto;
 import org.jsoup.select.Elements;
