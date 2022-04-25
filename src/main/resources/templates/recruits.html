@@ -5,6 +5,9 @@
     <title>Recruits</title>
 </head>
 <body>
+<div>
+    <button th:onclick="|location.href='@{/job-find}'|">뒤로</button>
+</div>
 <table>
     <tr th:each="recruit: ${list}">
         <td>
