@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recruits</title>
+</head>
+<body>
+<table>
+    <tr th:each="recruit: ${list}">
+        <td>
+            <div th:text="${recruit.corp}"></div>
+            <div th:text="${recruit.platform}"></div>
+        </td>
+        <td>
+            <div>
+                <a th:href="${recruit.url}" th:text="${recruit.title}"></a>
+                <div>
+                    <span th:text="${recruit.location}"></span>
+                    <span th:text="${recruit.jobType}"></span>
+                    <span th:text="${recruit.career}"></span>
+                    <span th:text="${recruit.date}"></span>
+                </div>
+            </div>
+            <div th:text="${recruit.techStack}"></div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

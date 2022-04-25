@@ -5,7 +5,6 @@ import flab.project.jobfinder.dto.ParseDto;
 import flab.project.jobfinder.service.perser.ParserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,7 @@ public class JobFinderController {
 
     @GetMapping("/job-find")
     public String getJobFindForm() {
-        return "basic/recruits";
+        return "recruits";
     }
 
     @PostMapping("/job-find")
@@ -38,6 +37,6 @@ public class JobFinderController {
         for (ParseDto parseDto : jobKoreaList) {
             log.info(parseDto.toString());
         }
-        return "basic/recruits";
+        return "recruits";
     }
 }
