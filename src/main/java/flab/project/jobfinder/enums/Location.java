@@ -1,5 +1,10 @@
 package flab.project.jobfinder.enums;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum Location {
     SEOUL("서울", "I000"),
     GANGNAM("강남구", "I010"),
@@ -53,11 +58,15 @@ public enum Location {
         this.jobkoreaCode = jobkoreaCode;
     }
 
-    public String koName() {
+    public String district() {
         return district;
     }
 
     public String jobkoreaCode() {
         return jobkoreaCode;
+    }
+
+    public static Map<String, String> toMap() {
+        return Collections.unmodifiableMap((Stream.of(values()).collect(Collectors.toMap(Location::district, Location::name))));
     }
 }
