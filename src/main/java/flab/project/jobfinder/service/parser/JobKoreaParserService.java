@@ -32,7 +32,7 @@ public class JobKoreaParserService implements ParserService {
                     .url(parseUrl(corpElement))
                     .career(parseCareer(optionElement))
                     .location(parseLocation(optionElement))
-                    .date(parseDate(optionElement))
+                    .dueDate(parseDueDate(optionElement))
                     .jobType(parseJobType(optionElement))
                     .techStack(parseTechStack(etcElement))
                     .platform(config.getPlatform())
@@ -46,7 +46,7 @@ public class JobKoreaParserService implements ParserService {
         return etcElement.text();
     }
 
-    private String parseDate(Elements optionElement) {
+    private String parseDueDate(Elements optionElement) {
         return optionElement.select("span.date").text();
     }
 

@@ -16,6 +16,6 @@ public class ParseDto {
     private String techStack;
     private String jobType;
     private String career;
-    private String date;
+    private String dueDate;
     private String platform;
 }
