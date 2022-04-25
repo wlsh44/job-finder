@@ -6,6 +6,7 @@ import flab.project.jobfinder.dto.ParseDto;
 import flab.project.jobfinder.service.crawler.CrawlerService;
 import flab.project.jobfinder.service.parser.ParserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class JobKoreaJobFindService implements JobFindService {
@@ -31,10 +33,12 @@ public class JobKoreaJobFindService implements JobFindService {
             Document doc = jobKoreaCrawlerService.crawl(dto, pageNum++);
             recruits = doc.select(config.getSelector());
             List<ParseDto> list = jobKoreaParserService.parse(recruits);
-
             parseDtoList.addAll(list);
+
+            log.info("page {} recruits size: {}", pageNum - 1, list.size());
         } while (recruits.size() > 0);
 
+        log.info("num of total recruits: {}", parseDtoList.size());
         return parseDtoList;
     }
 }
