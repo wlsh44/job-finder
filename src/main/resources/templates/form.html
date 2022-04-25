@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>form</title>
+</head>
+<body>
+<div id="test">
+    <form th:action="job-find" th:object="${dto}" method="post">
+        <div>
+            <label for="search-text">키워드</label>
+            <input type="text" th:field="*{searchText}" id="search-text">
+        </div>
+        <div>
+            <div>지역</div>
+            <span th:each="loc : ${map}">
+                <input type="checkbox" th:field="*{location}" th:value="${loc.value}">
+                <label th:for="${#ids.prev('location')}" th:text="${loc.key}"></label>
+            </span>
+        </div>
+        <div>
+            <div>고용형태</div>
+            <span><label><input type="checkbox" th:field="*{jobType}" value="FULL_TIME"> 정규직</label></span>
+            <span><label><input type="checkbox" th:field="*{jobType}" value="TEMPORARY"> 계약직</label></span>
+            <span><label><input type="checkbox" th:field="*{jobType}" value="INTERN"> 인턴</label></span>
+            <span><label><input type="checkbox" th:field="*{jobType}" value="FREELANCER"> 프리랜서</label></span>
+            <span><label><input type="checkbox" th:field="*{jobType}" value="MILITARY"> 병역특례</label></span>
+        </div>
+        <div>
+            <div>경력</div>
+                <select id="career" th:field="*{career.careerType}">
+                    <option value="">선택</option>
+                    <option value="JUNIOR">신입</option>
+                    <option value="SENIOR">경력</option>
+                    <option value="ANY"> 경력무관</option>
+                </select>
+                <label><input type="text" th:field="*{career.careerMin}"></label>
+                <label><input type="text" th:field="*{career.careerMax}"></label>
+        </div>
+        <div>
+            <div>급여</div>
+            <select id="pay" th:field="*{pay.payType}">
+                <option value="">선택</option>
+                <option value='ANNUAL'>연봉</option>
+                <option value='MONTH'>월급</option>
+                <option value='WEEK'>주급</option>
+            </select>
+            <label><input type="text" th:field="*{pay.payMin}"></label>
+            <label><input type="text" th:field="*{pay.payMax}"></label>
+        </div>
+        <button type="submit">찾기</button>
+    </form>
+</div>
+</body>
+</html>
