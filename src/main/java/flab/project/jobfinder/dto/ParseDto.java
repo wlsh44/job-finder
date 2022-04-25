@@ -1,10 +1,12 @@
 package flab.project.jobfinder.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.ToString;
 
 @Builder
 @ToString
+@Getter
 public class ParseDto {
     private String title;
     private String corp;
