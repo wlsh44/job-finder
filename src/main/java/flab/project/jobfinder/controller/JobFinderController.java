@@ -2,6 +2,7 @@ package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.ParseDto;
+import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.service.JobFindService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,15 @@ public class JobFinderController {
     private final JobFindService jobKoreaJobFindService;
 
     @GetMapping("/job-find")
-    public String getJobFindForm() {
-        return "recruits";
+    public String getJobFindForm(Model model) {
+        DetailedSearchDto dto = new DetailedSearchDto();
+        model.addAttribute("dto", dto);
+        model.addAttribute("map", Location.toMap());
+        return "form";
     }
 
     @PostMapping("/job-find")
-    public String jobFind(Model model, @RequestBody DetailedSearchDto dto) {
+    public String jobFind(Model model, DetailedSearchDto dto) {
         List<ParseDto> list = new ArrayList<>();
 
         log.info(dto.toString());
