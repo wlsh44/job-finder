@@ -41,6 +41,7 @@ public class JobFinderController {
         for (ParseDto parseDto : jobKoreaList) {
             log.info(parseDto.toString());
         }
+        log.info("jobKorea total recruits: {}", jobKoreaList.size());
         return "recruits";
     }
 }

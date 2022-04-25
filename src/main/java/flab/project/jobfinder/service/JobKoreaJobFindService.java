@@ -37,8 +37,6 @@ public class JobKoreaJobFindService implements JobFindService {
 
             log.info("page {} recruits size: {}", pageNum - 1, list.size());
         } while (recruits.size() > 0);
-
-        log.info("num of total recruits: {}", parseDtoList.size());
         return parseDtoList;
     }
 }
