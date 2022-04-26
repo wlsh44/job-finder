@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -47,18 +46,19 @@ public class JobKoreaJobFindService implements JobFindService {
     private List<ParseDto> asyncFind(DetailedSearchDto dto, int totalPage) {
         List<ParseDto> parseDtoList = new ArrayList<>();
 
-        Executor executor = Executors.newFixedThreadPool(totalPage);
-        final List<CompletableFuture<List<ParseDto>>> futures = IntStream.range(2, totalPage + 1)
-                .boxed()
-                .map(pageNum -> CompletableFuture.supplyAsync(() -> {
-                        Document pageDoc = jobKoreaCrawlerService.crawl(dto, pageNum);
-                        return parsePage(pageDoc);
-                    }, executor)
-                .exceptionally(e -> List.of(ParseDto.builder().build())))
-                .toList();
+        ForkJoinPool forkJoinPool = new ForkJoinPool(totalPage);
+        try {
+            forkJoinPool.submit(() -> IntStream.range(2, totalPage + 1)
+                    .parallel()
+                    .boxed()
+                    .map(pageNum -> parsePage(jobKoreaCrawlerService.crawl(dto, pageNum)))
+                    .forEach(parseDtoList::addAll)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            forkJoinPool.shutdown();
+        }
 
-        futures.stream().map(CompletableFuture::join)
-                .forEach(parseDtoList::addAll);
         return parseDtoList;
     }
 }
