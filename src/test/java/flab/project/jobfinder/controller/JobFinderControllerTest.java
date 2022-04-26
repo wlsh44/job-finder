@@ -4,6 +4,7 @@ import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.ParseDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,7 +49,17 @@ class JobFinderControllerTest {
                             .build();
 
     @Test
-    void basic_test() throws Exception {
+    @DisplayName("get 테스트")
+    void getTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/job-find"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 테스트")
+    void postTest() throws Exception {
         when(jobFindService.find(detailedSearchDto))
                 .thenReturn(List.of(parseDto));
 
