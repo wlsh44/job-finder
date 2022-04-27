@@ -46,17 +46,18 @@ public class JobKoreaJobFindService implements JobFindService {
     private List<ParseDto> asyncFind(DetailedSearchDto dto, int totalPage) {
         List<ParseDto> parseDtoList = new ArrayList<>();
 
-        ForkJoinPool forkJoinPool = new ForkJoinPool(totalPage);
+        ExecutorService executor = Executors.newFixedThreadPool(totalPage);
         try {
-            forkJoinPool.submit(() -> IntStream.range(2, totalPage + 1)
-                    .parallel()
+            final List<CompletableFuture<List<ParseDto>>> futures = IntStream.range(2, totalPage + 1)
                     .boxed()
-                    .map(pageNum -> parsePage(jobKoreaCrawlerService.crawl(dto, pageNum)))
-                    .forEach(parseDtoList::addAll)).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+                    .map(pageNum -> CompletableFuture.supplyAsync(() -> parsePage(jobKoreaCrawlerService.crawl(dto, pageNum)), executor)
+                            .exceptionally(e -> List.of(ParseDto.builder().build())))
+                    .toList();
+
+            futures.stream().map(CompletableFuture::join)
+                    .forEach(parseDtoList::addAll);
         } finally {
-            forkJoinPool.shutdown();
+            executor.shutdown();
         }
 
         return parseDtoList;
