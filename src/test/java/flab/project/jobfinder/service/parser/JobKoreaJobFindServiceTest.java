@@ -31,7 +31,7 @@ class JobKoreaJobFindServiceTest {
     void parse_test() {
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText("spring").jobType(List.of(MILITARY)).build();
 
-        List<ParseDto> dtoList = parserService.find(dto);
+        List<ParseDto> dtoList = parserService.findJob(dto);
 
         assertThat(dtoList.isEmpty()).isFalse();
     }

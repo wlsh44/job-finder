@@ -26,7 +26,7 @@ public class JobKoreaJobFindService implements JobFindService {
     private final JobKoreaPropertiesConfig config;
 
     @Override
-    public List<ParseDto> find(DetailedSearchDto dto) {
+    public List<ParseDto> findJob(DetailedSearchDto dto) {
         Document doc = jobKoreaCrawlerService.crawl(dto, 1);
         String pageNumStr = doc.select(config.getNumSelector()).text().replaceAll("[^0-9]", "");
         int totalPage = Math.min(Integer.parseInt(pageNumStr) / 20 + 1, config.getMaxThreadPool());
@@ -34,7 +34,7 @@ public class JobKoreaJobFindService implements JobFindService {
         log.info("total Page: {}", totalPage);
 
         List<ParseDto> parseDtoList = parsePage(doc);
-        parseDtoList.addAll(asyncFind(dto, totalPage));
+        parseDtoList.addAll(asyncFindJob(dto, totalPage));
         return parseDtoList;
     }
 
@@ -43,7 +43,7 @@ public class JobKoreaJobFindService implements JobFindService {
         return jobKoreaParserService.parse(recruits);
     }
 
-    private List<ParseDto> asyncFind(DetailedSearchDto dto, int totalPage) {
+    private List<ParseDto> asyncFindJob(DetailedSearchDto dto, int totalPage) {
         List<ParseDto> parseDtoList = new ArrayList<>();
 
         ExecutorService executor = Executors.newFixedThreadPool(totalPage);

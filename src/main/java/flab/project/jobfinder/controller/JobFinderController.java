@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class JobFinderController {
         List<ParseDto> list = new ArrayList<>();
 
         log.info(dto.toString());
-        List<ParseDto> jobKoreaList = jobKoreaJobFindService.find(dto);
+        List<ParseDto> jobKoreaList = jobKoreaJobFindService.findJob(dto);
         list.addAll(jobKoreaList);
         model.addAttribute("list", list);
         for (ParseDto parseDto : jobKoreaList) {
