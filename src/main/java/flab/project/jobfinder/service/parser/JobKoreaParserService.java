@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 public class JobKoreaParserService implements ParserService {
@@ -43,23 +45,23 @@ public class JobKoreaParserService implements ParserService {
     }
 
     private String parseTechStack(Elements etcElement) {
-        return etcElement.text();
+        return !isNull(etcElement) ? etcElement.text() : "";
     }
 
     private String parseDueDate(Elements optionElement) {
-        return optionElement.select("span.date").text();
+        return !isNull(optionElement) ? optionElement.select("span.date").text(): "";
     }
 
     private String parseLocation(Elements optionElement) {
-        return optionElement.select("span.long").text();
+        return !isNull(optionElement) ? optionElement.select("span.long").text() : "";
     }
 
     private String parseJobType(Elements optionElement) {
-        return optionElement.select("span").get(2).text();
+        return !isNull(optionElement) ? optionElement.select("span").get(2).text(): "";
     }
 
     private String parseCareer(Elements optionElement) {
-        return optionElement.select("span.exp").text().replace("[^0-9]", "");
+        return !isNull(optionElement) ? optionElement.select("span.exp").text().replace("[^0-9]", "") : "";
     }
 
     private String parseUrl(Elements corpElement) {
