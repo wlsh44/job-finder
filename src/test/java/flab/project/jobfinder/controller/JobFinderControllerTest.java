@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,9 +26,6 @@ class JobFinderControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    JobFinderController jobFinderController;
 
     @MockBean
     JobKoreaJobFindService jobFindService;
@@ -60,7 +56,7 @@ class JobFinderControllerTest {
     @Test
     @DisplayName("post 테스트")
     void postTest() throws Exception {
-        when(jobFindService.find(detailedSearchDto))
+        when(jobFindService.findJob(detailedSearchDto))
                 .thenReturn(List.of(parseDto));
 
         mockMvc.perform(MockMvcRequestBuilders

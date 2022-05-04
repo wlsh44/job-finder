@@ -57,7 +57,7 @@ class JobKoreaQueryParamGeneratorTest {
                 Arguments.of(DetailedSearchDto.builder().searchText("웹 서비스")
                         .location(List.of(GANGNAM, BUNDANG))
                         .pay(new DetailedSearchDto.Pay(ANNUAL, "4000", null)).build()
-                        , "stext=%EC%9B%B9+%EC%84%9C%EB%B9%84%EC%8A%A4&local=I010%2CB150&payType=1&payMin=4000")
+                        , "stext=%EC%9B%B9+%EC%84%9C%EB%B9%84%EC%8A%A4&local=I010%2CB150&payType=1&payMin=4000&Page_No=1")
 
         );
     }
