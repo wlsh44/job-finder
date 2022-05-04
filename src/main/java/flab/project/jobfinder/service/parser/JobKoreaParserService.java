@@ -35,6 +35,7 @@ public class JobKoreaParserService implements ParserService {
     }
 
     private RecruitDto getParseDto(Elements corpElement, Elements infoElement, Elements optionElement, Elements etcElement) {
+        String platform = config.getPlatform();
         RecruitDto recruitDto = RecruitDto.builder()
                 .title(parseTitle(infoElement))
                 .corp(parseCorp(corpElement))
@@ -44,7 +45,7 @@ public class JobKoreaParserService implements ParserService {
                 .dueDate(parseDueDate(optionElement))
                 .jobType(parseJobType(optionElement))
                 .techStack(parseTechStack(etcElement))
-                .platform(config.getPlatform())
+                .platform(platform)
                 .build();
         return recruitDto;
     }
