@@ -10,18 +10,29 @@
     <div class="py-5 text-center">
         <h2>직업 검색</h2>
     </div>
+    <br>
     <form th:action="job-find" th:object="${dto}" method="post">
+        <div class="row">플랫폼</div>
+        <div class="row">
+            <div th:each="entry : ${platformMap}" class="form-check">
+                <input type="checkbox" th:field="*{platform}" th:value="${entry.value}">
+                <label class="form-check-label" th:for="${#ids.prev('platform')}" th:text="${entry.key}  "></label>
+            </div>
+        </div>
+        <br>
         <div class="row">
             <label for="search-text" class="text-center">키워드</label>
             <input type="text" th:field="*{searchText}" id="search-text" class="form-control">
         </div>
+        <br>
         <div class="row">지역</div>
         <div class="row">
-            <div th:each="loc : ${map}" class="form-check">
+            <div th:each="loc : ${locationMap}" class="form-check">
                 <input type="checkbox" th:field="*{location}" th:value="${loc.value}">
                 <label th:for="${#ids.prev('location')}" th:text="${loc.key}  "></label>
             </div>
         </div>
+        <br>
         <div class="text-center row">고용형태</div>
         <div class="row">
             <span><label><input type="checkbox" th:field="*{jobType}" value="FULL_TIME"> 정규직  </label></span>
@@ -30,9 +41,10 @@
             <span><label><input type="checkbox" th:field="*{jobType}" value="FREELANCER"> 프리랜서  </label></span>
             <span><label><input type="checkbox" th:field="*{jobType}" value="MILITARY"> 병역특례  </label></span>
         </div>
+        <br>
         <div class="row">경력</div>
         <div class="row">
-            <select id="career" th:field="*{career.careerType}" class="form-select">
+            <select id="career-type" th:field="*{career.careerType}" class="form-select">
                 <option value="">선택</option>
                 <option value="JUNIOR">신입</option>
                 <option value="SENIOR">경력</option>
@@ -40,12 +52,13 @@
             </select>
         </div>
         <div class="row">
-            <input type="text" th:field="*{career.careerMin}" class="form-control col-sm-2" placeholder="년"> ~
-            <input type="text" th:field="*{career.careerMax}" class="form-control col-sm-2" placeholder="년">
+            <input id="career-min" type="text" th:field="*{career.careerMin}" class="form-control col-sm-2" placeholder="년"> ~
+            <input id="career-max" type="text" th:field="*{career.careerMax}" class="form-control col-sm-2" placeholder="년">
         </div>
+        <br>
         <div class="row">급여</div>
         <div class="row">
-            <select id="pay" th:field="*{pay.payType}" class="form-select">
+            <select id="pay-type" th:field="*{pay.payType}" class="form-select">
                 <option value="">선택</option>
                 <option value='ANNUAL'>연봉</option>
                 <option value='MONTH'>월급</option>
@@ -53,8 +66,8 @@
             </select>
         </div>
         <div class="row">
-            <input type="text" th:field="*{pay.payMin}" class="form-control col-sm-2" placeholder="만원 이상"> ~
-            <input type="text" th:field="*{pay.payMax}" class="form-control col-sm-2" placeholder="만원 이하">
+            <input id="pay-min" type="text" th:field="*{pay.payMin}" class="form-control col-sm-2" placeholder="만원 이상"> ~
+            <input id="pay-max" type="text" th:field="*{pay.payMax}" class="form-control col-sm-2" placeholder="만원 이하">
         </div>
         <hr class="my-4">
         <div class="row">
