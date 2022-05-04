@@ -12,6 +12,7 @@
     </div>
     <br>
     <form th:action="job-find" th:object="${dto}" method="post">
+        <input th:type="hidden" th:value="${currentPage}" name="currentPage">
         <div class="row">플랫폼</div>
         <div class="row">
             <div th:each="entry : ${platformMap}" class="form-check">

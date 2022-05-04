@@ -3,6 +3,7 @@ package flab.project.jobfinder.service.parser;
 import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
+import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
 import flab.project.jobfinder.service.crawler.JobKoreaCrawlerService;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
@@ -30,8 +31,8 @@ class JobKoreaJobFindServiceTest {
     void parse_test() {
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText("spring").build();
 
-        List<RecruitDto> dtoList = parserService.findJob(dto);
+        RecruitPageDto dtoList = parserService.findJobByPage(dto, 1);
 
-        assertThat(dtoList.isEmpty()).isFalse();
+        assertThat(dtoList.getList().isEmpty()).isFalse();
     }
 }

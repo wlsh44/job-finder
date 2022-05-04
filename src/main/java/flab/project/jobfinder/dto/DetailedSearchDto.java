@@ -1,9 +1,6 @@
 package flab.project.jobfinder.dto;
 
-import flab.project.jobfinder.enums.CareerType;
-import flab.project.jobfinder.enums.JobType;
-import flab.project.jobfinder.enums.Location;
-import flab.project.jobfinder.enums.PayType;
+import flab.project.jobfinder.enums.*;
 import lombok.*;
 
 import java.util.List;
@@ -19,7 +16,7 @@ public class DetailedSearchDto {
     private List<JobType> jobType;
     private Pay pay;
     private Career career;
-    private String platform;
+    private Platform platform;
 
     @Data
     @NoArgsConstructor
