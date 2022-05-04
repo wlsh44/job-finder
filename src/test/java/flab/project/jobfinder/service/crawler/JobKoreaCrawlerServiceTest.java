@@ -32,7 +32,7 @@ class JobKoreaCrawlerServiceTest {
         DetailedSearchDto dto = DetailedSearchDto.builder().searchText(givenText).build();
 
         when(paramGenerator.toQueryParams(dto, 1)).thenReturn("stext=" + givenText);
-        when(jobKoreaPropertiesConfig.getSearchUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?");
+        when(jobKoreaPropertiesConfig.getSearchUrl()).thenReturn("https://www.jobkorea.co.kr/Search/?tabType=recruit&Page_No=1");
 
         Document result = jobKoreaCrawlerService.crawl(dto, 1);
 
