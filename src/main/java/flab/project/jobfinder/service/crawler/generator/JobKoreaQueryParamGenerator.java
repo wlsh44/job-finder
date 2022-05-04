@@ -19,7 +19,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     @Override
     public String toQueryParams(DetailedSearchDto dto, int pageNum) {
-        StringBuilder queryParams = new StringBuilder();
+        StringBuilder queryParams = new StringBuilder("tabType=recruit&");
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
@@ -44,6 +44,9 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
+        if (jobTypes.isEmpty()) {
+            return "";
+        }
         String jobType = jobTypes.stream()
                 .map(JobType::jobkoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
@@ -51,6 +54,9 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toLocationParam(List<Location> locations) {
+        if (locations.isEmpty()) {
+            return "";
+        }
         String location = locations.stream()
                 .map(Location::jobkoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
