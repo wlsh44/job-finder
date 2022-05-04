@@ -67,6 +67,8 @@ public enum Location {
     }
 
     public static Map<String, String> toMap() {
-        return Collections.unmodifiableMap((Stream.of(values()).collect(Collectors.toMap(Location::district, Location::name))));
+        return Collections.unmodifiableMap((Stream
+                .of(values())
+                .collect(Collectors.toMap(Location::district, Location::name))));
     }
 }
