@@ -19,7 +19,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     @Override
     public String toQueryParams(DetailedSearchDto dto, int pageNum) {
-        StringBuilder queryParams = new StringBuilder("tabType=recruit&");
+        StringBuilder queryParams = new StringBuilder("tabType=recruit");
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
@@ -40,7 +40,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     private String toSearchTextParam(String searchText) {
         String encoded = URLEncoder.encode(searchText, StandardCharsets.UTF_8);
 
-        return "stext=" + encoded;
+        return "&stext=" + encoded;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
