@@ -48,27 +48,40 @@ public class JobKoreaParserService implements ParserService {
                 .build();
         return recruitDto;
     }
-        return parseDtoList;
-    }
 
     private String parseTechStack(Elements etcElement) {
-        return !isNull(etcElement) ? etcElement.text() : "";
+        if (isNull(etcElement)) {
+            return "";
+        }
+        return etcElement.text();
     }
 
     private String parseDueDate(Elements optionElement) {
-        return !isNull(optionElement) ? optionElement.select("span.date").text(): "";
+        if (isNull(optionElement)) {
+            return "";
+        }
+        return optionElement.select("span.date").text();
     }
 
     private String parseLocation(Elements optionElement) {
-        return !isNull(optionElement) ? optionElement.select("span.long").text() : "";
+        if (isNull(optionElement)) {
+            return "";
+        }
+        return optionElement.select("span.long").text();
     }
 
     private String parseJobType(Elements optionElement) {
-        return !isNull(optionElement) ? optionElement.select("span").get(2).text(): "";
+        if (isNull(optionElement)) {
+            return "";
+        }
+        return optionElement.select("span").get(2).text();
     }
 
     private String parseCareer(Elements optionElement) {
-        return !isNull(optionElement) ? optionElement.select("span.exp").text().replace("[^0-9]", "") : "";
+        if (isNull(optionElement)) {
+            return "";
+        }
+        return optionElement.select("span.exp").text().replace("[^0-9]", "");
     }
 
     private String parseUrl(Elements corpElement) {
