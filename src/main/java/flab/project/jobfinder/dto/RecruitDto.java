@@ -7,7 +7,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Getter
-public class ParseDto {
+public class RecruitDto {
     private String title;
     private String corp;
     private String url;

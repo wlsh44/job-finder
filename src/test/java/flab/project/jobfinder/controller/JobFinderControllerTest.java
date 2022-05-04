@@ -1,7 +1,7 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.ParseDto;
+import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ class JobFinderControllerTest {
                                 .searchText("spring")
                                 .location(List.of(Location.SEOUL)).build();
 
-    ParseDto parseDto = ParseDto.builder().title("test title")
+    RecruitDto recruitDto = RecruitDto.builder().title("test title")
                             .jobType("test jobType")
                             .dueDate("test dueDate")
                             .corp("test corp")
@@ -57,7 +57,7 @@ class JobFinderControllerTest {
     @DisplayName("post 테스트")
     void postTest() throws Exception {
         when(jobFindService.findJob(detailedSearchDto))
-                .thenReturn(List.of(parseDto));
+                .thenReturn(List.of(recruitDto));
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/job-find")

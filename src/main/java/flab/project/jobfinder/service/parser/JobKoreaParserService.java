@@ -1,7 +1,7 @@
 package flab.project.jobfinder.service.parser;
 
 import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
-import flab.project.jobfinder.dto.ParseDto;
+import flab.project.jobfinder.dto.RecruitDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,8 +19,8 @@ public class JobKoreaParserService implements ParserService {
     private final JobKoreaPropertiesConfig config;
 
     @Override
-    public List<ParseDto> parse(Elements recruits) {
-        List<ParseDto> parseDtoList = new ArrayList<>();
+    public List<RecruitDto> parse(Elements recruits) {
+        List<RecruitDto> recruitDtoList = new ArrayList<>();
 
         for (Element recruit : recruits) {
             Elements corpElement = recruit.select("div > div.post-list-corp > a");
@@ -28,19 +28,26 @@ public class JobKoreaParserService implements ParserService {
             Elements optionElement = infoElement.select("p.option");
             Elements etcElement = infoElement.select("p.etc");
 
-            ParseDto parseDto = ParseDto.builder()
-                    .title(parseTitle(infoElement))
-                    .corp(parseCorp(corpElement))
-                    .url(parseUrl(corpElement))
-                    .career(parseCareer(optionElement))
-                    .location(parseLocation(optionElement))
-                    .dueDate(parseDueDate(optionElement))
-                    .jobType(parseJobType(optionElement))
-                    .techStack(parseTechStack(etcElement))
-                    .platform(config.getPlatform())
-                    .build();
-            parseDtoList.add(parseDto);
+            RecruitDto recruitDto = getParseDto(corpElement, infoElement, optionElement, etcElement);
+            recruitDtoList.add(recruitDto);
         }
+        return recruitDtoList;
+    }
+
+    private RecruitDto getParseDto(Elements corpElement, Elements infoElement, Elements optionElement, Elements etcElement) {
+        RecruitDto recruitDto = RecruitDto.builder()
+                .title(parseTitle(infoElement))
+                .corp(parseCorp(corpElement))
+                .url(parseUrl(corpElement))
+                .career(parseCareer(optionElement))
+                .location(parseLocation(optionElement))
+                .dueDate(parseDueDate(optionElement))
+                .jobType(parseJobType(optionElement))
+                .techStack(parseTechStack(etcElement))
+                .platform(config.getPlatform())
+                .build();
+        return recruitDto;
+    }
         return parseDtoList;
     }
 

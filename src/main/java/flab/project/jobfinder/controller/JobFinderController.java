@@ -1,7 +1,7 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.ParseDto;
+import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.service.JobFindService;
 import lombok.RequiredArgsConstructor;
