@@ -19,6 +19,7 @@ public class DetailedSearchDto {
     private List<JobType> jobType;
     private Pay pay;
     private Career career;
+    private String platform;
 
     @Data
     @NoArgsConstructor
