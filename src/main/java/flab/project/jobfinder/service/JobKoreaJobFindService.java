@@ -29,6 +29,8 @@ public class JobKoreaJobFindService implements JobFindService {
         int totalPage = getTotalPage(doc);
         List<RecruitDto> recruitDtoList = parsePage(doc);
 
+        log.info("total page: {}", totalPage);
+
         return RecruitPageDto.builder()
                 .list(recruitDtoList)
                 .totalPage(totalPage)
@@ -39,7 +41,7 @@ public class JobKoreaJobFindService implements JobFindService {
         String numSelector = config.getNumSelector();
         String pageNumStr = doc.select(numSelector).text()
                             .replaceAll("[^0-9]", "");
-        return Integer.parseInt(pageNumStr);
+        return Integer.parseInt(pageNumStr) / 20 + 1;
     }
 
     private List<RecruitDto> parsePage(Document pageDoc) {
