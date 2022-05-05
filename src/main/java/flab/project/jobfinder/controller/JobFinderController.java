@@ -50,6 +50,7 @@ public class JobFinderController {
         model.addAttribute("list", list);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("currentPage", currentPage);
+        model.addAttribute("dto", dto);
 //        for (ParseDto parseDto : jobKoreaList) {
 //            log.info(parseDto.toString());
 //        }
