@@ -37,12 +37,14 @@ public class JobFinderController {
 
     @PostMapping("/job-find")
     public String jobFind(Model model, DetailedSearchDto dto, @RequestParam Integer currentPage) {
-        /* TODO
-         * 검증 로직
-         * pagination
-         */
         log.info(dto.toString());
-        RecruitPageDto recruitPageDto = getRecruitPageDto(dto, currentPage);
+        RecruitPageDto recruitPageDto = null;
+
+        switch (dto.getPlatform()) {
+            case JOBKOREA:
+                recruitPageDto = jobKoreaJobFindService.findJobByPage(dto, currentPage);
+                break;
+        }
 
         List<RecruitDto> list = recruitPageDto.getList();
         int totalPage = recruitPageDto.getTotalPage();
@@ -54,13 +56,5 @@ public class JobFinderController {
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("dto", dto);
         return "recruits";
-    }
-
-    private RecruitPageDto getRecruitPageDto(DetailedSearchDto dto, Integer currentPage) {
-        switch (dto.getPlatform()) {
-            case JOBKOREA:
-                return jobKoreaJobFindService.findJobByPage(dto, currentPage);
-        }
-        return new RecruitPageDto();
     }
 }
