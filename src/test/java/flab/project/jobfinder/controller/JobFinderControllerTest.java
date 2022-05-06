@@ -1,9 +1,13 @@
 package flab.project.jobfinder.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.enums.CareerType;
 import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.PayType;
+import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,17 +38,28 @@ class JobFinderControllerTest {
 
     DetailedSearchDto detailedSearchDto = DetailedSearchDto.builder()
                                 .searchText("spring")
-                                .location(List.of(Location.SEOUL)).build();
+                                .pay(new DetailedSearchDto.Pay(PayType.ANNUAL, null, null))
+                                .career(new DetailedSearchDto.Career(CareerType.SENIOR, null, null))
+                                .location(List.of(Location.SEOUL))
+                                .platform(Platform.JOBKOREA).build();
 
-    RecruitDto recruitDto = RecruitDto.builder().title("test title")
-                            .jobType("test jobType")
-                            .dueDate("test dueDate")
-                            .corp("test corp")
-                            .career("test career")
-                            .location("test loc")
-                            .platform("JobKorea")
-                            .techStack("spring")
-                            .build();
+
+    RecruitDto recruitDto = RecruitDto.builder()
+                                    .title("test title")
+                                    .jobType("test jobType")
+                                    .dueDate("test dueDate")
+                                    .corp("test corp")
+                                    .career("test career")
+                                    .location("test loc")
+                                    .platform("JobKorea")
+                                    .techStack("spring")
+                                    .build();
+
+    RecruitPageDto recruitPageDto = RecruitPageDto.builder()
+                                            .list(List.of(recruitDto))
+                                            .totalPage(1)
+                                            .startPage(1)
+                                            .build();
 
     @Test
     @DisplayName("get 테스트")
@@ -57,17 +73,19 @@ class JobFinderControllerTest {
     @Test
     @DisplayName("post 테스트")
     void postTest() throws Exception {
-        when(jobFindService.findJobByPage(detailedSearchDto, 1))
-                .thenReturn(RecruitPageDto
-                        .builder()
-                        .list(List.of(recruitDto))
-                        .totalPage(1)
-                        .build());
+        given(jobFindService.findJobByPage(detailedSearchDto, 1))
+                .willReturn(recruitPageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/job-find")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .param("searchText", "spring")
+                .param("location", "SEOUL")
+                .param("platform", "JOBKOREA")
+                .param("pay.payType", "ANNUAL")
+                .param("career.careerType", "SENIOR")
+                .param("currentPage", "1")
+                .contentType(MediaType.TEXT_HTML)
+                .accept(MediaType.TEXT_HTML))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
