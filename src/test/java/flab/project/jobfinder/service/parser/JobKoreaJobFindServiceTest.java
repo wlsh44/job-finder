@@ -14,8 +14,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {JobKoreaJobFindService.class, JobKoreaCrawlerService.class, JobKoreaQueryParamGenerator.class, JobKoreaParserService.class})
