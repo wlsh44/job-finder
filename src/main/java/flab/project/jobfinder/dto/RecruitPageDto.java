@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class RecruitPageDto {
     private List<RecruitDto> list;
