@@ -34,7 +34,15 @@ public class JobKoreaJobFindService implements JobFindService {
         return RecruitPageDto.builder()
                 .list(recruitDtoList)
                 .totalPage(totalPage)
+                .startPage(getStartPage(page))
                 .build();
+    }
+
+    private int getStartPage(int currentPage) {
+        if (currentPage <= 4) {
+            return 1;
+        }
+        return currentPage - 4;
     }
 
     private int getTotalPage(Document doc) {

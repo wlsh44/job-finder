@@ -45,15 +45,14 @@ public class JobFinderController {
         RecruitPageDto recruitPageDto = getRecruitPageDto(dto, currentPage);
 
         List<RecruitDto> list = recruitPageDto.getList();
-        Integer totalPage = recruitPageDto.getTotalPage();
+        int totalPage = recruitPageDto.getTotalPage();
+        int startPage = recruitPageDto.getStartPage();
 
         model.addAttribute("list", list);
+        model.addAttribute("startPage", startPage);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("dto", dto);
-//        for (ParseDto parseDto : jobKoreaList) {
-//            log.info(parseDto.toString());
-//        }
         return "recruits";
     }
 

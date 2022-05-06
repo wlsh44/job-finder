@@ -14,4 +14,5 @@ import java.util.List;
 public class RecruitPageDto {
     private List<RecruitDto> list;
     private int totalPage;
+    private int startPage;
 }
