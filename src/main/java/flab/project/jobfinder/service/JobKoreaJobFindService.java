@@ -50,6 +50,7 @@ public class JobKoreaJobFindService implements JobFindService {
     }
 
     private int getStartPage(int currentPage) {
+        //1, 2, 3, 4 페이지일 때는 startPage = 1
         if (currentPage <= MIDDLE_OF_PAGES) {
             return FIRST_PAGE;
         }
@@ -58,6 +59,7 @@ public class JobKoreaJobFindService implements JobFindService {
 
     private int getTotalPage(Document doc) {
         int pageNum = getPageNum(doc);
+        //page가 1부터 시작하므로 1 더해줌
         return pageNum / RECRUIT_COUNT_PER_PAGE + 1;
     }
 
