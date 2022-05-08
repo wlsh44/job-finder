@@ -1,6 +1,5 @@
 package flab.project.jobfinder.enums;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,6 +51,8 @@ public enum Location {
 
     private final String district;
     private final String jobkoreaCode;
+    private final static Map<String, String> map = Stream.of(values())
+            .collect(Collectors.toUnmodifiableMap(Location::district, Location::name));
 
     Location(String district, String jobkoreaCode) {
         this.district = district;
@@ -66,9 +67,7 @@ public enum Location {
         return jobkoreaCode;
     }
 
-    public static Map<String, String> toMap() {
-        return Collections.unmodifiableMap((Stream
-                .of(values())
-                .collect(Collectors.toMap(Location::district, Location::name))));
+    public static Map<String, String> getDistrictMap() {
+        return map;
     }
 }

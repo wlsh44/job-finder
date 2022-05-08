@@ -29,8 +29,8 @@ public class JobFinderController {
         Integer currentPage = 1;
 
         model.addAttribute("dto", dto);
-        model.addAttribute("locationMap", Location.toMap());
-        model.addAttribute("platformMap", Platform.toMap());
+        model.addAttribute("locationMap", Location.getDistrictMap());
+        model.addAttribute("platformMap", Platform.getKoreaNameMap());
         model.addAttribute("currentPage", currentPage);
         return "form";
     }
