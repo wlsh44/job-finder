@@ -25,10 +25,10 @@ public class JobFinderController {
 
     @GetMapping("/job-find")
     public String getJobFindForm(Model model) {
-        DetailedSearchDto dto = new DetailedSearchDto();
+        DetailedSearchDto searchFormDto = new DetailedSearchDto();
         Integer currentPage = 1;
 
-        model.addAttribute("dto", dto);
+        model.addAttribute("searchFormDto", searchFormDto);
         model.addAttribute("locationMap", Location.getDistrictMap());
         model.addAttribute("platformMap", Platform.getKoreaNameMap());
         model.addAttribute("currentPage", currentPage);
@@ -36,19 +36,19 @@ public class JobFinderController {
     }
 
     @PostMapping("/job-find")
-    public String jobFind(Model model, DetailedSearchDto dto, @RequestParam Integer currentPage) {
-        log.info(dto.toString());
-        RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(dto, currentPage);
+    public String jobFind(Model model, DetailedSearchDto searchFormDto, @RequestParam Integer currentPage) {
+        log.info(searchFormDto.toString());
+        RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(searchFormDto, currentPage);
 
-        List<RecruitDto> list = recruitPageDto.getList();
+        List<RecruitDto> recruitDtoList = recruitPageDto.getList();
         int totalPage = recruitPageDto.getTotalPage();
         int startPage = recruitPageDto.getStartPage();
 
-        model.addAttribute("list", list);
+        model.addAttribute("recruitDtoList", recruitDtoList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("dto", dto);
+        model.addAttribute("searchFormDto", searchFormDto);
         return "recruits";
     }
 }

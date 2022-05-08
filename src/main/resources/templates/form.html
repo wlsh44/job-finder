@@ -9,7 +9,7 @@
         <h2>직업 검색</h2>
     </div>
     <br>
-    <form th:action="job-find" th:object="${dto}" method="post">
+    <form th:action="job-find" th:object="${searchFormDto}" method="post">
         <input th:type="hidden" th:value="${currentPage}" name="currentPage">
         <div class="row">플랫폼</div>
         <div class="row">

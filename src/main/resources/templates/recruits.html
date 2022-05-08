@@ -9,7 +9,7 @@
         <button th:onclick="|location.href='@{/job-find}'|" class="btn-primary">뒤로</button>
     </div>
     <table class="table">
-        <tr th:each="recruit: ${list}">
+        <tr th:each="recruit: ${recruitDtoList}">
             <td>
                 <div th:text="${recruit.corp}"></div>
                 <div th:text="${recruit.platform}"></div>
@@ -32,7 +32,7 @@
         <ul class="pagination"
             th:with="lastPage=(${startPage + 9 < totalPage ? startPage + 9 : totalPage})">
             <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
-                <form th:action="job-find" th:object="${dto}" method="post">
+                <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" th:value="1" name="currentPage">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
@@ -48,7 +48,7 @@
                 </form>
             </li>
             <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
-                <form th:action="job-find" th:object="${dto}" method="post">
+                <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" th:value="${currentPage} - 1 > 0 ? ${currentPage} - 1 : 1" name="currentPage">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
@@ -65,7 +65,7 @@
             </li>
 
             <li th:each="page: ${#numbers.sequence(startPage, lastPage)}" class="page-item">
-                <form th:action="job-find" th:object="${dto}" method="post">
+                <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" th:value="${page}" name="currentPage">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
@@ -82,7 +82,7 @@
             </li>
 
             <li class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
-                <form th:action="job-find" th:object="${dto}" method="post">
+                <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" th:value="${currentPage} - 1" name="currentPage">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
@@ -98,7 +98,7 @@
                 </form>
             </li>
             <li th:class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
-                <form th:action="job-find" th:object="${dto}" method="post">
+                <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" th:value="${totalPage}" name="currentPage">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
