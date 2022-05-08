@@ -23,6 +23,10 @@ public class JobKoreaJobFindService implements JobFindService {
     private final ParserService jobKoreaParserService;
     private final JobKoreaPropertiesConfig config;
 
+    private final static int RECRUIT_COUNT_PER_PAGE = 20;
+    private final static int MIDDLE_OF_PAGES = 4;
+    private final static int FIRST_PAGE = 1;
+    
     @Override
     public RecruitPageDto findJobByPage(DetailedSearchDto dto, int page) {
         Document doc = jobKoreaCrawlerService.crawl(dto, page);
@@ -39,17 +43,23 @@ public class JobKoreaJobFindService implements JobFindService {
     }
 
     private int getStartPage(int currentPage) {
-        if (currentPage <= 4) {
-            return 1;
+        if (currentPage <= MIDDLE_OF_PAGES) {
+            return FIRST_PAGE;
         }
-        return currentPage - 4;
+        return currentPage - MIDDLE_OF_PAGES;
     }
 
     private int getTotalPage(Document doc) {
+        int pageNum = getPageNum(doc);
+        return pageNum / RECRUIT_COUNT_PER_PAGE + 1;
+    }
+
+    private int getPageNum(Document doc) {
         String numSelector = config.getNumSelector();
-        String pageNumStr = doc.select(numSelector).text()
-                            .replaceAll("[^0-9]", "");
-        return Integer.parseInt(pageNumStr) / 20 + 1;
+        String pageNumStr = doc.select(numSelector)
+                                .text()
+                                .replaceAll("[^0-9]", "");
+        return Integer.parseInt(pageNumStr);
     }
 
     private List<RecruitDto> parsePage(Document pageDoc) {
