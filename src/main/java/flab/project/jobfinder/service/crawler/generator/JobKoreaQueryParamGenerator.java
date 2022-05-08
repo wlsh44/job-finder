@@ -66,18 +66,28 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     private String toCareerParam(DetailedSearchDto.Career career) {
         StringBuilder params = new StringBuilder();
 
-        Optional.ofNullable(career.getCareerType()).ifPresent(x -> params.append("&careerType=").append(x.jobkoreaCode()));
-        Optional.ofNullable(career.getCareerMin()).filter(x -> !x.isEmpty()).ifPresent(x -> params.append("&careerMin=").append(x));
-        Optional.ofNullable(career.getCareerMax()).filter(x -> !x.isEmpty()).ifPresent(x -> params.append("&careerMax=").append(x));
+        Optional.ofNullable(career.getCareerType())
+                .ifPresent(careerType -> params.append("&careerType=").append(careerType.jobkoreaCode()));
+        Optional.ofNullable(career.getCareerMin())
+                .filter(careerMin -> !careerMin.isEmpty())
+                .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
+        Optional.ofNullable(career.getCareerMax())
+                .filter(careerMax -> !careerMax.isEmpty())
+                .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
         return params.toString();
     }
 
     private String toPayParam(DetailedSearchDto.Pay pay) {
         StringBuilder params = new StringBuilder();
 
-        Optional.ofNullable(pay.getPayType()).ifPresent(x -> params.append("&payType=").append(x.jobkoreaCode()));
-        Optional.ofNullable(pay.getPayMin()).filter(x -> !x.isEmpty()).ifPresent(x -> params.append("&payMin=").append(x));
-        Optional.ofNullable(pay.getPayMax()).filter(x -> !x.isEmpty()).ifPresent(x -> params.append("&payMax=").append(x));
+        Optional.ofNullable(pay.getPayType())
+                .ifPresent(payType -> params.append("&payType=").append(payType.jobkoreaCode()));
+        Optional.ofNullable(pay.getPayMin())
+                .filter(payMin -> !payMin.isEmpty()).
+                ifPresent(payMin -> params.append("&payMin=").append(payMin));
+        Optional.ofNullable(pay.getPayMax())
+                .filter(payMax -> !payMax.isEmpty())
+                .ifPresent(payMax -> params.append("&payMax=").append(payMax));
         return params.toString();
     }
 
