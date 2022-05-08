@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <div th:replace="/fragment/header.html :: fragment-header"></div>
     <title>Job-Finder</title>
 </head>
 <body>
-    <h1>Hello</h1>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1>통합 구직 프로젝트</h1>
+        </div>
+        <div class="row justify-content-center">
+            <button th:onclick="|location.href='@{/job-find}'|" class="btn btn-primary btn-lg">찾기</button>
+        </div>
+    </div>
 </body>
 </html>
