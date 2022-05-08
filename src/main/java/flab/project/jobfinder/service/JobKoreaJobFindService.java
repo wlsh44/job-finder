@@ -4,6 +4,7 @@ import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.crawler.CrawlerService;
 import flab.project.jobfinder.service.parser.ParserService;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -26,7 +28,7 @@ public class JobKoreaJobFindService implements JobFindService {
     private final static int RECRUIT_COUNT_PER_PAGE = 20;
     private final static int MIDDLE_OF_PAGES = 4;
     private final static int FIRST_PAGE = 1;
-    
+
     @Override
     public RecruitPageDto findJobByPage(DetailedSearchDto dto, int page) {
         Document doc = jobKoreaCrawlerService.crawl(dto, page);
@@ -40,6 +42,13 @@ public class JobKoreaJobFindService implements JobFindService {
                 .totalPage(totalPage)
                 .startPage(getStartPage(page))
                 .build();
+    }
+
+    @Override
+    public Platform getPlatform() {
+        Map<String, String> map = Platform.getKoreaNameMap();
+        String platformName = map.get(config.getPlatform());
+        return Platform.valueOf(platformName);
     }
 
     private int getStartPage(int currentPage) {

@@ -5,7 +5,7 @@ import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
-import flab.project.jobfinder.service.JobFindService;
+import flab.project.jobfinder.service.JobFindFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobFinderController {
 
-    private final JobFindService jobKoreaJobFindService;
+    private final JobFindFactory jobFindFactory;
 
     @GetMapping("/job-find")
     public String getJobFindForm(Model model) {
@@ -38,7 +38,7 @@ public class JobFinderController {
     @PostMapping("/job-find")
     public String jobFind(Model model, DetailedSearchDto dto, @RequestParam Integer currentPage) {
         log.info(dto.toString());
-        RecruitPageDto recruitPageDto = getRecruitPageDto(dto, currentPage);
+        RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(dto, currentPage);
 
         List<RecruitDto> list = recruitPageDto.getList();
         int totalPage = recruitPageDto.getTotalPage();
@@ -50,13 +50,5 @@ public class JobFinderController {
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("dto", dto);
         return "recruits";
-    }
-
-    private RecruitPageDto getRecruitPageDto(DetailedSearchDto dto, Integer currentPage) {
-        switch (dto.getPlatform()) {
-            case JOBKOREA:
-                return jobKoreaJobFindService.findJobByPage(dto, currentPage);
-        }
-        return RecruitPageDto.builder().build();
     }
 }
