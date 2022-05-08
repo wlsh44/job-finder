@@ -9,6 +9,7 @@ import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,30 +36,36 @@ class JobFinderControllerTest {
     @MockBean
     JobKoreaJobFindService jobFindService;
 
-    DetailedSearchDto detailedSearchDto = DetailedSearchDto.builder()
-                                .searchText("spring")
-                                .pay(new DetailedSearchDto.Pay(PayType.ANNUAL, null, null))
-                                .career(new DetailedSearchDto.Career(CareerType.SENIOR, null, null))
-                                .location(List.of(Location.SEOUL))
-                                .platform(Platform.JOBKOREA).build();
+    DetailedSearchDto detailedSearchDto;
+    RecruitDto recruitDto;
+    RecruitPageDto recruitPageDto;
 
+    @BeforeEach
+    void init() {
+        detailedSearchDto = DetailedSearchDto.builder()
+                .searchText("spring")
+                .pay(new DetailedSearchDto.Pay(PayType.ANNUAL, null, null))
+                .career(new DetailedSearchDto.Career(CareerType.SENIOR, null, null))
+                .location(List.of(Location.SEOUL))
+                .platform(Platform.JOBKOREA).build();
 
-    RecruitDto recruitDto = RecruitDto.builder()
-                                    .title("test title")
-                                    .jobType("test jobType")
-                                    .dueDate("test dueDate")
-                                    .corp("test corp")
-                                    .career("test career")
-                                    .location("test loc")
-                                    .platform("JobKorea")
-                                    .techStack("spring")
-                                    .build();
+        recruitDto = RecruitDto.builder()
+                .title("test title")
+                .jobType("test jobType")
+                .dueDate("test dueDate")
+                .corp("test corp")
+                .career("test career")
+                .location("test loc")
+                .platform("JobKorea")
+                .techStack("spring")
+                .build();
 
-    RecruitPageDto recruitPageDto = RecruitPageDto.builder()
-                                            .list(List.of(recruitDto))
-                                            .totalPage(1)
-                                            .startPage(1)
-                                            .build();
+        recruitPageDto = RecruitPageDto.builder()
+                .list(List.of(recruitDto))
+                .totalPage(1)
+                .startPage(1)
+                .build();
+    }
 
     @Test
     @DisplayName("get 테스트")
