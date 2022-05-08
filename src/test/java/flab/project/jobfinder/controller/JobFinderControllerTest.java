@@ -3,10 +3,12 @@ package flab.project.jobfinder.controller;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.dto.SearchFormDto;
 import flab.project.jobfinder.enums.CareerType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.service.JobFindFactory;
 import flab.project.jobfinder.service.JobKoreaJobFindService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,9 +35,10 @@ class JobFinderControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    JobKoreaJobFindService jobFindService;
+    JobFindFactory findFactory;
 
     DetailedSearchDto detailedSearchDto;
+    SearchFormDto searchFormDto;
     RecruitDto recruitDto;
     RecruitPageDto recruitPageDto;
 
@@ -47,6 +50,8 @@ class JobFinderControllerTest {
                 .career(new DetailedSearchDto.Career(CareerType.SENIOR, null, null))
                 .location(List.of(Location.SEOUL))
                 .platform(Platform.JOBKOREA).build();
+
+        searchFormDto = new SearchFormDto(detailedSearchDto, 1);
 
         recruitDto = RecruitDto.builder()
                 .title("test title")
@@ -76,22 +81,37 @@ class JobFinderControllerTest {
     }
 
     @Test
-    @DisplayName("post 테스트")
-    void postTest() throws Exception {
-        given(jobFindService.findJobByPage(detailedSearchDto, 1))
+    @DisplayName("post 성공 테스트")
+    void postSuccessTest() throws Exception {
+        given(findFactory.getRecruitPageDto(detailedSearchDto, 1))
                 .willReturn(recruitPageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/job-find")
-                .param("searchText", "spring")
-                .param("location", "SEOUL")
-                .param("platform", "JOBKOREA")
-                .param("pay.payType", "ANNUAL")
-                .param("career.careerType", "SENIOR")
-                .param("currentPage", "1")
-                .contentType(MediaType.TEXT_HTML)
-                .accept(MediaType.TEXT_HTML))
+                        .post("/job-find")
+                        .param("searchText", "spring")
+                        .param("location", "SEOUL")
+                        .param("platform", "JOBKOREA")
+                        .param("pay.payType", "ANNUAL")
+                        .param("career.careerType", "SENIOR")
+                        .param("currentPage", "1")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 실패 - 플랫폼 선택 안 함")
+    void postFail_PlatformIsNull() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("searchText", "spring")
+                        .param("location", "SEOUL")
+                        .param("pay.payType", "ANNUAL")
+                        .param("career.careerType", "SENIOR")
+                        .param("currentPage", "1")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());    //200이 리턴되는게 맞나?
     }
 }
