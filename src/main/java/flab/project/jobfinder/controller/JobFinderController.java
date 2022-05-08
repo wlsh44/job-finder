@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -35,11 +36,19 @@ public class JobFinderController {
     }
 
     @PostMapping("/job-find")
-    public String jobFind(@Valid SearchFormDto searchFormDto, Model model) {
+    public String jobFind(@Valid SearchFormDto searchFormDto, BindingResult bindingResult, Model model) {
+        log.info(searchFormDto.toString());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("locationMap", Location.getDistrictMap());
+            model.addAttribute("platformMap", Platform.getKoreaNameMap());
+            log.info("errors={}", bindingResult);
+            return "form";
+        }
+
         DetailedSearchDto detailedSearchDto = searchFormDto.getDetailedSearchDto();
         Integer currentPage = searchFormDto.getCurrentPage();
 
-        log.info(searchFormDto.toString());
         RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(detailedSearchDto, currentPage);
 
         List<RecruitDto> recruitDtoList = recruitPageDto.getRecruitDtoList();
