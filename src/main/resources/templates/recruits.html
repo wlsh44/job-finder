@@ -84,7 +84,7 @@
 
             <li class="page-item" th:style="${searchFormDto.currentPage == totalPage} ? 'display : none'">
                 <form th:action="job-find" th:object="${searchFormDto}" method="post">
-                    <input th:type="hidden" name="currentPage"  th:value="${searchFormDto.currentPage} - 1">
+                    <input th:type="hidden" name="currentPage"  th:value="${searchFormDto.currentPage} + 1">
                     <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
                     <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
                     <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
