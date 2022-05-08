@@ -34,16 +34,16 @@
             <li class="page-item" th:style="${searchFormDto.currentPage == 1} ? 'display : none'">
                 <form th:action="job-find" method="post">
                     <input th:type="hidden" name="currentPage"  th:value="1">
-                    <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
-                    <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
-                    <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
-                    <input th:type="hidden" th:field="*{jobType}" th:value="*{jobType}"/>
-                    <input th:type="hidden" th:field="*{payType}" th:value="*{payType}"/>
-                    <input th:type="hidden" th:field="*{payMin}" th:value="*{payMin}"/>
-                    <input th:type="hidden" th:field="*{payMax}" th:value="*{payMax}"/>
-                    <input th:type="hidden" th:field="*{careerType}" th:value="*{careerType}"/>
-                    <input th:type="hidden" th:field="*{careerMin}" th:value="*{careerMin}"/>
-                    <input th:type="hidden" th:field="*{careerMax}" th:value="*{careerMax}"/>
+                    <input th:type="hidden" th:field="*{platform}"/>
+                    <input th:type="hidden" th:field="*{searchText}"/>
+                    <input th:type="hidden" th:field="*{location}"/>
+                    <input th:type="hidden" th:field="*{jobType}"/>
+                    <input th:type="hidden" th:field="*{payType}"/>
+                    <input th:type="hidden" th:field="*{payMin}"/>
+                    <input th:type="hidden" th:field="*{payMax}"/>
+                    <input th:type="hidden" th:field="*{careerType}"/>
+                    <input th:type="hidden" th:field="*{careerMin}"/>
+                    <input th:type="hidden" th:field="*{careerMax}"/>
                     <button type="submit" th:text="First" class="btn"></button>
                 </form>
             </li>
@@ -51,16 +51,16 @@
                 <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" name="currentPage"
                            th:value="${searchFormDto.currentPage} - 1 > 0 ? ${searchFormDto.currentPage} - 1 : 1">
-                    <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
-                    <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
-                    <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
-                    <input th:type="hidden" th:field="*{jobType}" th:value="*{jobType}"/>
-                    <input th:type="hidden" th:field="*{payType}" th:value="*{payType}"/>
-                    <input th:type="hidden" th:field="*{payMin}" th:value="*{payMin}"/>
-                    <input th:type="hidden" th:field="*{payMax}" th:value="*{payMax}"/>
-                    <input th:type="hidden" th:field="*{careerType}" th:value="*{careerType}"/>
-                    <input th:type="hidden" th:field="*{careerMin}" th:value="*{careerMin}"/>
-                    <input th:type="hidden" th:field="*{careerMax}" th:value="*{careerMax}"/>
+                    <input th:type="hidden" th:field="*{platform}"/>
+                    <input th:type="hidden" th:field="*{searchText}"/>
+                    <input th:type="hidden" th:field="*{location}"/>
+                    <input th:type="hidden" th:field="*{jobType}"/>
+                    <input th:type="hidden" th:field="*{payType}"/>
+                    <input th:type="hidden" th:field="*{payMin}"/>
+                    <input th:type="hidden" th:field="*{payMax}"/>
+                    <input th:type="hidden" th:field="*{careerType}"/>
+                    <input th:type="hidden" th:field="*{careerMin}"/>
+                    <input th:type="hidden" th:field="*{careerMax}"/>
                     <button type="submit" th:text="Prev" th:classappend="${searchFormDto.currentPage == 1} ? 'disabled-btn'" class="btn"></button>
                 </form>
             </li>
@@ -68,49 +68,49 @@
             <li th:each="page: ${#numbers.sequence(startPage, lastPage)}" class="page-item">
                 <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" name="currentPage" th:value="${page}">
-                    <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
-                    <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
-                    <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
-                    <input th:type="hidden" th:field="*{jobType}" th:value="*{jobType}"/>
-                    <input th:type="hidden" th:field="*{payType}" th:value="*{payType}"/>
-                    <input th:type="hidden" th:field="*{payMin}" th:value="*{payMin}"/>
-                    <input th:type="hidden" th:field="*{payMax}" th:value="*{payMax}"/>
-                    <input th:type="hidden" th:field="*{careerType}" th:value="*{careerType}"/>
-                    <input th:type="hidden" th:field="*{careerMin}" th:value="*{careerMin}"/>
-                    <input th:type="hidden" th:field="*{careerMax}" th:value="*{careerMax}"/>
+                    <input th:type="hidden" th:field="*{platform}"/>
+                    <input th:type="hidden" th:field="*{searchText}"/>
+                    <input th:type="hidden" th:field="*{location}"/>
+                    <input th:type="hidden" th:field="*{jobType}"/>
+                    <input th:type="hidden" th:field="*{payType}"/>
+                    <input th:type="hidden" th:field="*{payMin}"/>
+                    <input th:type="hidden" th:field="*{payMax}"/>
+                    <input th:type="hidden" th:field="*{careerType}"/>
+                    <input th:type="hidden" th:field="*{careerMin}"/>
+                    <input th:type="hidden" th:field="*{careerMax}"/>
                     <button type="submit" th:text="${page}" th:classappend="${page == searchFormDto.currentPage} ? 'btn-primary'" class="btn"></button>
                 </form>
             </li>
 
             <li class="page-item" th:style="${searchFormDto.currentPage == totalPage} ? 'display : none'">
                 <form th:action="job-find" th:object="${searchFormDto}" method="post">
-                    <input th:type="hidden" name="currentPage"  th:value="${searchFormDto.currentPage} + 1">
-                    <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
-                    <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
-                    <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
-                    <input th:type="hidden" th:field="*{jobType}" th:value="*{jobType}"/>
-                    <input th:type="hidden" th:field="*{payType}" th:value="*{payType}"/>
-                    <input th:type="hidden" th:field="*{payMin}" th:value="*{payMin}"/>
-                    <input th:type="hidden" th:field="*{payMax}" th:value="*{payMax}"/>
-                    <input th:type="hidden" th:field="*{careerType}" th:value="*{careerType}"/>
-                    <input th:type="hidden" th:field="*{careerMin}" th:value="*{careerMin}"/>
-                    <input th:type="hidden" th:field="*{careerMax}" th:value="*{careerMax}"/>
+                    <input th:type="hidden" name="currentPage" th:value="${searchFormDto.currentPage} + 1">
+                    <input th:type="hidden" th:field="*{platform}"/>
+                    <input th:type="hidden" th:field="*{searchText}"/>
+                    <input th:type="hidden" th:field="*{location}"/>
+                    <input th:type="hidden" th:field="*{jobType}"/>
+                    <input th:type="hidden" th:field="*{payType}"/>
+                    <input th:type="hidden" th:field="*{payMin}"/>
+                    <input th:type="hidden" th:field="*{payMax}"/>
+                    <input th:type="hidden" th:field="*{careerType}"/>
+                    <input th:type="hidden" th:field="*{careerMin}"/>
+                    <input th:type="hidden" th:field="*{careerMax}"/>
                     <button type="submit" th:text="Next" class="btn"></button>
                 </form>
             </li>
             <li th:class="page-item" th:style="${searchFormDto.currentPage == totalPage} ? 'display : none'">
                 <form th:action="job-find" th:object="${searchFormDto}" method="post">
                     <input th:type="hidden" name="currentPage" th:value="${totalPage}">
-                    <input th:type="hidden" th:field="*{platform}" th:value="*{platform}"/>
-                    <input th:type="hidden" th:field="*{searchText}" th:value="*{searchText}"/>
-                    <input th:type="hidden" th:field="*{location}" th:value="*{location}"/>
-                    <input th:type="hidden" th:field="*{jobType}" th:value="*{jobType}"/>
-                    <input th:type="hidden" th:field="*{payType}" th:value="*{payType}"/>
-                    <input th:type="hidden" th:field="*{payMin}" th:value="*{payMin}"/>
-                    <input th:type="hidden" th:field="*{payMax}" th:value="*{payMax}"/>
-                    <input th:type="hidden" th:field="*{careerType}" th:value="*{careerType}"/>
-                    <input th:type="hidden" th:field="*{careerMin}" th:value="*{careerMin}"/>
-                    <input th:type="hidden" th:field="*{careerMax}" th:value="*{careerMax}"/>
+                    <input th:type="hidden" th:field="*{platform}"/>
+                    <input th:type="hidden" th:field="*{searchText}"/>
+                    <input th:type="hidden" th:field="*{location}"/>
+                    <input th:type="hidden" th:field="*{jobType}"/>
+                    <input th:type="hidden" th:field="*{payType}"/>
+                    <input th:type="hidden" th:field="*{payMin}"/>
+                    <input th:type="hidden" th:field="*{payMax}"/>
+                    <input th:type="hidden" th:field="*{careerType}"/>
+                    <input th:type="hidden" th:field="*{careerMin}"/>
+                    <input th:type="hidden" th:field="*{careerMax}"/>
                     <button type="submit" th:text="Last" class="btn"></button>
                 </form>
             </li>
