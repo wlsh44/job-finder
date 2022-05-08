@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static flab.project.jobfinder.enums.Platform.JOBKOREA;
+
 @Component
 @RequiredArgsConstructor
 public class JobKoreaParserService implements ParserService {
@@ -33,7 +35,6 @@ public class JobKoreaParserService implements ParserService {
     }
 
     private RecruitDto getParseDto(Elements corpElement, Elements infoElement, Elements optionElement, Elements etcElement) {
-        String platform = config.getPlatform();
         RecruitDto recruitDto = RecruitDto.builder()
                 .title(parseTitle(infoElement))
                 .corp(parseCorp(corpElement))
@@ -43,7 +44,7 @@ public class JobKoreaParserService implements ParserService {
                 .dueDate(parseDueDate(optionElement))
                 .jobType(parseJobType(optionElement))
                 .techStack(parseTechStack(etcElement))
-                .platform(platform)
+                .platform(JOBKOREA.koreaName())
                 .build();
         return recruitDto;
     }

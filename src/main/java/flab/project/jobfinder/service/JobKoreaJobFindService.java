@@ -46,9 +46,7 @@ public class JobKoreaJobFindService implements JobFindService {
 
     @Override
     public Platform getPlatform() {
-        Map<String, String> map = Platform.getKoreaNameMap();
-        String platformName = map.get(config.getPlatform());
-        return Platform.valueOf(platformName);
+        return Platform.JOBKOREA;
     }
 
     private int getStartPage(int currentPage) {
