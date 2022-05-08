@@ -69,10 +69,8 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         Optional.ofNullable(career.getCareerType())
                 .ifPresent(careerType -> params.append("&careerType=").append(careerType.jobkoreaCode()));
         Optional.ofNullable(career.getCareerMin())
-                .filter(careerMin -> !careerMin.isEmpty())
                 .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
         Optional.ofNullable(career.getCareerMax())
-                .filter(careerMax -> !careerMax.isEmpty())
                 .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
         return params.toString();
     }
@@ -83,10 +81,8 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         Optional.ofNullable(pay.getPayType())
                 .ifPresent(payType -> params.append("&payType=").append(payType.jobkoreaCode()));
         Optional.ofNullable(pay.getPayMin())
-                .filter(payMin -> !payMin.isEmpty()).
-                ifPresent(payMin -> params.append("&payMin=").append(payMin));
+                .ifPresent(payMin -> params.append("&payMin=").append(payMin));
         Optional.ofNullable(pay.getPayMax())
-                .filter(payMax -> !payMax.isEmpty())
                 .ifPresent(payMax -> params.append("&payMax=").append(payMax));
         return params.toString();
     }
