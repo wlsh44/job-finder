@@ -40,7 +40,7 @@ public class JobFinderController {
         log.info(searchFormDto.toString());
         RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(searchFormDto, currentPage);
 
-        List<RecruitDto> recruitDtoList = recruitPageDto.getList();
+        List<RecruitDto> recruitDtoList = recruitPageDto.getRecruitDtoList();
         int totalPage = recruitPageDto.getTotalPage();
         int startPage = recruitPageDto.getStartPage();
 

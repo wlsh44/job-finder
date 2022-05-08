@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class RecruitPageDto {
-    private List<RecruitDto> list;
+    private List<RecruitDto> recruitDtoList;
     private int totalPage;
     private int startPage;
 }

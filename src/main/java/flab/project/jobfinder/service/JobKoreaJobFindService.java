@@ -14,7 +14,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -38,7 +37,7 @@ public class JobKoreaJobFindService implements JobFindService {
         log.info("total page: {}", totalPage);
 
         return RecruitPageDto.builder()
-                .list(recruitDtoList)
+                .recruitDtoList(recruitDtoList)
                 .totalPage(totalPage)
                 .startPage(getStartPage(page))
                 .build();

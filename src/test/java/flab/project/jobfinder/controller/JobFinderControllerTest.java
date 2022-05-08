@@ -1,6 +1,5 @@
 package flab.project.jobfinder.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
@@ -61,7 +60,7 @@ class JobFinderControllerTest {
                 .build();
 
         recruitPageDto = RecruitPageDto.builder()
-                .list(List.of(recruitDto))
+                .recruitDtoList(List.of(recruitDto))
                 .totalPage(1)
                 .startPage(1)
                 .build();
