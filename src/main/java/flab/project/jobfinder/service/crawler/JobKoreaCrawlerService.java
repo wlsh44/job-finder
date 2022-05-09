@@ -2,6 +2,7 @@ package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -36,7 +37,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
             return doc;
         } catch (IOException e) {
             log.error(e.getMessage());
+            throw new CrawlFailedException("서버 연결에 실패했습니다.");
         }
-        return null;
     }
 }
