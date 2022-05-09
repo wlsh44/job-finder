@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchFormDto {
 
-    @NotNull
+    @NotNull(message = "플랫폼을 정해주세요")
     private Platform platform;
     private String searchText;
     private List<Location> location;
