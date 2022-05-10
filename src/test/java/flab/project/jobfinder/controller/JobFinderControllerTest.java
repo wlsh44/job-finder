@@ -114,4 +114,17 @@ class JobFinderControllerTest {
                         .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk());    //200이 리턴되는게 맞나?
     }
+
+    @Test
+    @DisplayName("post 실패 - currentPage 이상한 값 들어옴")
+    void postFail_WrongFormatOfCurrentPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .param("currentPage", "-1")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());    //200이 리턴되는게 맞나?
+    }
 }
