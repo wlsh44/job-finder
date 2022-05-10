@@ -54,13 +54,11 @@ public class JobFinderController {
         List<RecruitDto> recruitDtoList = recruitPageDto.getRecruitDtoList();
         int totalPage = recruitPageDto.getTotalPage();
         int startPage = recruitPageDto.getStartPage();
-
-        SearchFormDto newSearchFormDto = new SearchFormDto(detailedSearchDto, currentPage);
-
+        
         model.addAttribute("recruitDtoList", recruitDtoList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("totalPage", totalPage);
-        model.addAttribute("searchFormDto", newSearchFormDto);
+        model.addAttribute("searchFormDto", searchFormDto);
         return "recruits";
     }
 }

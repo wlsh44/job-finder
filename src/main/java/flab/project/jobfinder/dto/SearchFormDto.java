@@ -27,20 +27,6 @@ public class SearchFormDto {
     @Min(1)
     private Integer currentPage;
 
-    public SearchFormDto(DetailedSearchDto dto, Integer currentPage) {
-        this.platform = dto.getPlatform();
-        this.searchText = dto.getSearchText();
-        this.location = dto.getLocation();
-        this.jobType = dto.getJobType();
-        this.payType = dto.getPay().getPayType();
-        this.payMin = dto.getPay().getPayMin();
-        this.payMax = dto.getPay().getPayMax();
-        this.careerType = dto.getCareer().getCareerType();
-        this.careerMin = dto.getCareer().getCareerMin();
-        this.careerMax = dto.getCareer().getCareerMax();
-        this.currentPage = currentPage;
-    }
-
     public DetailedSearchDto getDetailedSearchDto() {
         return DetailedSearchDto.builder()
                 .platform(platform)
@@ -50,9 +36,5 @@ public class SearchFormDto {
                 .pay(new DetailedSearchDto.Pay(payType, payMin, payMax))
                 .career(new DetailedSearchDto.Career(careerType, careerMin, careerMax))
                 .build();
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
     }
 }
