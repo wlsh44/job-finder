@@ -25,6 +25,7 @@ public class SearchFormDto {
     private Integer careerMax;
 
     @Min(1)
+    @NotNull
     private Integer currentPage;
 
     public DetailedSearchDto getDetailedSearchDto() {
