@@ -37,21 +37,19 @@ class JobFinderControllerTest {
     @MockBean
     JobFindFactory findFactory;
 
-    DetailedSearchDto detailedSearchDto;
     SearchFormDto searchFormDto;
     RecruitDto recruitDto;
     RecruitPageDto recruitPageDto;
 
     @BeforeEach
     void init() {
-        detailedSearchDto = DetailedSearchDto.builder()
-                .searchText("spring")
-                .pay(new DetailedSearchDto.Pay(PayType.ANNUAL, null, null))
-                .career(new DetailedSearchDto.Career(CareerType.SENIOR, null, null))
-                .location(List.of(Location.SEOUL))
-                .platform(Platform.JOBKOREA).build();
-
-        searchFormDto = new SearchFormDto(detailedSearchDto, 1);
+        searchFormDto = new SearchFormDto();
+        searchFormDto.setPlatform(Platform.JOBKOREA);
+        searchFormDto.setSearchText("spring");
+        searchFormDto.setPayType(PayType.ANNUAL);
+        searchFormDto.setCareerType(CareerType.SENIOR);
+        searchFormDto.setLocation(List.of(Location.SEOUL));
+        searchFormDto.setCurrentPage(1);
 
         recruitDto = RecruitDto.builder()
                 .title("test title")
@@ -83,7 +81,8 @@ class JobFinderControllerTest {
     @Test
     @DisplayName("post 성공 테스트")
     void postSuccessTest() throws Exception {
-        given(findFactory.getRecruitPageDto(detailedSearchDto, 1))
+        given(findFactory.getRecruitPageDto(searchFormDto.getDetailedSearchDto(),
+                                            searchFormDto.getCurrentPage()))
                 .willReturn(recruitPageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
