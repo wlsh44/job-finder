@@ -58,6 +58,10 @@
             <input id="career-min" type="text" th:field="*{careerMin}" class="form-control col-sm-2" placeholder="년"> ~
             <input id="career-max" type="text" th:field="*{careerMax}" class="form-control col-sm-2" placeholder="년">
         </div>
+        <p class="field-error" th:if="${#fields.hasErrors('careerMin')} or ${#fields.hasErrors('careerMax')}"
+        th:text="${#fields.hasErrors('careerMin')} ? ${#fields.errors('careerMin').get(0)} : ${#fields.errors('careerMax').get(0)}">
+            검증 오류
+        </p>
         <br>
         <div class="row">급여</div>
         <div class="row">
@@ -72,6 +76,10 @@
             <input id="pay-min" type="text" th:field="*{payMin}" class="form-control col-sm-2" placeholder="만원 이상"> ~
             <input id="pay-max" type="text" th:field="*{payMax}" class="form-control col-sm-2" placeholder="만원 이하">
         </div>
+        <p class="field-error" th:if="${#fields.hasErrors('payMin')} or ${#fields.hasErrors('payMax')}"
+           th:text="${#fields.hasErrors('payMin')} ? ${#fields.errors('payMin').get(0)} : ${#fields.errors('payMax').get(0)}">
+            검증 오류
+        </p>
         <hr class="my-4">
         <div class="row">
             <button type="submit" class="w-50 btn btn-primary btn-lg">찾기</button>
