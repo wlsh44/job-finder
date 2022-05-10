@@ -1,6 +1,5 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.dto.SearchFormDto;
@@ -9,7 +8,6 @@ import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobFindFactory;
-import flab.project.jobfinder.service.JobKoreaJobFindService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +56,7 @@ class JobFinderControllerTest {
                 .corp("test corp")
                 .career("test career")
                 .location("test loc")
-                .platform("JobKorea")
+                .platform("잡코리아")
                 .techStack("spring")
                 .build();
 
@@ -90,8 +88,8 @@ class JobFinderControllerTest {
                         .param("searchText", "spring")
                         .param("location", "SEOUL")
                         .param("platform", "JOBKOREA")
-                        .param("pay.payType", "ANNUAL")
-                        .param("career.careerType", "SENIOR")
+                        .param("payType", "ANNUAL")
+                        .param("careerType", "SENIOR")
                         .param("currentPage", "1")
                         .contentType(MediaType.TEXT_HTML)
                         .accept(MediaType.TEXT_HTML))
@@ -115,6 +113,18 @@ class JobFinderControllerTest {
     }
 
     @Test
+    @DisplayName("post 실패 - currentPage 값 안 들어옴")
+    void postFail_CurrentPageNull() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("post 실패 - currentPage 이상한 값 들어옴")
     void postFail_WrongFormatOfCurrentPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
@@ -124,6 +134,62 @@ class JobFinderControllerTest {
                         .contentType(MediaType.TEXT_HTML)
                         .accept(MediaType.TEXT_HTML))
                 .andDo(print())
-                .andExpect(status().isOk());    //200이 리턴되는게 맞나?
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 실패 - careerMin 이상한 값 들어옴")
+    void postFail_WrongFormatOfCareerMin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .param("currentPage", "1")
+                        .param("careerMin", "aaa")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 실패 - careerMax 이상한 값 들어옴")
+    void postFail_WrongFormatOfCareerMax() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .param("currentPage", "1")
+                        .param("careerMax", "aaa")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 실패 - payMin 이상한 값 들어옴")
+    void postFail_WrongFormatOfPayMin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .param("currentPage", "1")
+                        .param("payMin", "aaa")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("post 실패 - payMax 이상한 값 들어옴")
+    void postFail_WrongFormatOfPayMax() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/job-find")
+                        .param("platform", "JOBKOREA")
+                        .param("currentPage", "1")
+                        .param("payMax", "aaa")
+                        .contentType(MediaType.TEXT_HTML)
+                        .accept(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
