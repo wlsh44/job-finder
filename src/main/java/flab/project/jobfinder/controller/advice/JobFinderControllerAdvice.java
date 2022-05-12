@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class JobFinderControllerAdvice {
 
+    /**
+     * Crawling 실패 시
+     * @return
+     */
     @ExceptionHandler(CrawlFailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String CrawlFailedException(Model model) {
