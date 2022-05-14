@@ -5,6 +5,7 @@ import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.CrawlerService;
 import flab.project.jobfinder.service.parser.ParserService;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class JobKoreaJobFindService implements JobFindService {
     private final static int FIRST_PAGE = 1;
 
     @Override
-    public RecruitPageDto findJobByPage(DetailedSearchDto dto, int page) {
+    public RecruitPageDto findJobByPage(DetailedSearchDto dto, int page) throws CrawlFailedException {
         Document doc = jobKoreaCrawlerService.crawl(dto, page);
         int totalPage = getTotalPage(doc);
         List<RecruitDto> recruitDtoList = parsePage(doc);

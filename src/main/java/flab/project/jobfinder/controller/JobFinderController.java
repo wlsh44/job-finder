@@ -3,6 +3,7 @@ package flab.project.jobfinder.controller;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.dto.SearchFormDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobFindFactory;
@@ -10,10 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -25,20 +27,29 @@ public class JobFinderController {
 
     @GetMapping("/job-find")
     public String getJobFindForm(Model model) {
-        DetailedSearchDto searchFormDto = new DetailedSearchDto();
-        Integer currentPage = 1;
+        SearchFormDto searchFormDto = new SearchFormDto();
 
         model.addAttribute("searchFormDto", searchFormDto);
         model.addAttribute("locationMap", Location.getDistrictMap());
         model.addAttribute("platformMap", Platform.getKoreaNameMap());
-        model.addAttribute("currentPage", currentPage);
         return "form";
     }
 
     @PostMapping("/job-find")
-    public String jobFind(Model model, DetailedSearchDto searchFormDto, @RequestParam Integer currentPage) {
-        log.info(searchFormDto.toString());
-        RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(searchFormDto, currentPage);
+    public String jobFind(@Valid SearchFormDto searchFormDto, BindingResult bindingResult, Model model) {
+        log.debug(searchFormDto.toString());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("locationMap", Location.getDistrictMap());
+            model.addAttribute("platformMap", Platform.getKoreaNameMap());
+            log.info("errors={}", bindingResult);
+            return "form";
+        }
+
+        DetailedSearchDto detailedSearchDto = searchFormDto.getDetailedSearchDto();
+        Integer currentPage = searchFormDto.getCurrentPage();
+
+        RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(detailedSearchDto, currentPage);
 
         List<RecruitDto> recruitDtoList = recruitPageDto.getRecruitDtoList();
         int totalPage = recruitPageDto.getTotalPage();
@@ -47,7 +58,6 @@ public class JobFinderController {
         model.addAttribute("recruitDtoList", recruitDtoList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("totalPage", totalPage);
-        model.addAttribute("currentPage", currentPage);
         model.addAttribute("searchFormDto", searchFormDto);
         return "recruits";
     }

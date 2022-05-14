@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="/fragment/header.html :: fragment-header"></div>
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container" style="max-width: 800px">
@@ -10,12 +11,15 @@
     </div>
     <br>
     <form th:action="job-find" th:object="${searchFormDto}" method="post">
-        <input th:type="hidden" th:value="${currentPage}" name="currentPage">
+        <input th:type="hidden" name="currentPage" th:value="${1}">
         <div class="row">플랫폼</div>
         <div class="row">
             <div th:each="entry : ${platformMap}" class="form-check">
                 <input type="checkbox" th:field="*{platform}" th:value="${entry.value}">
                 <label class="form-check-label" th:for="${#ids.prev('platform')}" th:text="${entry.key}  "></label>
+                <div class="field-error" th:errors="*{platform}">
+                    검증 오류
+                </div>
             </div>
         </div>
         <br>
@@ -43,7 +47,7 @@
         <br>
         <div class="row">경력</div>
         <div class="row">
-            <select id="career-type" th:field="*{career.careerType}" class="form-select">
+            <select id="career-type" th:field="*{careerType}" class="form-select">
                 <option value="">선택</option>
                 <option value="JUNIOR">신입</option>
                 <option value="SENIOR">경력</option>
@@ -51,13 +55,17 @@
             </select>
         </div>
         <div class="row">
-            <input id="career-min" type="text" th:field="*{career.careerMin}" class="form-control col-sm-2" placeholder="년"> ~
-            <input id="career-max" type="text" th:field="*{career.careerMax}" class="form-control col-sm-2" placeholder="년">
+            <input id="career-min" type="text" th:field="*{careerMin}" class="form-control col-sm-2" placeholder="년"> ~
+            <input id="career-max" type="text" th:field="*{careerMax}" class="form-control col-sm-2" placeholder="년">
         </div>
+        <p class="field-error" th:if="${#fields.hasErrors('careerMin')} or ${#fields.hasErrors('careerMax')}"
+        th:text="${#fields.hasErrors('careerMin')} ? ${#fields.errors('careerMin').get(0)} : ${#fields.errors('careerMax').get(0)}">
+            검증 오류
+        </p>
         <br>
         <div class="row">급여</div>
         <div class="row">
-            <select id="pay-type" th:field="*{pay.payType}" class="form-select">
+            <select id="pay-type" th:field="*{payType}" class="form-select">
                 <option value="">선택</option>
                 <option value='ANNUAL'>연봉</option>
                 <option value='MONTH'>월급</option>
@@ -65,9 +73,13 @@
             </select>
         </div>
         <div class="row">
-            <input id="pay-min" type="text" th:field="*{pay.payMin}" class="form-control col-sm-2" placeholder="만원 이상"> ~
-            <input id="pay-max" type="text" th:field="*{pay.payMax}" class="form-control col-sm-2" placeholder="만원 이하">
+            <input id="pay-min" type="text" th:field="*{payMin}" class="form-control col-sm-2" placeholder="만원 이상"> ~
+            <input id="pay-max" type="text" th:field="*{payMax}" class="form-control col-sm-2" placeholder="만원 이하">
         </div>
+        <p class="field-error" th:if="${#fields.hasErrors('payMin')} or ${#fields.hasErrors('payMax')}"
+           th:text="${#fields.hasErrors('payMin')} ? ${#fields.errors('payMin').get(0)} : ${#fields.errors('payMax').get(0)}">
+            검증 오류
+        </p>
         <hr class="my-4">
         <div class="row">
             <button type="submit" class="w-50 btn btn-primary btn-lg">찾기</button>

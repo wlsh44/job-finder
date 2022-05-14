@@ -3,6 +3,7 @@ package flab.project.jobfinder.dto;
 import flab.project.jobfinder.enums.*;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Builder
@@ -11,38 +12,28 @@ import java.util.List;
 @NoArgsConstructor
 public class DetailedSearchDto {
 
+    private Platform platform;
     private String searchText;
     private List<Location> location;
     private List<JobType> jobType;
     private Pay pay;
     private Career career;
-    private Platform platform;
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Pay {
         private PayType payType;
-        private String payMin;
-        private String payMax;
-
-        public Pay(PayType payType, String payMin, String payMax) {
-            this.payType = payType;
-            this.payMin = payMin;
-            this.payMax = payMax;
-        }
+        private Integer payMin;
+        private Integer payMax;
     }
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Career {
         private CareerType careerType;
-        private String careerMin;
-        private String careerMax;
-
-        public Career(CareerType careerType, String careerMin, String careerMax) {
-            this.careerType = careerType;
-            this.careerMin = careerMin;
-            this.careerMax = careerMax;
-        }
+        private Integer careerMin;
+        private Integer careerMax;
     }
 }
