@@ -19,7 +19,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
     @Override
     public String toQueryParams(DetailedSearchDto dto, int pageNum) {
-        StringBuilder queryParams = new StringBuilder("tabType=recruit");
+        StringBuilder queryParams = new StringBuilder("");
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
@@ -38,9 +38,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toSearchTextParam(String searchText) {
-        String encoded = URLEncoder.encode(searchText, StandardCharsets.UTF_8);
-
-        return "&stext=" + encoded;
+        return "?keywords=" + searchText;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -54,13 +52,14 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toLocationParam(List<Location> locations) {
+        StringBuilder sb = new StringBuilder("");
         if (locations.isEmpty()) {
-            return "";
+            return sb.toString();
         }
-        String location = locations.stream()
-                .map(Location::jobkoreaCode)
-                .collect(Collectors.joining(config.getDelimiter()));
-        return "&local=" + location;
+        locations.stream()
+                .map(Location::rocketPunchCode)
+                .forEach(location -> sb.append("&location=").append(location));
+        return sb.toString();
     }
 
     private String toCareerParam(DetailedSearchDto.Career career) {
