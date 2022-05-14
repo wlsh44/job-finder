@@ -37,7 +37,7 @@ public class JobFinderController {
 
     @PostMapping("/job-find")
     public String jobFind(@Valid SearchFormDto searchFormDto, BindingResult bindingResult, Model model) {
-        log.info(searchFormDto.toString());
+        log.debug(searchFormDto.toString());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("locationMap", Location.getDistrictMap());
