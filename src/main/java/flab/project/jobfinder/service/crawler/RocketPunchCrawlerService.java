@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
+import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
@@ -15,13 +15,13 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-public class JobKoreaCrawlerService implements CrawlerService {
+public class RocketPunchCrawlerService implements CrawlerService {
 
     private final QueryParamGenerator paramGenerator;
-    private final RocketPunchPropertiesConfig config;
+    private final JobKoreaPropertiesConfig config;
 
     @Autowired
-    public JobKoreaCrawlerService(@Qualifier("rocketPunchQueryParamGenerator") QueryParamGenerator paramGenerator, RocketPunchPropertiesConfig config) {
+    public RocketPunchCrawlerService(@Qualifier("rocketPunchQueryParamGenerator") QueryParamGenerator paramGenerator, JobKoreaPropertiesConfig config) {
         this.paramGenerator = paramGenerator;
         this.config = config;
     }
