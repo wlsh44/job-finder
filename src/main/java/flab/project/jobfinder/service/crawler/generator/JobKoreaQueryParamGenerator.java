@@ -58,7 +58,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
             return "";
         }
         String location = locations.stream()
-                .map(Location::jobkoreaCode)
+                .map(Location::jobKoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
         return "&local=" + location;
     }
