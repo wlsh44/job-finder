@@ -15,11 +15,16 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
     public static final int PAY_UNIT = 10000;
     public static final int MAX_PAY = 20000;
+    public static final String JOB_TYPE_KEY = "hiring_types";
+    public static final String LOCATION_KEY = "location";
+    public static final String PAY_KEY = "salary";
+    public static final String PAGE_KEY = "page";
+    public static final String SEARCH_TEXT_KEY = "keywords";
+
     private final RocketPunchPropertiesConfig config;
 
     @Override
     public String toQueryParams(DetailedSearchDto dto, int pageNum) {
-        StringBuilder queryParams = new StringBuilder("");
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
@@ -27,18 +32,17 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         String payParam = Optional.ofNullable(dto.getPay()).map(this::toPayParam).orElse("");
         String pageNumParam = toPageNumParam(pageNum);
 
-        queryParams.append(searchTextParam)
-                .append(locationParam)
-                .append(careerParam)
-                .append(jobParam)
-                .append(payParam)
-                .append(pageNumParam);
-
-        return queryParams.toString();
+        return String.join(config.getDelimiter(),
+                searchTextParam,
+                locationParam,
+                careerParam,
+                jobParam,
+                payParam,
+                pageNumParam);
     }
 
     private String toSearchTextParam(String searchText) {
-        return "keywords=" + searchText;
+        return SEARCH_TEXT_KEY + "=" + searchText;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -46,36 +50,31 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
             return "";
         }
         String jobType = jobTypes.stream()
-                .map(JobType::jobkoreaCode)
-                .collect(Collectors.joining(config.getDelimiter()));
-        return "&hiring_types=" + jobType;
+                .map(JobType::rocketPunchCode)
+                .collect(Collectors.joining(config.getDelimiter() + JOB_TYPE_KEY + "="));
+        return JOB_TYPE_KEY + "=" + jobType;
     }
 
     private String toLocationParam(List<Location> locations) {
-        StringBuilder sb = new StringBuilder();
-//        if (locations.isEmpty()) {
-//            return sb.toString();
-//        }
-        locations.stream()
+        if (locations.isEmpty()) {
+            return "";
+        }
+        String location = locations.stream()
                 .map(Location::rocketPunchCode)
-                .forEach(location -> sb.append("&location=").append(location));
-        return sb.toString();
+                .collect(Collectors.joining(config.getDelimiter() + LOCATION_KEY + "="));
+        return LOCATION_KEY + "=" + location;
     }
 
     private String toCareerParam(DetailedSearchDto.Career career) {
         StringBuilder params = new StringBuilder();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> params.append("&career_type=").append(careerType.jobkoreaCode()));
-//        Optional.ofNullable(career.getCareerMin())
-//                .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
-//        Optional.ofNullable(career.getCareerMax())
-//                .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
+                .ifPresent(careerType -> params.append("career_type=").append(careerType.jobkoreaCode()));
         return params.toString();
     }
 
     private String toPayParam(DetailedSearchDto.Pay pay) {
-        StringBuilder params = new StringBuilder("&salary=");
+        StringBuilder params = new StringBuilder(PAY_KEY + "=");
 
         if (pay.getPayMin() == null && pay.getPayMax() == null) {
             return "";
@@ -87,6 +86,6 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toPageNumParam(int pageNum) {
-        return "&page=" + pageNum;
+        return PAGE_KEY + "=" + pageNum;
     }
 }
