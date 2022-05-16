@@ -15,5 +15,4 @@ public class JobKoreaPropertiesConfig {
     private String delimiter;
     private String selector;
     private String numSelector;
-    private int maxThreadPool;
 }

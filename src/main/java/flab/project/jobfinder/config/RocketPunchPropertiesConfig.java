@@ -15,5 +15,4 @@ public class RocketPunchPropertiesConfig {
     private String delimiter;
     private String selector;
     private String numSelector;
-    private int maxThreadPool;
 }
