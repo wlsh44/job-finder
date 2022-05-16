@@ -38,7 +38,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toSearchTextParam(String searchText) {
-        return "?keywords=" + searchText;
+        return "keywords=" + searchText;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -77,6 +77,9 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     private String toPayParam(DetailedSearchDto.Pay pay) {
         StringBuilder params = new StringBuilder("&salary=");
 
+        if (pay.getPayMin() == null && pay.getPayMax() == null) {
+            return "";
+        }
         Integer payMin = Optional.ofNullable(pay.getPayMin()).orElse(0);
         Integer payMax = Optional.ofNullable(pay.getPayMax()).orElse(MAX_PAY);
         params.append(payMin * PAY_UNIT).append("-").append(payMax * PAY_UNIT);
