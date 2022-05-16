@@ -48,7 +48,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         String jobType = jobTypes.stream()
                 .map(JobType::jobkoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
-        return "&jobtype=" + jobType;
+        return "&hiring_types=" + jobType;
     }
 
     private String toLocationParam(List<Location> locations) {
