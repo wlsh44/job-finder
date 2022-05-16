@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
+    public static final int PAY_UNIT = 10000;
+    public static final int MAX_PAY = 20000;
     private final RocketPunchPropertiesConfig config;
 
     @Override
@@ -52,10 +54,10 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toLocationParam(List<Location> locations) {
-        StringBuilder sb = new StringBuilder("");
-        if (locations.isEmpty()) {
-            return sb.toString();
-        }
+        StringBuilder sb = new StringBuilder();
+//        if (locations.isEmpty()) {
+//            return sb.toString();
+//        }
         locations.stream()
                 .map(Location::rocketPunchCode)
                 .forEach(location -> sb.append("&location=").append(location));
@@ -66,27 +68,24 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         StringBuilder params = new StringBuilder();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> params.append("&careerType=").append(careerType.jobkoreaCode()));
-        Optional.ofNullable(career.getCareerMin())
-                .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
-        Optional.ofNullable(career.getCareerMax())
-                .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
+                .ifPresent(careerType -> params.append("&career_type=").append(careerType.jobkoreaCode()));
+//        Optional.ofNullable(career.getCareerMin())
+//                .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
+//        Optional.ofNullable(career.getCareerMax())
+//                .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
         return params.toString();
     }
 
     private String toPayParam(DetailedSearchDto.Pay pay) {
-        StringBuilder params = new StringBuilder();
+        StringBuilder params = new StringBuilder("&salary=");
 
-        Optional.ofNullable(pay.getPayType())
-                .ifPresent(payType -> params.append("&payType=").append(payType.jobkoreaCode()));
-        Optional.ofNullable(pay.getPayMin())
-                .ifPresent(payMin -> params.append("&payMin=").append(payMin));
-        Optional.ofNullable(pay.getPayMax())
-                .ifPresent(payMax -> params.append("&payMax=").append(payMax));
+        Integer payMin = Optional.ofNullable(pay.getPayMin()).orElse(0);
+        Integer payMax = Optional.ofNullable(pay.getPayMax()).orElse(MAX_PAY);
+        params.append(payMin * PAY_UNIT).append("-").append(payMax * PAY_UNIT);
         return params.toString();
     }
 
     private String toPageNumParam(int pageNum) {
-        return "&Page_No=" + pageNum;
+        return "&page=" + pageNum;
     }
 }
