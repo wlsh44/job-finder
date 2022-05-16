@@ -56,15 +56,15 @@ class RocketPunchQueryParamGeneratorTest {
                 Arguments.of(DetailedSearchDto.builder().searchText("spring").build(), "keywords=spring&page=1"),
                 Arguments.of(DetailedSearchDto.builder().searchText("spring boot")
                                 .career(new DetailedSearchDto.Career(JUNIOR, null, 2)).build()
-                        , "keywords=spring%20boot&career_type=1&page=1"),
+                        , "keywords=spring+boot&career_type=1&page=1"),
                 Arguments.of(DetailedSearchDto.builder().searchText("웹 서비스")
                                 .location(List.of(GANGNAM, BUNDANG))
                                 .pay(new DetailedSearchDto.Pay(ANNUAL, 4000, null)).build()
-                        , "keywords=웹%20서비스&location=강남구&location=분당구&salary=40000000-200000000&page=1"),
+                        , "keywords=%EC%9B%B9+%EC%84%9C%EB%B9%84%EC%8A%A4&location=%EA%B0%95%EB%82%A8%EA%B5%AC&location=%EB%B6%84%EB%8B%B9%EA%B5%AC&salary=40000000-200000000&page=1"),
                 Arguments.of(DetailedSearchDto.builder().searchText("react 웹 프런트")
                                 .location(List.of(DONGDAEMUN, EUNPYEONG, YONGSAN))
                                 .jobType(List.of(MILITARY)).build()
-                        , "keywords=react%20웹%20프런트&location=동대문구&location=은평구&location=용산구&hiring_types=3&page=1")
+                        , "keywords=react+%EC%9B%B9+%ED%94%84%EB%9F%B0%ED%8A%B8&location=%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC&location=%EC%9D%80%ED%8F%89%EA%B5%AC&location=%EC%9A%A9%EC%82%B0%EA%B5%AC&hiring_types=3&page=1")
         );
     }
 }
