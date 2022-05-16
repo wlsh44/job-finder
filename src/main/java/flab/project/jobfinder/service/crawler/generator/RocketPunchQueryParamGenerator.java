@@ -6,6 +6,8 @@ import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import lombok.RequiredArgsConstructor;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,8 +48,8 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toSearchTextParam(String searchText) {
-        searchText = searchText.replaceAll(" ", "%20");
-        return SEARCH_TEXT_KEY + "=" + searchText;
+        String encoded = URLEncoder.encode(searchText, StandardCharsets.UTF_8);
+        return SEARCH_TEXT_KEY + "=" + encoded;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -66,6 +68,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         }
         return locations.stream()
                 .map(Location::rocketPunchCode)
+                .map(location -> URLEncoder.encode(location, StandardCharsets.UTF_8))
                 .map(location -> config.getDelimiter() + LOCATION_KEY + "=" + location)
                 .collect(Collectors.joining());
     }
