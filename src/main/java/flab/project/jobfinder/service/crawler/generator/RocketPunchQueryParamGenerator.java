@@ -6,8 +6,6 @@ import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import lombok.RequiredArgsConstructor;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
