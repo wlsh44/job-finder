@@ -42,6 +42,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toSearchTextParam(String searchText) {
+        searchText = searchText.replaceAll(" ", "%20");
         return SEARCH_TEXT_KEY + "=" + searchText;
     }
 
