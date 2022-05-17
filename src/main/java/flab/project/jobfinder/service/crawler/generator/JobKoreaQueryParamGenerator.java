@@ -28,17 +28,17 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     @Override
     public MultiValueMap<String, String> toQueryParams(DetailedSearchDto dto, int pageNum) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add(TAB_TYPE_KEY, "recruit");
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add(TAB_TYPE_KEY, "recruit");
 
-        Optional.ofNullable(dto.getSearchText()).ifPresent(searchText -> map.add(SEARCH_TEXT_KEY, searchText));
-        Optional.ofNullable(dto.getLocation()).ifPresent(locations -> map.addAll(LOCATION_KEY, toLocationParam(locations)));
-        Optional.ofNullable(dto.getCareer()).ifPresent(career -> map.addAll(toCareerParam(career)));
-        Optional.ofNullable(dto.getJobType()).ifPresent(jobTypes -> map.addAll(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
-        Optional.ofNullable(dto.getPay()).ifPresent(pay -> map.addAll(toPayParam(pay)));
-        map.add(PAGE_KEY, String.valueOf(pageNum));
+        Optional.ofNullable(dto.getSearchText()).ifPresent(searchText -> queryParams.add(SEARCH_TEXT_KEY, searchText));
+        Optional.ofNullable(dto.getLocation()).ifPresent(locations -> queryParams.addAll(LOCATION_KEY, toLocationParam(locations)));
+        Optional.ofNullable(dto.getCareer()).ifPresent(career -> queryParams.addAll(toCareerParam(career)));
+        Optional.ofNullable(dto.getJobType()).ifPresent(jobTypes -> queryParams.addAll(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
+        Optional.ofNullable(dto.getPay()).ifPresent(pay -> queryParams.addAll(toPayParam(pay)));
+        queryParams.add(PAGE_KEY, String.valueOf(pageNum));
 
-        return map;
+        return queryParams;
     }
 
     private List<String> toJobTypeParam(List<JobType> jobTypes) {
@@ -54,26 +54,26 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     }
 
     private MultiValueMap<String, String> toCareerParam(DetailedSearchDto.Career career) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> map.add(CAREER_TYPE_KEY, careerType.jobkoreaCode()));
+                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.jobkoreaCode()));
         Optional.ofNullable(career.getCareerMin())
-                .ifPresent(careerMin -> map.add(CAREER_MIN_KEY, careerMin.toString()));
+                .ifPresent(careerMin -> careerParam.add(CAREER_MIN_KEY, careerMin.toString()));
         Optional.ofNullable(career.getCareerMax())
-                .ifPresent(careerMax -> map.add(CAREER_MAX_KEY, careerMax.toString()));
-        return map;
+                .ifPresent(careerMax -> careerParam.add(CAREER_MAX_KEY, careerMax.toString()));
+        return careerParam;
     }
 
     private MultiValueMap<String, String> toPayParam(DetailedSearchDto.Pay pay) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> payParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(pay.getPayType())
-                .ifPresent(payType -> map.add(PAY_TYPE_KEY, payType.jobkoreaCode()));
+                .ifPresent(payType -> payParam.add(PAY_TYPE_KEY, payType.jobkoreaCode()));
         Optional.ofNullable(pay.getPayMin())
-                .ifPresent(payMin -> map.add(PAY_MIN_KEY, payMin.toString()));
+                .ifPresent(payMin -> payParam.add(PAY_MIN_KEY, payMin.toString()));
         Optional.ofNullable(pay.getPayMax())
-                .ifPresent(payMax -> map.add(PAY_MAX_KEY, payMax.toString()));
-        return map;
+                .ifPresent(payMax -> payParam.add(PAY_MAX_KEY, payMax.toString()));
+        return payParam;
     }
 }

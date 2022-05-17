@@ -29,23 +29,23 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
     @Override
     public MultiValueMap<String, String> toQueryParams(DetailedSearchDto dto, int pageNum) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(dto.getSearchText())
-                .ifPresent(searchText -> map.add(SEARCH_TEXT_KEY, searchText));
+                .ifPresent(searchText -> queryParams.add(SEARCH_TEXT_KEY, searchText));
         Optional.ofNullable(dto.getLocation())
-                .ifPresent(locations -> map.add(LOCATION_KEY, toLocationParam(locations)));
+                .ifPresent(locations -> queryParams.add(LOCATION_KEY, toLocationParam(locations)));
         Optional.ofNullable(dto.getCareer())
                 .filter(career -> !ANY.equals(career.getCareerType()))
-                .ifPresent(career -> map.add(CAREER_TYPE_KEY, toCareerParam(career)));
+                .ifPresent(career -> queryParams.add(CAREER_TYPE_KEY, toCareerParam(career)));
         Optional.ofNullable(dto.getJobType())
-                .ifPresent(jobTypes -> map.add(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
+                .ifPresent(jobTypes -> queryParams.add(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
         Optional.ofNullable(dto.getPay())
                 .filter(pay -> !(pay.getPayMin() == null && pay.getPayMax() == null))
-                .ifPresent(pay -> map.add(PAY_KEY, toPayParam(pay)));
-        map.add(PAGE_KEY, String.valueOf(pageNum));
+                .ifPresent(pay -> queryParams.add(PAY_KEY, toPayParam(pay)));
+        queryParams.add(PAGE_KEY, String.valueOf(pageNum));
 
-        return map;
+        return queryParams;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -65,14 +65,14 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     }
 
     private String toPayParam(DetailedSearchDto.Pay pay) {
-        StringBuilder params = new StringBuilder();
+        StringBuilder payParam = new StringBuilder();
 
         Integer payMin = Optional.ofNullable(pay.getPayMin()).orElse(0);
         Integer payMax = pay.getPayMax();
-        params.append(payMin * PAY_UNIT).append("-");
+        payParam.append(payMin * PAY_UNIT).append("-");
         if (payMax != null) {
-            params.append(payMax);
+            payParam.append(payMax);
         }
-        return params.toString();
+        return payParam.toString();
     }
 }

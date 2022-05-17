@@ -31,13 +31,13 @@ public class JobKoreaCrawlerService implements CrawlerService {
     @Override
     public Document crawl(DetailedSearchDto dto, int pageNum) {
         String url = config.getSearchUrl();
-        Map<String, String> map = paramGenerator.toQueryParams(dto, pageNum).toSingleValueMap();
+        Map<String, String> queryParams = paramGenerator.toQueryParams(dto, pageNum).toSingleValueMap();
 
         try {
             log.info("url = {}", url);
-            log.info("queryParam = {}", map);
+            log.info("queryParam = {}", queryParams);
             return  Jsoup.connect(url)
-                    .data(map)
+                    .data(queryParams)
                     .timeout(5000)
                     .get();
         } catch (IOException e) {
