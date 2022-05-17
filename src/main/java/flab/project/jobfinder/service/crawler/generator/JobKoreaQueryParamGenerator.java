@@ -15,11 +15,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
+    public static final String SEARCH_TEXT_KEY = "stext";
+    public static final String JOBTYPE_KEY = "jobtype";
+    public static final String LOCATION_KEY = "local";
+    public static final String CAREER_TYPE_KEY = "careerType";
+    public static final String CAREER_MIN_KEY = "careerMin";
+    public static final String CAREER_MAX_KEY = "careerMax";
+    public static final String PAY_TYPE_KEY = "payType";
+    public static final String PAY_MIN_KEY = "payMin";
+    public static final String PAY_MAX_KEY = "payMax";
+    public static final String PAGE_KEY = "Page_No";
+    public static final String TAB_TYPE_KEY = "tabType";
     private final JobKoreaPropertiesConfig config;
 
     @Override
     public String toQueryParams(DetailedSearchDto dto, int pageNum) {
         StringBuilder queryParams = new StringBuilder("tabType=recruit");
+        StringBuilder queryParams = new StringBuilder(TAB_TYPE_KEY + "=recruit");
         String searchTextParam = Optional.ofNullable(dto.getSearchText()).map(this::toSearchTextParam).orElse("");
         String locationParam = Optional.ofNullable(dto.getLocation()).map(this::toLocationParam).orElse("");
         String careerParam = Optional.ofNullable(dto.getCareer()).map(this::toCareerParam).orElse("");
@@ -40,7 +52,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
     private String toSearchTextParam(String searchText) {
         String encoded = URLEncoder.encode(searchText, StandardCharsets.UTF_8);
 
-        return "&stext=" + encoded;
+        return "&" + SEARCH_TEXT_KEY + "=" + encoded;
     }
 
     private String toJobTypeParam(List<JobType> jobTypes) {
@@ -50,7 +62,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         String jobType = jobTypes.stream()
                 .map(JobType::jobkoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
-        return "&jobtype=" + jobType;
+        return "&" + JOBTYPE_KEY + "=" + jobType;
     }
 
     private String toLocationParam(List<Location> locations) {
@@ -60,18 +72,18 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         String location = locations.stream()
                 .map(Location::jobKoreaCode)
                 .collect(Collectors.joining(config.getDelimiter()));
-        return "&local=" + location;
+        return "&" + LOCATION_KEY + "=" + location;
     }
 
     private String toCareerParam(DetailedSearchDto.Career career) {
         StringBuilder params = new StringBuilder();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> params.append("&careerType=").append(careerType.jobkoreaCode()));
+                .ifPresent(careerType -> params.append("&" + CAREER_TYPE_KEY + "=").append(careerType.jobkoreaCode()));
         Optional.ofNullable(career.getCareerMin())
-                .ifPresent(careerMin -> params.append("&careerMin=").append(careerMin));
+                .ifPresent(careerMin -> params.append("&" + CAREER_MIN_KEY + "=").append(careerMin));
         Optional.ofNullable(career.getCareerMax())
-                .ifPresent(careerMax -> params.append("&careerMax=").append(careerMax));
+                .ifPresent(careerMax -> params.append("&" + CAREER_MAX_KEY + "=").append(careerMax));
         return params.toString();
     }
 
@@ -79,15 +91,15 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         StringBuilder params = new StringBuilder();
 
         Optional.ofNullable(pay.getPayType())
-                .ifPresent(payType -> params.append("&payType=").append(payType.jobkoreaCode()));
+                .ifPresent(payType -> params.append("&" + PAY_TYPE_KEY + "=").append(payType.jobkoreaCode()));
         Optional.ofNullable(pay.getPayMin())
-                .ifPresent(payMin -> params.append("&payMin=").append(payMin));
+                .ifPresent(payMin -> params.append("&" + PAY_MIN_KEY + "=").append(payMin));
         Optional.ofNullable(pay.getPayMax())
-                .ifPresent(payMax -> params.append("&payMax=").append(payMax));
+                .ifPresent(payMax -> params.append("&" + PAY_MAX_KEY + "=").append(payMax));
         return params.toString();
     }
 
     private String toPageNumParam(int pageNum) {
-        return "&Page_No=" + pageNum;
+        return "&" + PAGE_KEY + "=" + pageNum;
     }
 }
