@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class JobKoreaConfig {
 
     @Bean
-    public QueryParamGenerator jobKoreaQueryParamGenerator(JobKoreaPropertiesConfig config) {
-        return new JobKoreaQueryParamGenerator(config);
+    public QueryParamGenerator jobKoreaQueryParamGenerator() {
+        return new JobKoreaQueryParamGenerator();
     }
 }
