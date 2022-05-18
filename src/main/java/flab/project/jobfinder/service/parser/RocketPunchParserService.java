@@ -1,6 +1,5 @@
 package flab.project.jobfinder.service.parser;
 
-import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.RecruitDto;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static flab.project.jobfinder.enums.Platform.JOBKOREA;
+import static flab.project.jobfinder.enums.Platform.ROCKETPUNCH;
 
 @Component
 @RequiredArgsConstructor
@@ -24,76 +23,65 @@ public class RocketPunchParserService implements ParserService {
         List<RecruitDto> recruitDtoList = new ArrayList<>();
 
         for (Element recruit : recruits) {
-            Elements corpElement = recruit.select("div > div.post-list-corp > a");
-            Elements infoElement = recruit.select("div > div.post-list-info");
-            Elements optionElement = infoElement.select("p.option");
-            Elements etcElement = infoElement.select("p.etc");
+            String corp = parseCorp(recruit);
+            String metaTech = parseTechStack(recruit);
+            Elements recruitDetails = recruit.select("div.company-jobs-detail > div.job-detail");
 
-            RecruitDto recruitDto = getParseDto(corpElement, infoElement, optionElement, etcElement);
-            recruitDtoList.add(recruitDto);
+            for (Element recruitDetail : recruitDetails) {
+                String title = parseTitle(recruitDetail);
+                String url = parseUrl(recruitDetail);
+                String career = parseCareer(recruitDetail);
+                String dueDate = parseDueDate(recruitDetail);
+
+                RecruitDto recruitDto = getRecruitDto(corp, metaTech, title, url, career, dueDate);
+                recruitDtoList.add(recruitDto);
+            }
         }
         return recruitDtoList;
     }
 
-    private RecruitDto getParseDto(Elements corpElement, Elements infoElement, Elements optionElement, Elements etcElement) {
-        RecruitDto recruitDto = RecruitDto.builder()
-                .title(parseTitle(infoElement))
-                .corp(parseCorp(corpElement))
-                .url(parseUrl(corpElement))
-                .career(parseCareer(optionElement))
-                .location(parseLocation(optionElement))
-                .dueDate(parseDueDate(optionElement))
-                .jobType(parseJobType(optionElement))
-                .techStack(parseTechStack(etcElement))
-                .platform(JOBKOREA.koreaName())
+    private RecruitDto getRecruitDto(String corp, String metaTech, String title, String url, String career, String dueDate) {
+        return RecruitDto.builder()
+                .corp(corp)
+                .title(title)
+                .techStack(metaTech)
+                .url(url)
+                .career(career)
+                .dueDate(dueDate)
+                .platform(ROCKETPUNCH.koreaName())
                 .build();
-        return recruitDto;
     }
 
-    private String parseTechStack(Elements etcElement) {
-        if (etcElement == null) {
+    private String parseTechStack(Element recruit) {
+        Elements meta = recruit.select("div.meta");
+        return meta.text();
+    }
+
+    //기간, 원격 유뮤, 등록 날짜 3개 순으로 되어 있으므로 첫 번째 span 값 가져옴
+    private String parseDueDate(Element recruitDetail) {
+        Element dueDateElement = recruitDetail.select("div.job-dates > span").first();
+        if (dueDateElement == null) {
             return "";
         }
-        return etcElement.text();
+        return recruitDetail.text();
     }
 
-    private String parseDueDate(Elements optionElement) {
-        if (optionElement == null) {
-            return "";
-        }
-        return optionElement.select("span.date").text();
+    private String parseCareer(Element recruitDetail) {
+        return recruitDetail.select("div.job-stat-info").text();
     }
 
-    private String parseLocation(Elements optionElement) {
-        if (optionElement == null) {
-            return "";
-        }
-        return optionElement.select("span.long").text();
+    private String parseUrl(Element recruitDetail) {
+        return config.getUrl() + recruitDetail.select("a.job-title")
+                                                .attr("href");
     }
 
-    private String parseJobType(Elements optionElement) {
-        if (optionElement == null) {
-            return "";
-        }
-        return optionElement.select("span").get(2).text();
+    private String parseCorp(Element recruit) {
+        Elements companyName = recruit.select("div.company-name");
+        return companyName.text();
     }
 
-    private String parseCareer(Elements optionElement) {
-        if (optionElement == null) {
-            return "";
-        }
-        return optionElement.select("span.exp").text().replace("[^0-9]", "");
-    }
-
-    private String parseUrl(Elements corpElement) {
-        return config.getUrl() + corpElement.attr("href");
-    }
-
-    private String parseCorp(Elements corpElement) {
-        return corpElement.attr("title");
-    }
-
-    private String parseTitle(Elements infoElement) {
-        return infoElement.select("a").attr("title");
+    private String parseTitle(Element recruitDetail) {
+        Elements companyName = recruitDetail.select("a.job-title");
+        return companyName.text();
     }
 }
