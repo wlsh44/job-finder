@@ -1,6 +1,5 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,22 +18,15 @@ import static flab.project.jobfinder.enums.JobType.MILITARY;
 import static flab.project.jobfinder.enums.Location.*;
 import static flab.project.jobfinder.enums.PayType.ANNUAL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RocketPunchQueryParamGeneratorTest {
 
     RocketPunchQueryParamGenerator rocketPunchQueryParamGenerator;
 
-    RocketPunchPropertiesConfig config;
-
-    @BeforeAll
+    @BeforeEach
     void init() {
-        config = mock(RocketPunchPropertiesConfig.class);
-        rocketPunchQueryParamGenerator = new RocketPunchQueryParamGenerator(config);
-
-        given(config.getDelimiter()).willReturn("&");
+        rocketPunchQueryParamGenerator = new RocketPunchQueryParamGenerator();
     }
 
     @ParameterizedTest(name = "{index} => {1}")
