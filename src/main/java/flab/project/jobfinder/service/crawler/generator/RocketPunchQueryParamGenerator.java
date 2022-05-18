@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.CareerType.ANY;
+import static flab.project.jobfinder.enums.JobType.INTERN;
 
 @RequiredArgsConstructor
 public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
@@ -39,7 +40,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
                 .ifPresent(locations -> queryParams.addAll(LOCATION_KEY, toLocationParam(locations)));
         Optional.ofNullable(dto.getCareer())
                 .filter(career -> !ANY.equals(career.getCareerType()))
-                .ifPresent(career -> queryParams.addAll(toCareerParam(career)));
+                .ifPresent(career -> queryParams.addAll(toCareerParam(career, dto.getJobType())));
         Optional.ofNullable(dto.getJobType())
                 .ifPresent(jobTypes -> queryParams.addAll(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
         Optional.ofNullable(dto.getPay())
@@ -52,8 +53,8 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
     private List<String> toJobTypeParam(List<JobType> jobTypes) {
         return jobTypes.stream()
-                .map(JobType::rocketPunchCode)
-                .collect(Collectors.toList());
+                .filter(jobType -> !INTERN.equals(jobType))
+                .map(JobType::rocketPunchCode).toList();
     }
 
     private List<String> toLocationParam(List<Location> locations) {
@@ -62,10 +63,13 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
                 .collect(Collectors.toList());
     }
 
-    private MultiValueMap<String, String> toCareerParam(DetailedSearchDto.Career career) {
+    private MultiValueMap<String, String> toCareerParam(DetailedSearchDto.Career career, List<JobType> jobTypes) {
         MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
         Optional.ofNullable(career.getCareerType())
                 .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.rocketPunchCode()));
+        if (jobTypes != null && jobTypes.contains(INTERN)) {
+            careerParam.add(CAREER_TYPE_KEY, INTERN.rocketPunchCode());
+        }
         return careerParam;
     }
 
