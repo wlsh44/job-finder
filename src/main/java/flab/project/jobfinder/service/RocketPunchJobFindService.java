@@ -25,7 +25,6 @@ public class RocketPunchJobFindService implements JobFindService {
     private final ParserService rocketPunchParserService;
     private final RocketPunchPropertiesConfig config;
 
-    private final static int RECRUIT_COUNT_PER_PAGE = 20;
     private final static int MIDDLE_OF_PAGES = 4;
     private final static int FIRST_PAGE = 1;
 
@@ -44,6 +43,11 @@ public class RocketPunchJobFindService implements JobFindService {
                 .build();
     }
 
+    private List<RecruitDto> parsePage(Document pageDoc) {
+        Elements recruits = pageDoc.select(config.getSelector());
+        return rocketPunchParserService.parse(recruits);
+    }
+
     @Override
     public Platform getPlatform() {
         return Platform.ROCKETPUNCH;
@@ -58,21 +62,13 @@ public class RocketPunchJobFindService implements JobFindService {
     }
 
     private int getTotalPage(Document doc) {
-        int pageNum = getPageNum(doc);
-        //page가 1부터 시작하므로 1 더해줌
-        return pageNum / RECRUIT_COUNT_PER_PAGE + 1;
-    }
+        String totalPageSelector = config.getTotalPageSelector();
 
-    private int getPageNum(Document doc) {
-        String numSelector = config.getNumSelector();
-        String pageNumStr = doc.select(numSelector)
-                                .text()
-                                .replaceAll("[^0-9]", "");
-        return Integer.parseInt(pageNumStr);
-    }
-
-    private List<RecruitDto> parsePage(Document pageDoc) {
-        Elements recruits = pageDoc.select(config.getSelector());
-        return rocketPunchParserService.parse(recruits);
+        Elements select = doc.select(totalPageSelector);
+        if (select.size() == 0) {
+            return 1;
+        }
+        String totalPageStr = select.last().text();
+        return Integer.parseInt(totalPageStr);
     }
 }
