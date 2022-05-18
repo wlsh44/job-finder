@@ -8,6 +8,7 @@ import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.CrawlerService;
 import flab.project.jobfinder.service.parser.ParserService;
+import flab.project.jobfinder.service.parser.pagination.PaginationParser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
@@ -23,16 +24,14 @@ public class JobKoreaJobFindService implements JobFindService {
 
     private final CrawlerService jobKoreaCrawlerService;
     private final ParserService jobKoreaParserService;
+    private final PaginationParser jobKoreaPaginationParser;
     private final JobKoreaPropertiesConfig config;
-
-    private final static int RECRUIT_COUNT_PER_PAGE = 20;
-    private final static int MIDDLE_OF_PAGES = 4;
-    private final static int FIRST_PAGE = 1;
 
     @Override
     public RecruitPageDto findJobByPage(DetailedSearchDto dto, int page) throws CrawlFailedException {
         Document doc = jobKoreaCrawlerService.crawl(dto, page);
-        int totalPage = getTotalPage(doc);
+        int totalPage = jobKoreaPaginationParser.getTotalPage(doc, config);
+        int startPage = jobKoreaPaginationParser.getStartPage(page);
         List<RecruitDto> recruitDtoList = parsePage(doc);
 
         log.info("total page: {}", totalPage);
@@ -40,39 +39,17 @@ public class JobKoreaJobFindService implements JobFindService {
         return RecruitPageDto.builder()
                 .recruitDtoList(recruitDtoList)
                 .totalPage(totalPage)
-                .startPage(getStartPage(page))
+                .startPage(startPage)
                 .build();
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return Platform.JOBKOREA;
-    }
-
-    private int getStartPage(int currentPage) {
-        //1, 2, 3, 4 페이지일 때는 startPage = 1
-        if (currentPage <= MIDDLE_OF_PAGES) {
-            return FIRST_PAGE;
-        }
-        return currentPage - MIDDLE_OF_PAGES;
-    }
-
-    private int getTotalPage(Document doc) {
-        int pageNum = getPageNum(doc);
-        //page가 1부터 시작하므로 1 더해줌
-        return pageNum / RECRUIT_COUNT_PER_PAGE + 1;
-    }
-
-    private int getPageNum(Document doc) {
-        String numSelector = config.getNumSelector();
-        String pageNumStr = doc.select(numSelector)
-                                .text()
-                                .replaceAll("[^0-9]", "");
-        return Integer.parseInt(pageNumStr);
     }
 
     private List<RecruitDto> parsePage(Document pageDoc) {
         Elements recruits = pageDoc.select(config.getSelector());
         return jobKoreaParserService.parse(recruits);
+    }
+
+    @Override
+    public Platform getPlatform() {
+        return Platform.JOBKOREA;
     }
 }
