@@ -39,7 +39,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
                 .ifPresent(locations -> queryParams.addAll(LOCATION_KEY, toLocationParam(locations)));
         Optional.ofNullable(dto.getCareer())
                 .filter(career -> !ANY.equals(career.getCareerType()))
-                .ifPresent(career -> queryParams.add(CAREER_TYPE_KEY, toCareerParam(career)));
+                .ifPresent(career -> queryParams.addAll(toCareerParam(career)));
         Optional.ofNullable(dto.getJobType())
                 .ifPresent(jobTypes -> queryParams.addAll(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
         Optional.ofNullable(dto.getPay())
@@ -62,8 +62,11 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
                 .collect(Collectors.toList());
     }
 
-    private String toCareerParam(DetailedSearchDto.Career career) {
-        return career.getCareerType().rocketPunchCode();
+    private MultiValueMap<String, String> toCareerParam(DetailedSearchDto.Career career) {
+        MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
+        Optional.ofNullable(career.getCareerType())
+                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.rocketPunchCode()));
+        return careerParam;
     }
 
     private String toPayParam(DetailedSearchDto.Pay pay) {

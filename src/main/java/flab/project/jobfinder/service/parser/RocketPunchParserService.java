@@ -48,6 +48,8 @@ public class RocketPunchParserService implements ParserService {
                 .url(url)
                 .career(career)
                 .dueDate(dueDate)
+                .location("")
+                .jobType("")
                 .platform(ROCKETPUNCH.koreaName())
                 .build();
     }
@@ -59,15 +61,17 @@ public class RocketPunchParserService implements ParserService {
 
     //기간, 원격 유뮤, 등록 날짜 3개 순으로 되어 있으므로 첫 번째 span 값 가져옴
     private String parseDueDate(Element recruitDetail) {
-        Element dueDateElement = recruitDetail.select("div.job-dates > span").first();
-        if (dueDateElement == null) {
+        Element dueDate = recruitDetail.select("div.job-dates > span").first();
+        if (dueDate == null) {
             return "";
         }
-        return recruitDetail.text();
+        return dueDate.text();
     }
 
     private String parseCareer(Element recruitDetail) {
-        return recruitDetail.select("div.job-stat-info").text();
+        String info = recruitDetail.select("span.job-stat-info").text();
+        String[] infoArr = info.split("/");
+        return infoArr[infoArr.length - 1];
     }
 
     private String parseUrl(Element recruitDetail) {
@@ -76,7 +80,7 @@ public class RocketPunchParserService implements ParserService {
     }
 
     private String parseCorp(Element recruit) {
-        Elements companyName = recruit.select("div.company-name");
+        Elements companyName = recruit.select("h4.name > strong");
         return companyName.text();
     }
 
