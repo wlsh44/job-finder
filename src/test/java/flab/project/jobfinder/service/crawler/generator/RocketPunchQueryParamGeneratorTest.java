@@ -58,12 +58,12 @@ class RocketPunchQueryParamGeneratorTest {
                 "page", List.of("1")));
         MultiValueMap<String, String> map4 = new LinkedMultiValueMap<>(Map.of(
                 "keywords", List.of("react 웹 프런트"),
-                "location", List.of("동대문구&location=은평구&location=용산구"),
+                "location", List.of("동대문구", "은평구", "용산구"),
                 "hiring_types", List.of("3"),
                 "page", List.of("1")));
         MultiValueMap<String, String> map5 = new LinkedMultiValueMap<>(Map.of(
                 "keywords", List.of("웹 서비스"),
-                "location", List.of("강남구&location=분당구"),
+                "location", List.of("강남구", "분당구"),
                 "salary", List.of("40000000-"),
                 "page", List.of("1")));
         MultiValueMap<String, String> map6 = new LinkedMultiValueMap<>(Map.of(

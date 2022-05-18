@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,6 +49,5 @@ class RocketPunchCrawlerServiceTest {
         Document result = rocketPunchCrawlerService.crawl(dto, 1);
 
         assertThat(result).isNotNull();
-        assertThat(result.connection().response().statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }
