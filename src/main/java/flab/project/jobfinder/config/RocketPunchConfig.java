@@ -10,8 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class RocketPunchConfig {
 
     @Bean
-    public QueryParamGenerator rocketPunchQueryParamGenerator(RocketPunchPropertiesConfig config) {
-        return new RocketPunchQueryParamGenerator(config);
+    public QueryParamGenerator rocketPunchQueryParamGenerator() {
+        return new RocketPunchQueryParamGenerator();
     }
 
     @Bean
