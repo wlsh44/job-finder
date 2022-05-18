@@ -1,6 +1,5 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
@@ -8,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,8 +24,6 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     public static final String PAGE_KEY = "page";
     public static final String SEARCH_TEXT_KEY = "keywords";
     public static final String CAREER_TYPE_KEY = "career_type";
-
-    private final RocketPunchPropertiesConfig config;
 
     @Override
     public MultiValueMap<String, String> toQueryParams(DetailedSearchDto dto, int pageNum) {
