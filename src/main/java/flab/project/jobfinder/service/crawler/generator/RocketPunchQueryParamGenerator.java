@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,12 +36,12 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         Optional.ofNullable(dto.getSearchText())
                 .ifPresent(searchText -> queryParams.add(SEARCH_TEXT_KEY, searchText));
         Optional.ofNullable(dto.getLocation())
-                .ifPresent(locations -> queryParams.add(LOCATION_KEY, toLocationParam(locations)));
+                .ifPresent(locations -> queryParams.addAll(LOCATION_KEY, toLocationParam(locations)));
         Optional.ofNullable(dto.getCareer())
                 .filter(career -> !ANY.equals(career.getCareerType()))
                 .ifPresent(career -> queryParams.add(CAREER_TYPE_KEY, toCareerParam(career)));
         Optional.ofNullable(dto.getJobType())
-                .ifPresent(jobTypes -> queryParams.add(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
+                .ifPresent(jobTypes -> queryParams.addAll(JOB_TYPE_KEY, toJobTypeParam(jobTypes)));
         Optional.ofNullable(dto.getPay())
                 .filter(pay -> !(pay.getPayMin() == null && pay.getPayMax() == null))
                 .ifPresent(pay -> queryParams.add(PAY_KEY, toPayParam(pay)));
@@ -48,16 +50,16 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         return queryParams;
     }
 
-    private String toJobTypeParam(List<JobType> jobTypes) {
+    private List<String> toJobTypeParam(List<JobType> jobTypes) {
         return jobTypes.stream()
                 .map(JobType::rocketPunchCode)
-                .collect(Collectors.joining(config.getDelimiter() + JOB_TYPE_KEY + "="));
+                .collect(Collectors.toList());
     }
 
-    private String toLocationParam(List<Location> locations) {
+    private List<String> toLocationParam(List<Location> locations) {
         return locations.stream()
                 .map(Location::rocketPunchCode)
-                .collect(Collectors.joining(config.getDelimiter() + LOCATION_KEY + "="));
+                .collect(Collectors.toList());
     }
 
     private String toCareerParam(DetailedSearchDto.Career career) {
