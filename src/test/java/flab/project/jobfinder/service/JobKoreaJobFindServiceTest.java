@@ -8,6 +8,7 @@ import flab.project.jobfinder.service.JobKoreaJobFindService;
 import flab.project.jobfinder.service.crawler.JobKoreaCrawlerService;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import flab.project.jobfinder.service.parser.JobKoreaParserService;
+import flab.project.jobfinder.service.parser.pagination.JobKoreaPaginationParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {JobKoreaJobFindService.class, JobKoreaCrawlerService.class, JobKoreaQueryParamGenerator.class, JobKoreaParserService.class})
+@SpringBootTest(classes = {JobKoreaJobFindService.class, JobKoreaCrawlerService.class, JobKoreaQueryParamGenerator.class, JobKoreaParserService.class, JobKoreaPaginationParser.class})
 @EnableConfigurationProperties(value = JobKoreaPropertiesConfig.class)
 @TestPropertySource("classpath:application-dev.properties")
 class JobKoreaJobFindServiceTest {

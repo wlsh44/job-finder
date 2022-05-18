@@ -7,6 +7,7 @@ import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.crawler.RocketPunchCrawlerService;
 import flab.project.jobfinder.service.parser.RocketPunchParserService;
+import flab.project.jobfinder.service.parser.pagination.RocketPunchPaginationParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {RocketPunchJobFindService.class, RocketPunchCrawlerService.class, RocketPunchParserService.class, RocketPunchConfig.class})
+@SpringBootTest(classes = {RocketPunchJobFindService.class, RocketPunchCrawlerService.class, RocketPunchParserService.class, RocketPunchConfig.class, RocketPunchPaginationParser.class})
 @EnableConfigurationProperties(value = RocketPunchPropertiesConfig.class)
 class RocketPunchJobFindServiceTest {
 
