@@ -3,6 +3,7 @@ package flab.project.jobfinder.dto;
 import flab.project.jobfinder.enums.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -18,10 +19,14 @@ public class SearchFormDto {
     private List<Location> location;
     private List<JobType> jobType;
     private PayType payType;
+    @Range(min = 0, max = 100000)
     private Integer payMin;
+    @Range(min = 0, max = 100000)
     private Integer payMax;
     private CareerType careerType;
+    @Min(0)
     private Integer careerMin;
+    @Min(0)
     private Integer careerMax;
 
     @Min(1)
