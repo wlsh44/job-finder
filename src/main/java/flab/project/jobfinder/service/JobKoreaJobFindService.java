@@ -2,6 +2,7 @@ package flab.project.jobfinder.service;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.dto.PageDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
@@ -34,12 +35,16 @@ public class JobKoreaJobFindService implements JobFindService {
         int startPage = jobKoreaPaginationParser.getStartPage(page);
         List<RecruitDto> recruitDtoList = parsePage(doc);
 
+        PageDto pageDto = PageDto.builder()
+                .startPage(startPage)
+                .totalPage(totalPage)
+                .build();
+
         log.info("total page: {}", totalPage);
 
         return RecruitPageDto.builder()
                 .recruitDtoList(recruitDtoList)
-                .totalPage(totalPage)
-                .startPage(startPage)
+                .pageDto(pageDto)
                 .build();
     }
 

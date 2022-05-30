@@ -30,7 +30,7 @@ public class JobKoreaCrawlerService implements CrawlerService {
     @Override
     public Document crawl(DetailedSearchDto dto, int pageNum) {
         String url = config.getSearchUrl();
-        Map<String, String> queryParams = paramGenerator.toQueryParams(dto, pageNum).toSingleValueMap();
+        final Map<String, String> queryParams = paramGenerator.toQueryParams(dto, pageNum).toSingleValueMap();
 
         try {
             log.info("url = {}", url);
