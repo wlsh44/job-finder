@@ -1,11 +1,10 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
+import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;

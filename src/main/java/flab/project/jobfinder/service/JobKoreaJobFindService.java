@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service;
 
-import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
+import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;

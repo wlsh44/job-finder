@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
+import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
@@ -13,9 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Service

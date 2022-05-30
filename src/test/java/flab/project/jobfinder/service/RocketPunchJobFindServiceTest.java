@@ -1,7 +1,7 @@
 package flab.project.jobfinder.service;
 
-import flab.project.jobfinder.config.RocketPunchConfig;
-import flab.project.jobfinder.config.RocketPunchPropertiesConfig;
+import flab.project.jobfinder.config.rocketpunch.RocketPunchConfig;
+import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;

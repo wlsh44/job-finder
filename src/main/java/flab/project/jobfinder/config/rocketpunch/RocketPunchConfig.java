@@ -1,4 +1,4 @@
-package flab.project.jobfinder.config;
+package flab.project.jobfinder.config.rocketpunch;
 
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
 import flab.project.jobfinder.service.crawler.generator.RocketPunchQueryParamGenerator;

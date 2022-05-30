@@ -1,4 +1,4 @@
-package flab.project.jobfinder.config;
+package flab.project.jobfinder.config.jobkorea;
 
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
