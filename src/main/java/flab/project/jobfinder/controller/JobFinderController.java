@@ -1,9 +1,6 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.RecruitDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
-import flab.project.jobfinder.dto.SearchFormDto;
+import flab.project.jobfinder.dto.*;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobFindFactory;
@@ -52,8 +49,9 @@ public class JobFinderController {
         RecruitPageDto recruitPageDto = jobFindFactory.getRecruitPageDto(detailedSearchDto, currentPage);
 
         List<RecruitDto> recruitDtoList = recruitPageDto.getRecruitDtoList();
-        int totalPage = recruitPageDto.getTotalPage();
-        int startPage = recruitPageDto.getStartPage();
+        PageDto pageDto = recruitPageDto.getPageDto();
+        int totalPage = pageDto.getTotalPage();
+        int startPage = pageDto.getStartPage();
 
         model.addAttribute("recruitDtoList", recruitDtoList);
         model.addAttribute("startPage", startPage);

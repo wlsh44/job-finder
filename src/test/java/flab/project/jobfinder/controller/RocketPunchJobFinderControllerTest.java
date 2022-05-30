@@ -1,5 +1,6 @@
 package flab.project.jobfinder.controller;
 
+import flab.project.jobfinder.dto.PageDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.dto.SearchFormDto;
@@ -36,6 +37,7 @@ class RocketPunchJobFinderControllerTest {
     SearchFormDto searchFormDto;
     RecruitDto recruitDto;
     RecruitPageDto recruitPageDto;
+    PageDto pageDto;
 
     @BeforeEach
     void init() {
@@ -58,10 +60,14 @@ class RocketPunchJobFinderControllerTest {
                 .techStack("spring")
                 .build();
 
+        pageDto = PageDto.builder()
+                .startPage(1)
+                .totalPage(1)
+                .build();
+
         recruitPageDto = RecruitPageDto.builder()
                 .recruitDtoList(List.of(recruitDto))
-                .totalPage(1)
-                .startPage(1)
+                .pageDto(pageDto)
                 .build();
     }
 

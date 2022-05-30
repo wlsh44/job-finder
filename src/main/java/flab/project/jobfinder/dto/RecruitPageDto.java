@@ -11,6 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class RecruitPageDto {
     private List<RecruitDto> recruitDtoList;
-    private int totalPage;
-    private int startPage;
+    private PageDto pageDto;
 }
