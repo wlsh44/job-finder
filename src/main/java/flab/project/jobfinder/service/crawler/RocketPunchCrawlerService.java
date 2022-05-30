@@ -48,16 +48,13 @@ public class RocketPunchCrawlerService implements CrawlerService {
 
     private URI makeUri(DetailedSearchDto dto, int pageNum) {
         String url = config.getSearchUrl();
-        Set<Map.Entry<String, List<String>>> queryParams = rocketPunchQueryParamGenerator
-                                                            .toQueryParams(dto, pageNum)
-                                                            .entrySet();
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(url);
+        rocketPunchQueryParamGenerator.toQueryParams(dto, pageNum)
+                                        .forEach((key, value) -> value
+                                                .forEach(param -> uriBuilder.queryParam(key, param)));
 
         log.info("url = {}", url);
-        log.info("queryParams = {}", queryParams);
 
-        queryParams.forEach(entry -> entry.getValue()
-                    .forEach(param -> uriBuilder.queryParam(entry.getKey(), param)));
         return uriBuilder.build().encode().toUri();
     }
 
