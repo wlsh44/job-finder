@@ -1,5 +1,6 @@
 package flab.project.jobfinder.controller;
 
+import flab.project.jobfinder.dto.PageDto;
 import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.dto.SearchFormDto;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -26,8 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JobFinderController.class)
-@ActiveProfiles("dev")
-class JobFinderControllerTest {
+class RocketPunchJobFinderControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,11 +37,12 @@ class JobFinderControllerTest {
     SearchFormDto searchFormDto;
     RecruitDto recruitDto;
     RecruitPageDto recruitPageDto;
+    PageDto pageDto;
 
     @BeforeEach
     void init() {
         searchFormDto = new SearchFormDto();
-        searchFormDto.setPlatform(Platform.JOBKOREA);
+        searchFormDto.setPlatform(Platform.ROCKETPUNCH);
         searchFormDto.setSearchText("spring");
         searchFormDto.setPayType(PayType.ANNUAL);
         searchFormDto.setCareerType(CareerType.SENIOR);
@@ -56,14 +56,18 @@ class JobFinderControllerTest {
                 .corp("test corp")
                 .career("test career")
                 .location("test loc")
-                .platform("잡코리아")
+                .platform("로켓펀치")
                 .techStack("spring")
+                .build();
+
+        pageDto = PageDto.builder()
+                .startPage(1)
+                .totalPage(1)
                 .build();
 
         recruitPageDto = RecruitPageDto.builder()
                 .recruitDtoList(List.of(recruitDto))
-                .totalPage(1)
-                .startPage(1)
+                .pageDto(pageDto)
                 .build();
     }
 
@@ -87,7 +91,7 @@ class JobFinderControllerTest {
                         .post("/job-find")
                         .param("searchText", "spring")
                         .param("location", "SEOUL")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("payType", "ANNUAL")
                         .param("careerType", "SENIOR")
                         .param("currentPage", "1")
@@ -117,7 +121,7 @@ class JobFinderControllerTest {
     void postFail_CurrentPageNull() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .contentType(MediaType.TEXT_HTML)
                         .accept(MediaType.TEXT_HTML))
                 .andDo(print())
@@ -129,7 +133,7 @@ class JobFinderControllerTest {
     void postFail_WrongFormatOfCurrentPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("currentPage", "-1")
                         .contentType(MediaType.TEXT_HTML)
                         .accept(MediaType.TEXT_HTML))
@@ -142,7 +146,7 @@ class JobFinderControllerTest {
     void postFail_WrongFormatOfCareerMin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("currentPage", "1")
                         .param("careerMin", "aaa")
                         .contentType(MediaType.TEXT_HTML)
@@ -156,7 +160,7 @@ class JobFinderControllerTest {
     void postFail_WrongFormatOfCareerMax() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("currentPage", "1")
                         .param("careerMax", "aaa")
                         .contentType(MediaType.TEXT_HTML)
@@ -170,7 +174,7 @@ class JobFinderControllerTest {
     void postFail_WrongFormatOfPayMin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("currentPage", "1")
                         .param("payMin", "aaa")
                         .contentType(MediaType.TEXT_HTML)
@@ -184,7 +188,7 @@ class JobFinderControllerTest {
     void postFail_WrongFormatOfPayMax() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/job-find")
-                        .param("platform", "JOBKOREA")
+                        .param("platform", "ROCKETPUNCH")
                         .param("currentPage", "1")
                         .param("payMax", "aaa")
                         .contentType(MediaType.TEXT_HTML)

@@ -3,7 +3,6 @@ package flab.project.jobfinder.dto;
 import flab.project.jobfinder.enums.*;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Builder

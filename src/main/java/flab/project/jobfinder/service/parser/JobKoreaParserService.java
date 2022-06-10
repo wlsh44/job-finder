@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.parser;
 
-import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
+import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.RecruitDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;

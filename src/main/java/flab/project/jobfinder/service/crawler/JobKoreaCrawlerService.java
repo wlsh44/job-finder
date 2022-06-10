@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.config.JobKoreaPropertiesConfig;
+import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -28,13 +29,16 @@ public class JobKoreaCrawlerService implements CrawlerService {
 
     @Override
     public Document crawl(DetailedSearchDto dto, int pageNum) {
-        String url = config.getSearchUrl() + paramGenerator.toQueryParams(dto, pageNum);
+        String url = config.getSearchUrl();
+        final Map<String, String> queryParams = paramGenerator.toQueryParams(dto, pageNum).toSingleValueMap();
 
-        log.info("parsing url = {}", url);
         try {
-            Document doc = Jsoup.connect(url).get();
-
-            return doc;
+            log.info("url = {}", url);
+            log.info("queryParam = {}", queryParams);
+            return  Jsoup.connect(url)
+                    .data(queryParams)
+                    .timeout(5000)
+                    .get();
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new CrawlFailedException("서버 연결에 실패했습니다.");

@@ -1,4 +1,4 @@
-package flab.project.jobfinder.config;
+package flab.project.jobfinder.config.jobkorea;
 
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class JobKoreaConfig {
 
     @Bean
-    public QueryParamGenerator jobKoreaQueryParamGenerator(JobKoreaPropertiesConfig config) {
-        return new JobKoreaQueryParamGenerator(config);
+    public QueryParamGenerator jobKoreaQueryParamGenerator() {
+        return new JobKoreaQueryParamGenerator();
     }
 }
