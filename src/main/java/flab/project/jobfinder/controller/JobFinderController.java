@@ -1,8 +1,8 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.*;
-import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.enums.location.District;
 import flab.project.jobfinder.service.JobFindFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class JobFinderController {
         SearchFormDto searchFormDto = new SearchFormDto();
 
         model.addAttribute("searchFormDto", searchFormDto);
-        model.addAttribute("locationMap", Location.getDistrictMap());
+        model.addAttribute("locationMap", District.getDistrictMap());
         model.addAttribute("platformMap", Platform.getKoreaNameMap());
         return "form";
     }
@@ -37,7 +37,7 @@ public class JobFinderController {
         log.debug(searchFormDto.toString());
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("locationMap", Location.getDistrictMap());
+            model.addAttribute("locationMap", District.getDistrictMap());
             model.addAttribute("platformMap", Platform.getKoreaNameMap());
             log.info("errors={}", bindingResult);
             return "form";

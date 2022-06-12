@@ -2,7 +2,10 @@ package flab.project.jobfinder.service.crawler.generator;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
-import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.JobKoreaLocation;
+import flab.project.jobfinder.enums.location.LocationInterface;
+import flab.project.jobfinder.enums.location.RocketPunchLocation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -52,9 +55,9 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
                 .map(JobType::rocketPunchCode).toList();
     }
 
-    private List<String> toLocationParam(List<Location> locations) {
+    private List<String> toLocationParam(List<District> locations) {
         return locations.stream()
-                .map(Location::rocketPunchCode)
+                .map(location -> RocketPunchLocation.valueOf(location.name()).getCode())
                 .collect(Collectors.toList());
     }
 

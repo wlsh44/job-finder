@@ -2,7 +2,9 @@ package flab.project.jobfinder.service.crawler.generator;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
-import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.JobKoreaLocation;
+import flab.project.jobfinder.enums.location.LocationInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -47,9 +49,9 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
                 .collect(Collectors.toList());
     }
 
-    private List<String> toLocationParam(List<Location> locations) {
+    private List<String> toLocationParam(List<District> locations) {
         return locations.stream()
-                .map(Location::jobKoreaCode)
+                .map(location -> JobKoreaLocation.valueOf(location.name()).getCode())
                 .collect(Collectors.toList());
     }
 

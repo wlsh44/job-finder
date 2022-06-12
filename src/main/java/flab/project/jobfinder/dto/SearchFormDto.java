@@ -1,6 +1,8 @@
 package flab.project.jobfinder.dto;
 
 import flab.project.jobfinder.enums.*;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.LocationInterface;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -16,7 +18,7 @@ public class SearchFormDto {
     @NotNull(message = "플랫폼을 정해주세요")
     private Platform platform;
     private String searchText;
-    private List<Location> location;
+    private List<District> location;
     private List<JobType> jobType;
     private PayType payType;
     @Range(min = 0, max = 100000)

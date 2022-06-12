@@ -1,8 +1,8 @@
 package flab.project.jobfinder.controller.advice;
 
 import flab.project.jobfinder.dto.SearchFormDto;
-import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.enums.location.District;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class JobFinderControllerAdvice {
         SearchFormDto searchFormDto = new SearchFormDto();
 
         model.addAttribute("searchFormDto", searchFormDto);
-        model.addAttribute("locationMap", Location.getDistrictMap());
+        model.addAttribute("locationMap", District.getDistrictMap());
         model.addAttribute("platformMap", Platform.getKoreaNameMap());
         return "form";
     }
