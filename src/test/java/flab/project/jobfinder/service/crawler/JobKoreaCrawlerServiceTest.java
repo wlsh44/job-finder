@@ -2,6 +2,8 @@ package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.JobKoreaLocation;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
@@ -16,8 +18,6 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 
-import static flab.project.jobfinder.enums.Location.BUNDANG;
-import static flab.project.jobfinder.enums.Location.GANGNAM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +35,7 @@ class JobKoreaCrawlerServiceTest {
 
     @Test
     void 크롤링_정상_작동_테스트() {
-        DetailedSearchDto dto = DetailedSearchDto.builder().searchText("spring").location(List.of(GANGNAM, BUNDANG)).build();
+        DetailedSearchDto dto = DetailedSearchDto.builder().searchText("spring").location(List.of(District.GANGNAM, District.BUNDANG)).build();
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>(Map.of(
                 "stext", List.of("웹 서비스"),
                 "local", List.of("I010", "B150")));

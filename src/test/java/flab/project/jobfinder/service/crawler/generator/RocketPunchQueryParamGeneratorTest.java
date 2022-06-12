@@ -1,6 +1,8 @@
 package flab.project.jobfinder.service.crawler.generator;
 
 import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.RocketPunchLocation;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,7 +17,6 @@ import java.util.stream.Stream;
 import static flab.project.jobfinder.enums.CareerType.ANY;
 import static flab.project.jobfinder.enums.CareerType.JUNIOR;
 import static flab.project.jobfinder.enums.JobType.MILITARY;
-import static flab.project.jobfinder.enums.Location.*;
 import static flab.project.jobfinder.enums.PayType.ANNUAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,11 +70,11 @@ class RocketPunchQueryParamGeneratorTest {
                                 .career(new DetailedSearchDto.Career(JUNIOR, null, 2)).build()
                         , map3),
                 Arguments.of(DetailedSearchDto.builder().searchText("react 웹 프런트")
-                                .location(List.of(DONGDAEMUN, EUNPYEONG, YONGSAN))
+                                .location(List.of(District.DONGDAEMUN, District.EUNPYEONG, District.YONGSAN))
                                 .jobType(List.of(MILITARY)).build()
                         , map4),
                 Arguments.of(DetailedSearchDto.builder().searchText("웹 서비스")
-                                .location(List.of(GANGNAM, BUNDANG))
+                                .location(List.of(District.GANGNAM, District.BUNDANG))
                                 .pay(new DetailedSearchDto.Pay(ANNUAL, 4000, null)).build()
                         , map5),
                 Arguments.of(DetailedSearchDto.builder().searchText("테스트")

@@ -5,9 +5,10 @@ import flab.project.jobfinder.dto.RecruitDto;
 import flab.project.jobfinder.dto.RecruitPageDto;
 import flab.project.jobfinder.dto.SearchFormDto;
 import flab.project.jobfinder.enums.CareerType;
-import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.PayType;
 import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.enums.location.District;
+import flab.project.jobfinder.enums.location.JobKoreaLocation;
 import flab.project.jobfinder.service.JobFindFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +47,7 @@ class JobKoreaJobFinderControllerTest {
         searchFormDto.setSearchText("spring");
         searchFormDto.setPayType(PayType.ANNUAL);
         searchFormDto.setCareerType(CareerType.SENIOR);
-        searchFormDto.setLocation(List.of(Location.SEOUL));
+        searchFormDto.setLocation(List.of(District.SEOUL));
         searchFormDto.setCurrentPage(1);
 
         recruitDto = RecruitDto.builder()
