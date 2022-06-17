@@ -4,6 +4,7 @@ import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.jobkorea.JobKoreaCareerType;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaJobType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -44,7 +45,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     private List<String> toJobTypeParam(List<JobType> jobTypes) {
         return jobTypes.stream()
-                .map(JobType::jobkoreaCode)
+                .map(jobType -> JobKoreaJobType.valueOf(jobType.name()).code())
                 .collect(Collectors.toList());
     }
 

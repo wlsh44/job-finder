@@ -4,6 +4,7 @@ import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.rocketpunch.RocketPunchCareerType;
+import flab.project.jobfinder.enums.rocketpunch.RocketPunchJobType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -50,7 +51,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     private List<String> toJobTypeParam(List<JobType> jobTypes) {
         return jobTypes.stream()
                 .filter(jobType -> !INTERN.equals(jobType))
-                .map(JobType::rocketPunchCode).toList();
+                .map(jobType -> RocketPunchJobType.valueOf(jobType.name()).code()).toList();
     }
 
     private List<String> toLocationParam(List<Location> locations) {
@@ -64,7 +65,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         Optional.ofNullable(career.getCareerType())
                 .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, RocketPunchCareerType.valueOf(careerType.name()).code()));
         if (jobTypes != null && jobTypes.contains(INTERN)) {
-            careerParam.add(CAREER_TYPE_KEY, INTERN.rocketPunchCode());
+            careerParam.add(CAREER_TYPE_KEY, RocketPunchJobType.INTERN.code());
         }
         return careerParam;
     }
