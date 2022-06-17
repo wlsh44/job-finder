@@ -5,6 +5,7 @@ import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.rocketpunch.RocketPunchCareerType;
 import flab.project.jobfinder.enums.rocketpunch.RocketPunchJobType;
+import flab.project.jobfinder.enums.rocketpunch.RocketPunchLocation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -56,7 +57,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
 
     private List<String> toLocationParam(List<Location> locations) {
         return locations.stream()
-                .map(Location::rocketPunchCode)
+                .map(location -> RocketPunchLocation.valueOf(location.name()).code())
                 .collect(Collectors.toList());
     }
 
