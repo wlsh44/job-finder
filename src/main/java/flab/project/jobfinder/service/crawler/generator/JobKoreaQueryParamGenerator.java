@@ -6,6 +6,7 @@ import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.jobkorea.JobKoreaCareerType;
 import flab.project.jobfinder.enums.jobkorea.JobKoreaJobType;
 import flab.project.jobfinder.enums.jobkorea.JobKoreaLocation;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaPayType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -72,7 +73,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         MultiValueMap<String, String> payParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(pay.getPayType())
-                .ifPresent(payType -> payParam.add(PAY_TYPE_KEY, payType.jobkoreaCode()));
+                .ifPresent(payType -> payParam.add(PAY_TYPE_KEY, JobKoreaPayType.valueOf(payType.name()).code()));
         Optional.ofNullable(pay.getPayMin())
                 .ifPresent(payMin -> payParam.add(PAY_MIN_KEY, payMin.toString()));
         Optional.ofNullable(pay.getPayMax())
