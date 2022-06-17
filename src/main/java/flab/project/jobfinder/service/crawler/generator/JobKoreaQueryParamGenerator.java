@@ -3,6 +3,7 @@ package flab.project.jobfinder.service.crawler.generator;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaCareerType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -57,7 +58,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.jobkoreaCode()));
+                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, JobKoreaCareerType.valueOf(careerType.name()).code()));
         Optional.ofNullable(career.getCareerMin())
                 .ifPresent(careerMin -> careerParam.add(CAREER_MIN_KEY, careerMin.toString()));
         Optional.ofNullable(career.getCareerMax())

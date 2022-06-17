@@ -3,6 +3,7 @@ package flab.project.jobfinder.service.crawler.generator;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.rocketpunch.RocketPunchCareerType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -61,7 +62,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
     private MultiValueMap<String, String> toCareerParam(DetailedSearchDto.Career career, List<JobType> jobTypes) {
         MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.rocketPunchCode()));
+                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, RocketPunchCareerType.valueOf(careerType.name()).code()));
         if (jobTypes != null && jobTypes.contains(INTERN)) {
             careerParam.add(CAREER_TYPE_KEY, INTERN.rocketPunchCode());
         }
