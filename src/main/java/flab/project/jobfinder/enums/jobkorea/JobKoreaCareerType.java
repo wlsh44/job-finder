@@ -7,14 +7,14 @@ public enum JobKoreaCareerType implements PlatformCode {
     SENIOR("2"),
     ANY("4");
 
-    private final String jobkoreaCode;
+    private final String code;
 
-    JobKoreaCareerType(String jobkoreaCode) {
-        this.jobkoreaCode = jobkoreaCode;
+    JobKoreaCareerType(String code) {
+        this.code = code;
     }
 
     @Override
     public String code() {
-        return jobkoreaCode;
+        return code;
     }
 }

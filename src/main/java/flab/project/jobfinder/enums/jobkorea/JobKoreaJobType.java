@@ -9,14 +9,14 @@ public enum JobKoreaJobType implements PlatformCode {
     FREELANCER("6"),
     MILITARY("9");
 
-    private final String jobkoreaCode;
+    private final String code;
 
-    JobKoreaJobType(String jobkoreaCode) {
-        this.jobkoreaCode = jobkoreaCode;
+    JobKoreaJobType(String code) {
+        this.code = code;
     }
 
     @Override
     public String code() {
-        return jobkoreaCode;
+        return code;
     }
 }

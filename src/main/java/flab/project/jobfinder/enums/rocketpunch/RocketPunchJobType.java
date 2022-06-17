@@ -9,14 +9,14 @@ public enum RocketPunchJobType implements PlatformCode {
     FREELANCER("2"),
     MILITARY("3");
 
-    private final String rocketPunchCode;
+    private final String code;
 
-    RocketPunchJobType(String rocketPunchCode) {
-        this.rocketPunchCode = rocketPunchCode;
+    RocketPunchJobType(String code) {
+        this.code = code;
     }
 
     @Override
     public String code() {
-        return rocketPunchCode;
+        return code;
     }
 }

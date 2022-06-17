@@ -7,14 +7,14 @@ public enum RocketPunchCareerType implements PlatformCode {
     SENIOR("2"),
     ANY("3");
 
-    private final String rocketPunchCode;
+    private final String code;
 
-    RocketPunchCareerType(String rocketPunchCode) {
-        this.rocketPunchCode = rocketPunchCode;
+    RocketPunchCareerType(String code) {
+        this.code = code;
     }
 
     @Override
     public String code() {
-        return rocketPunchCode;
+        return code;
     }
 }
