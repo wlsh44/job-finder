@@ -1,11 +1,13 @@
-package flab.project.jobfinder.enums;
+package flab.project.jobfinder.enums.rocketpunch;
+
+import flab.project.jobfinder.enums.PlatformCode;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public enum Location {
-    SEOUL("서울"),
+public enum RocketPunchLocation implements PlatformCode {
+    SEOUL("서울특별시"),
     GANGNAM("강남구"),
     GANGDONG("강동구"),
     GANGBUK("강북구"),
@@ -31,38 +33,32 @@ public enum Location {
     JONGNO("종로구"),
     JUNG("중구"),
     JUNGRANG("중랑구"),
-    GYEONGGI("경기"),
+    GYEONGGI("경기도"),
     BUNDANG("분당구"),
     INCHEON("인천"),
     DAEJEON("대전"),
     SEJONG("세종"),
-    CHUNGNAM("충남"),
-    CHUNGBUK("충북"),
+    CHUNGNAM("충청남도"),
+    CHUNGBUK("충청북도"),
     GWANGJU("광주"),
-    JEONNAM("전남"),
-    JEONBUK("전북"),
+    JEONNAM("전라남도"),
+    JEONBUK("전라북도"),
     DAEGU("대구"),
-    GYEONGBUK("경북"),
+    GYEONGBUK("경상북도"),
     BUSAN("부산"),
     ULSAN("울산"),
-    GYEONGNAM("경남"),
-    GANGWON("강원"),
-    JEJU("제주");
+    GYEONGNAM("경상남도"),
+    GANGWON("강원도"),
+    JEJU("제주도");
 
-    private final String district;
+    private final String code;
 
-    Location(String district) {
-        this.district = district;
+    RocketPunchLocation(String code) {
+        this.code = code;
     }
 
-    public String district() {
-        return district;
-    }
-
-    private final static Map<String, String> map = Stream.of(values())
-            .collect(Collectors.toUnmodifiableMap(Location::district, Location::name));
-
-    public static Map<String, String> getDistrictMap() {
-        return map;
+    @Override
+    public String code() {
+        return code;
     }
 }

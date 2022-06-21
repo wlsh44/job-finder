@@ -3,6 +3,10 @@ package flab.project.jobfinder.service.crawler.generator;
 import flab.project.jobfinder.dto.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaCareerType;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaJobType;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaLocation;
+import flab.project.jobfinder.enums.jobkorea.JobKoreaPayType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -43,13 +47,13 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
 
     private List<String> toJobTypeParam(List<JobType> jobTypes) {
         return jobTypes.stream()
-                .map(JobType::jobkoreaCode)
+                .map(jobType -> JobKoreaJobType.valueOf(jobType.name()).code())
                 .collect(Collectors.toList());
     }
 
     private List<String> toLocationParam(List<Location> locations) {
         return locations.stream()
-                .map(Location::jobKoreaCode)
+                .map(location -> JobKoreaLocation.valueOf(location.name()).code())
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +61,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         MultiValueMap<String, String> careerParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(career.getCareerType())
-                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, careerType.jobkoreaCode()));
+                .ifPresent(careerType -> careerParam.add(CAREER_TYPE_KEY, JobKoreaCareerType.valueOf(careerType.name()).code()));
         Optional.ofNullable(career.getCareerMin())
                 .ifPresent(careerMin -> careerParam.add(CAREER_MIN_KEY, careerMin.toString()));
         Optional.ofNullable(career.getCareerMax())
@@ -69,7 +73,7 @@ public class JobKoreaQueryParamGenerator implements QueryParamGenerator {
         MultiValueMap<String, String> payParam = new LinkedMultiValueMap<>();
 
         Optional.ofNullable(pay.getPayType())
-                .ifPresent(payType -> payParam.add(PAY_TYPE_KEY, payType.jobkoreaCode()));
+                .ifPresent(payType -> payParam.add(PAY_TYPE_KEY, JobKoreaPayType.valueOf(payType.name()).code()));
         Optional.ofNullable(pay.getPayMin())
                 .ifPresent(payMin -> payParam.add(PAY_MIN_KEY, payMin.toString()));
         Optional.ofNullable(pay.getPayMax())
