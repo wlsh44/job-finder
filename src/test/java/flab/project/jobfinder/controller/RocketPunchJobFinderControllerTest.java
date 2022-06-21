@@ -5,7 +5,7 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.dto.form.SearchFormDto;
 import flab.project.jobfinder.enums.*;
-import flab.project.jobfinder.service.JobFindFactory;
+import flab.project.jobfinder.service.jobfind.JobFindFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

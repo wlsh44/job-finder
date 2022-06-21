@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service;
+package flab.project.jobfinder.service.jobfind;
 
 import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import flab.project.jobfinder.dto.page.RecruitPageDto;

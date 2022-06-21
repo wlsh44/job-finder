@@ -1,9 +1,9 @@
-package flab.project.jobfinder.service.crawler;
+package flab.project.jobfinder.service.jobfind.crawler;
 
 import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import flab.project.jobfinder.exception.CrawlFailedException;
-import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
+import flab.project.jobfinder.service.jobfind.crawler.generator.QueryParamGenerator;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

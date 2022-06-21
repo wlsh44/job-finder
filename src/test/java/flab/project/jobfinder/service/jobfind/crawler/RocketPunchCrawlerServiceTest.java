@@ -1,8 +1,8 @@
-package flab.project.jobfinder.service.crawler;
+package flab.project.jobfinder.service.jobfind.crawler;
 
 import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
 import flab.project.jobfinder.dto.form.DetailedSearchDto;
-import flab.project.jobfinder.service.crawler.generator.RocketPunchQueryParamGenerator;
+import flab.project.jobfinder.service.jobfind.crawler.generator.RocketPunchQueryParamGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.parser.pagination;
+package flab.project.jobfinder.service.jobfind.parser.pagination;
 
 import flab.project.jobfinder.config.PropertiesConfig;
 import org.jsoup.nodes.Document;
