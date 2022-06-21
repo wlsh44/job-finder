@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Members {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
