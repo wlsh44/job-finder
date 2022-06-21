@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.jobkorea.JobKoreaCareerType;

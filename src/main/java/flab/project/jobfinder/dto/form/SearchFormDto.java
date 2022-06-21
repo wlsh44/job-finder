@@ -1,4 +1,4 @@
-package flab.project.jobfinder.dto;
+package flab.project.jobfinder.dto.form;
 
 import flab.project.jobfinder.enums.*;
 import lombok.Data;

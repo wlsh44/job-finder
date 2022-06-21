@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler.generator;
 
-import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;

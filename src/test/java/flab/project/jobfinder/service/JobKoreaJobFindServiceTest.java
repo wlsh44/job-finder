@@ -1,8 +1,8 @@
 package flab.project.jobfinder.service;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
-import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.crawler.JobKoreaCrawlerService;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;

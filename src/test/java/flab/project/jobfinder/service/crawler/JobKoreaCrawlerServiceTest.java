@@ -1,7 +1,7 @@
 package flab.project.jobfinder.service.crawler;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
-import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import flab.project.jobfinder.service.crawler.generator.JobKoreaQueryParamGenerator;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;

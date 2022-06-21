@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.crawler;
 
-import flab.project.jobfinder.dto.DetailedSearchDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import org.jsoup.nodes.Document;
 
 public interface CrawlerService {
