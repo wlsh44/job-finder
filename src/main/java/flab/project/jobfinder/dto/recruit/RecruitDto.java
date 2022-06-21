@@ -1,4 +1,4 @@
-package flab.project.jobfinder.dto;
+package flab.project.jobfinder.dto.recruit;
 
 import lombok.Builder;
 import lombok.Getter;

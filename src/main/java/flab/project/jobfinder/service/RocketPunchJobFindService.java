@@ -1,10 +1,10 @@
 package flab.project.jobfinder.service;
 
 import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
-import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.PageDto;
-import flab.project.jobfinder.dto.RecruitDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
+import flab.project.jobfinder.dto.page.PageDto;
+import flab.project.jobfinder.dto.recruit.RecruitDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.exception.CrawlFailedException;
 import flab.project.jobfinder.service.crawler.CrawlerService;

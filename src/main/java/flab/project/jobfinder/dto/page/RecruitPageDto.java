@@ -1,5 +1,6 @@
-package flab.project.jobfinder.dto;
+package flab.project.jobfinder.dto.page;
 
+import flab.project.jobfinder.dto.recruit.RecruitDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

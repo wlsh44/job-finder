@@ -1,9 +1,9 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.dto.PageDto;
-import flab.project.jobfinder.dto.RecruitDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
-import flab.project.jobfinder.dto.SearchFormDto;
+import flab.project.jobfinder.dto.page.PageDto;
+import flab.project.jobfinder.dto.recruit.RecruitDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
+import flab.project.jobfinder.dto.form.SearchFormDto;
 import flab.project.jobfinder.enums.*;
 import flab.project.jobfinder.service.JobFindFactory;
 import org.junit.jupiter.api.BeforeEach;

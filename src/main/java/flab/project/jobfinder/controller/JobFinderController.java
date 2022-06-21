@@ -1,6 +1,10 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.dto.*;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
+import flab.project.jobfinder.dto.form.SearchFormDto;
+import flab.project.jobfinder.dto.page.PageDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
+import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.service.JobFindFactory;
