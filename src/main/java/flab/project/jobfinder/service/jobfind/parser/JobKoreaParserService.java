@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.parser;
+package flab.project.jobfinder.service.jobfind.parser;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.service.parser.duedate.DueDateParser;

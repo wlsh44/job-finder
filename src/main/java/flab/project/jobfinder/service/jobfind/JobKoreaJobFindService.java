@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service;
+package flab.project.jobfinder.service.jobfind;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.form.DetailedSearchDto;
@@ -7,9 +7,9 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.exception.CrawlFailedException;
-import flab.project.jobfinder.service.crawler.CrawlerService;
-import flab.project.jobfinder.service.parser.ParserService;
-import flab.project.jobfinder.service.parser.pagination.PaginationParser;
+import flab.project.jobfinder.service.jobfind.crawler.CrawlerService;
+import flab.project.jobfinder.service.jobfind.parser.ParserService;
+import flab.project.jobfinder.service.jobfind.parser.pagination.PaginationParser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;

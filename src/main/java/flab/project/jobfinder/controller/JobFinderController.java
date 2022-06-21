@@ -7,7 +7,7 @@ import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
-import flab.project.jobfinder.service.JobFindFactory;
+import flab.project.jobfinder.service.jobfind.JobFindFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

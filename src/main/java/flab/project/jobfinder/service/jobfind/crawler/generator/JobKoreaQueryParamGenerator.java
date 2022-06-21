@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.crawler.generator;
+package flab.project.jobfinder.service.jobfind.crawler.generator;
 
 import flab.project.jobfinder.dto.form.DetailedSearchDto;
 import flab.project.jobfinder.enums.JobType;
