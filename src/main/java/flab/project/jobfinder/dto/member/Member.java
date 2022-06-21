@@ -1,21 +1,24 @@
 package flab.project.jobfinder.dto.member;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = 50, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 100, nullable = false)
     private String email;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String password;
 }
