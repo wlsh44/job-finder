@@ -2,6 +2,7 @@ package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.config.MemberPropertiesConfig;
 import flab.project.jobfinder.dto.form.LoginFormDto;
+import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.member.Member;
 import flab.project.jobfinder.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,18 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberPropertiesConfig memberPropertiesConfig;
+
+    @GetMapping("/sign-up")
+    public String signUp(Model model) {
+        model.addAttribute("signUpFormDto", new SignUpFormDto());
+        return "sign-up";
+    }
+
+    @PostMapping("/sign-up")
+    public String signUp(@Valid SignUpFormDto signUpFormDto) {
+        memberService.save(signUpFormDto);
+        return "redirect:/";
+    }
 
     @GetMapping("/login")
     public String login(Model model) {

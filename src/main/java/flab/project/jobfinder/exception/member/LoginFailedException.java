@@ -1,4 +1,4 @@
-package flab.project.jobfinder.exception;
+package flab.project.jobfinder.exception.member;
 
 public class LoginFailedException extends RuntimeException {
     public LoginFailedException() {

@@ -1,7 +1,8 @@
 package flab.project.jobfinder.service.member;
 
+import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.member.Member;
-import flab.project.jobfinder.exception.UserNotFoundException;
+import flab.project.jobfinder.exception.member.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -16,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -29,6 +29,7 @@ class MemberServiceTest {
     @Mock
     MemberRepository memberRepository;
 
+    SignUpFormDto signUpFormDto;
     Member member;
 
     @BeforeEach
@@ -37,6 +38,12 @@ class MemberServiceTest {
         String name = "test";
         String password = "password";
         String email = "email@email.email";
+        signUpFormDto = SignUpFormDto.builder()
+                .name(name)
+                .password(password)
+                .passwordCheck(password)
+                .email(email)
+                .build();
         member = Member.builder()
                 .id(1L)
                 .name(name)
@@ -52,7 +59,7 @@ class MemberServiceTest {
         given(memberRepository.save(any())).willReturn(member);
 
         //when
-        Long res = memberService.save(member);
+        Long res = memberService.save(signUpFormDto);
 
         //then
         assertThat(res).isEqualTo(1L);
@@ -64,7 +71,7 @@ class MemberServiceTest {
         //given
         given(memberRepository.save(any())).willReturn(member);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
-        Long saveMemberId = memberService.save(member);
+        Long saveMemberId = memberService.save(signUpFormDto);
 
         //when
         Member res = memberService.findById(saveMemberId);
@@ -92,7 +99,7 @@ class MemberServiceTest {
         //given
         given(memberRepository.save(any())).willReturn(member);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
-        Long saveMemberId = memberService.save(member);
+        Long saveMemberId = memberService.save(signUpFormDto);
 
         System.out.println("saveMemberId = " + saveMemberId);
         //when

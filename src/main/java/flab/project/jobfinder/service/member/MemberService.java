@@ -1,9 +1,11 @@
 package flab.project.jobfinder.service.member;
 
 import flab.project.jobfinder.dto.form.LoginFormDto;
+import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.member.Member;
-import flab.project.jobfinder.exception.LoginFailedException;
-import flab.project.jobfinder.exception.UserNotFoundException;
+import flab.project.jobfinder.exception.member.LoginFailedException;
+import flab.project.jobfinder.exception.member.SignUpFailedException;
+import flab.project.jobfinder.exception.member.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class MemberService {
 
     public Member login(LoginFormDto loginFormDto) {
         Member member = memberRepository.findByName(loginFormDto.getName())
-                .orElseThrow(() -> new UserNotFoundException(loginFormDto.getName()));
+                .orElseThrow(LoginFailedException::new);
         if (!member.getPassword().equals(loginFormDto.getPassword())) {
             throw new LoginFailedException();
         }
@@ -25,11 +27,19 @@ public class MemberService {
     }
 
     @Transactional
-    public Long save(Member memberDto) {
+    public Long save(SignUpFormDto signUpFormDto) {
+        if (memberRepository.existsByName(signUpFormDto.getName())) {
+            throw new SignUpFailedException("이미 존재하는 유저");
+        }
+        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordCheck())) {
+            throw new SignUpFailedException("비밀번호 확인 실패");
+        }
+        //TODO
+        //비밀번호 암호화
         Member member = Member.builder()
-                .name(memberDto.getName())
-                .password(memberDto.getPassword())
-                .email(memberDto.getEmail())
+                .name(signUpFormDto.getName())
+                .password(signUpFormDto.getPassword())
+                .email(signUpFormDto.getEmail())
                 .build();
         return memberRepository.save(member).getId();
     }
