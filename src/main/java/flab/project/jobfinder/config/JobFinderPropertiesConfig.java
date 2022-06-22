@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class PropertiesConfig {
+public abstract class JobFinderPropertiesConfig {
     protected String url;
     protected String searchUrl;
     protected String delimiter;
