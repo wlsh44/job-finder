@@ -2,12 +2,10 @@ package flab.project.jobfinder.service.member;
 
 import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.exception.member.SignUpFailedException;
 import flab.project.jobfinder.exception.member.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -41,7 +39,7 @@ class MemberServiceTest {
         signUpFormDto = SignUpFormDto.builder()
                 .name(name)
                 .password(password)
-                .passwordCheck(password)
+                .passwordConfirm(password)
                 .email(email)
                 .build();
         member = Member.builder()
@@ -52,17 +50,51 @@ class MemberServiceTest {
                 .build();
     }
 
-    @Test
+    @Nested
     @DisplayName("저장 테스트")
-    void saveTest() {
-        //given
-        given(memberRepository.save(any())).willReturn(member);
+    class SaveTest {
+        @Test
+        @DisplayName("저장 성공")
+        void saveTest() {
+            //given
+            given(memberRepository.save(any())).willReturn(member);
 
-        //when
-        Long res = memberService.save(signUpFormDto);
+            //when
+            Long res = memberService.save(signUpFormDto);
 
-        //then
-        assertThat(res).isEqualTo(1L);
+            //then
+            assertThat(res).isEqualTo(1L);
+        }
+
+        @Test
+        @DisplayName("이미 존재하는 유저인 경우")
+        void alreadyExistsMember() {
+            //given
+            given(memberRepository.existsByName("test")).willReturn(true);
+
+            //when then
+            assertThatThrownBy(() -> memberService.save(signUpFormDto))
+                    .isInstanceOf(SignUpFailedException.class)
+                    .hasMessage("회원가입에 실패했습니다: 이미 존재하는 유저");
+        }
+
+        @Test
+        @DisplayName("이미 존재하는 유저인 경우")
+        void passwordConfirmFailed() {
+            //given
+            signUpFormDto = SignUpFormDto.builder()
+                    .name("test")
+                    .password("password1")
+                    .passwordConfirm("wrong password")
+                    .email("asdf@asdf.asdf")
+                    .build();
+            given(memberRepository.existsByName("test")).willReturn(false);
+
+            //when then
+            assertThatThrownBy(() -> memberService.save(signUpFormDto))
+                    .isInstanceOf(SignUpFailedException.class)
+                    .hasMessage("회원가입에 실패했습니다: 비밀번호 검증 실패");
+        }
     }
 
     @Test
