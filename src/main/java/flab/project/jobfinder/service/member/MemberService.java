@@ -1,6 +1,6 @@
 package flab.project.jobfinder.service.member;
 
-import flab.project.jobfinder.dto.member.Members;
+import flab.project.jobfinder.dto.member.Member;
 import flab.project.jobfinder.exception.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Members save() {
-        Members member = new Members();
-        return memberRepository.save(member);
+    public Long save(Member memberDto) {
+        Member member = Member.builder()
+                .name(memberDto.getName())
+                .password(memberDto.getPassword())
+                .email(memberDto.getEmail())
+                .build();
+        return memberRepository.save(member).getId();
     }
 
     @Transactional
@@ -27,7 +31,7 @@ public class MemberService {
         );
     }
 
-    public Members findById(Long id) {
+    public Member findById(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
