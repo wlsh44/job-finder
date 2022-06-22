@@ -19,9 +19,9 @@ public class MemberService {
 
     public Member login(LoginFormDto loginFormDto) {
         Member member = memberRepository.findByName(loginFormDto.getName())
-                .orElseThrow(LoginFailedException::new);
+                .orElseThrow(() -> new LoginFailedException("존재하지 않는 유저"));
         if (!member.getPassword().equals(loginFormDto.getPassword())) {
-            throw new LoginFailedException();
+            throw new LoginFailedException("비밀번호 틀림");
         }
         return member;
     }
