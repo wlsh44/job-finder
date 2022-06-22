@@ -1,14 +1,14 @@
 package flab.project.jobfinder.repository;
 
-import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.dto.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findById(Long id);
-    Optional<Member> findByName(String name);
+public interface MemberRepository extends JpaRepository<User, Long> {
+    Optional<User> findById(Long id);
+    Optional<User> findByName(String name);
     boolean existsByName(String name);
 }

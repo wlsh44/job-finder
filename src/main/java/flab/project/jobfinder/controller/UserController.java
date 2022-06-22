@@ -1,10 +1,10 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.config.MemberPropertiesConfig;
+import flab.project.jobfinder.config.UserPropertiesConfig;
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.dto.member.Member;
-import flab.project.jobfinder.service.member.MemberService;
+import flab.project.jobfinder.dto.user.User;
+import flab.project.jobfinder.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +19,10 @@ import javax.validation.Valid;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController {
+public class UserController {
 
-    private final MemberService memberService;
-    private final MemberPropertiesConfig memberPropertiesConfig;
+    private final UserService userService;
+    private final UserPropertiesConfig userPropertiesConfig;
 
     @GetMapping("/sign-up")
     public String signUp(Model model) {
@@ -32,7 +32,7 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     public String signUp(@Valid SignUpFormDto signUpFormDto) {
-        memberService.save(signUpFormDto);
+        userService.save(signUpFormDto);
         return "redirect:/";
     }
 
@@ -44,10 +44,10 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Valid LoginFormDto loginFormDto, HttpServletRequest request) {
-        Member loginMember = memberService.login(loginFormDto);
+        User loginUser = userService.login(loginFormDto);
 
         HttpSession session = request.getSession();
-        session.setAttribute(memberPropertiesConfig.getLoginSessionId(), loginMember);
+        session.setAttribute(userPropertiesConfig.getLoginSessionId(), loginUser);
         return "redirect:/";
     }
 
