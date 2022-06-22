@@ -1,7 +1,9 @@
 package flab.project.jobfinder.service.member;
 
+import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.exception.member.LoginFailedException;
 import flab.project.jobfinder.exception.member.SignUpFailedException;
 import flab.project.jobfinder.exception.member.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
@@ -27,21 +29,16 @@ class MemberServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-    SignUpFormDto signUpFormDto;
     Member member;
+    String name = "test";
+    String password = "password";
+    String email = "email@email.email";
+
 
     @BeforeEach
     void clean() {
         memberRepository.deleteAll();
-        String name = "test";
-        String password = "password";
-        String email = "email@email.email";
-        signUpFormDto = SignUpFormDto.builder()
-                .name(name)
-                .password(password)
-                .passwordConfirm(password)
-                .email(email)
-                .build();
+
         member = Member.builder()
                 .id(1L)
                 .name(name)
@@ -53,6 +50,19 @@ class MemberServiceTest {
     @Nested
     @DisplayName("저장 테스트")
     class SaveTest {
+
+        SignUpFormDto signUpFormDto;
+
+        @BeforeEach
+        void init() {
+            signUpFormDto = SignUpFormDto.builder()
+                    .name(name)
+                    .password(password)
+                    .passwordConfirm(password)
+                    .email(email)
+                    .build();
+        }
+
         @Test
         @DisplayName("저장 성공")
         void saveTest() {
@@ -97,16 +107,69 @@ class MemberServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("로그인 테스트")
+    class LoginTest {
+
+        LoginFormDto loginFormDto;
+
+        @BeforeEach
+        void init() {
+            loginFormDto = LoginFormDto.builder().name(name)
+                    .password(password)
+                    .build();
+        }
+
+        @Test
+        @DisplayName("로그인 성공")
+        void loginTest() {
+            //given
+            given(memberRepository.findByName(name)).willReturn(Optional.of(member));
+
+            //when
+            Member res = memberService.login(loginFormDto);
+
+            //then
+            assertThat(res).isEqualTo(member);
+        }
+
+        @Test
+        @DisplayName("없는 유저일 경우")
+        void notExistsMember() {
+            //given
+            given(memberRepository.findByName(name)).willReturn(Optional.empty());
+
+            //when then
+            assertThatThrownBy(() -> memberService.login(loginFormDto))
+                    .isInstanceOf(LoginFailedException.class)
+                    .hasMessage("로그인에 실패했습니다: 존재하지 않는 유저");
+        }
+
+        @Test
+        @DisplayName("비밀번호 틀릴 경우")
+        void notCorrectPassword() {
+            //given
+            given(memberRepository.findByName(name)).willReturn(Optional.of(member));
+            loginFormDto = LoginFormDto.builder()
+                                    .name(name)
+                                    .password("wrong passwrod")
+                                    .build();
+
+            //when then
+            assertThatThrownBy(() -> memberService.login(loginFormDto))
+                    .isInstanceOf(LoginFailedException.class)
+                    .hasMessage("로그인에 실패했습니다: 비밀번호 틀림");
+        }
+    }
+
     @Test
     @DisplayName("조회 테스트")
     void findByIdTest() {
         //given
-        given(memberRepository.save(any())).willReturn(member);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
-        Long saveMemberId = memberService.save(signUpFormDto);
 
         //when
-        Member res = memberService.findById(saveMemberId);
+        Member res = memberService.findById(1L);
 
         //then
         assertThat(res.getName()).isEqualTo(member.getName());
@@ -129,16 +192,13 @@ class MemberServiceTest {
     @Disabled(value = "삭제 테스트 어떻게 할까")
     void deleteTest() {
         //given
-        given(memberRepository.save(any())).willReturn(member);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
-        Long saveMemberId = memberService.save(signUpFormDto);
 
-        System.out.println("saveMemberId = " + saveMemberId);
         //when
-        memberService.delete(saveMemberId);
+        memberService.delete(1L);
 
         //then
-        assertThatThrownBy(() -> memberService.findById(saveMemberId))
+        assertThatThrownBy(() -> memberService.findById(1L))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
