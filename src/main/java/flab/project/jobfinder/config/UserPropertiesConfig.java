@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "member")
-public class MemberPropertiesConfig {
+public class UserPropertiesConfig {
     private String loginSessionId;
 }

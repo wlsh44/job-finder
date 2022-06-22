@@ -1,4 +1,4 @@
-package flab.project.jobfinder.dto.member;
+package flab.project.jobfinder.dto.user;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -22,8 +22,8 @@ public class Member {
     @Column(length = 255, nullable = false)
     private String password;
 
-    public Member toEntity() {
-        return Member.builder()
+    public User toEntity() {
+        return User.builder()
                 .name(name)
                 .email(email)
                 .password(password)

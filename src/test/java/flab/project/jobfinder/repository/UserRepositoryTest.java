@@ -1,6 +1,6 @@
 package flab.project.jobfinder.repository;
 
-import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.dto.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class MemberRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
@@ -27,18 +27,18 @@ class MemberRepositoryTest {
         String name = "test";
         String password = "password";
         String email = "email@email.email";
-        Member member = Member.builder()
+        User user = User.builder()
                 .name(name)
                 .password(password)
                 .email(email)
                 .build();
-        Member saveMember = memberRepository.save(member);
+        User saveUser = memberRepository.save(user);
 
         //when
-        Member result = memberRepository.findById(saveMember.getId()).get();
+        User result = memberRepository.findById(saveUser.getId()).get();
 
         //then
-        assertThat(result.getName()).isEqualTo(member.getName());
-        assertThat(result.getEmail()).isEqualTo(member.getEmail());
+        assertThat(result.getName()).isEqualTo(user.getName());
+        assertThat(result.getEmail()).isEqualTo(user.getEmail());
     }
 }

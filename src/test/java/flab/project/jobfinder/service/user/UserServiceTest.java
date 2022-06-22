@@ -1,8 +1,8 @@
-package flab.project.jobfinder.service.member;
+package flab.project.jobfinder.service.user;
 
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.dto.user.User;
 import flab.project.jobfinder.exception.member.LoginFailedException;
 import flab.project.jobfinder.exception.member.SignUpFailedException;
 import flab.project.jobfinder.exception.member.UserNotFoundException;
@@ -21,15 +21,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+class UserServiceTest {
 
     @InjectMocks
-    MemberService memberService;
+    UserService userService;
 
     @Mock
     MemberRepository memberRepository;
 
-    Member member;
+    User user;
     String name = "test";
     String password = "password";
     String email = "email@email.email";
@@ -39,7 +39,7 @@ class MemberServiceTest {
     void clean() {
         memberRepository.deleteAll();
 
-        member = Member.builder()
+        user = User.builder()
                 .id(1L)
                 .name(name)
                 .password(password)
@@ -67,10 +67,10 @@ class MemberServiceTest {
         @DisplayName("저장 성공")
         void saveTest() {
             //given
-            given(memberRepository.save(any())).willReturn(member);
+            given(memberRepository.save(any())).willReturn(user);
 
             //when
-            Long res = memberService.save(signUpFormDto);
+            Long res = userService.save(signUpFormDto);
 
             //then
             assertThat(res).isEqualTo(1L);
@@ -83,7 +83,7 @@ class MemberServiceTest {
             given(memberRepository.existsByName("test")).willReturn(true);
 
             //when then
-            assertThatThrownBy(() -> memberService.save(signUpFormDto))
+            assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
                     .hasMessage("회원가입에 실패했습니다: 이미 존재하는 유저");
         }
@@ -101,7 +101,7 @@ class MemberServiceTest {
             given(memberRepository.existsByName("test")).willReturn(false);
 
             //when then
-            assertThatThrownBy(() -> memberService.save(signUpFormDto))
+            assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
                     .hasMessage("회원가입에 실패했습니다: 비밀번호 검증 실패");
         }
@@ -124,13 +124,13 @@ class MemberServiceTest {
         @DisplayName("로그인 성공")
         void loginTest() {
             //given
-            given(memberRepository.findByName(name)).willReturn(Optional.of(member));
+            given(memberRepository.findByName(name)).willReturn(Optional.of(user));
 
             //when
-            Member res = memberService.login(loginFormDto);
+            User res = userService.login(loginFormDto);
 
             //then
-            assertThat(res).isEqualTo(member);
+            assertThat(res).isEqualTo(user);
         }
 
         @Test
@@ -140,7 +140,7 @@ class MemberServiceTest {
             given(memberRepository.findByName(name)).willReturn(Optional.empty());
 
             //when then
-            assertThatThrownBy(() -> memberService.login(loginFormDto))
+            assertThatThrownBy(() -> userService.login(loginFormDto))
                     .isInstanceOf(LoginFailedException.class)
                     .hasMessage("로그인에 실패했습니다: 존재하지 않는 유저");
         }
@@ -149,14 +149,14 @@ class MemberServiceTest {
         @DisplayName("비밀번호 틀릴 경우")
         void notCorrectPassword() {
             //given
-            given(memberRepository.findByName(name)).willReturn(Optional.of(member));
+            given(memberRepository.findByName(name)).willReturn(Optional.of(user));
             loginFormDto = LoginFormDto.builder()
                                     .name(name)
                                     .password("wrong passwrod")
                                     .build();
 
             //when then
-            assertThatThrownBy(() -> memberService.login(loginFormDto))
+            assertThatThrownBy(() -> userService.login(loginFormDto))
                     .isInstanceOf(LoginFailedException.class)
                     .hasMessage("로그인에 실패했습니다: 비밀번호 틀림");
         }
@@ -166,14 +166,14 @@ class MemberServiceTest {
     @DisplayName("조회 테스트")
     void findByIdTest() {
         //given
-        given(memberRepository.findById(1L)).willReturn(Optional.of(member));
+        given(memberRepository.findById(1L)).willReturn(Optional.of(user));
 
         //when
-        Member res = memberService.findById(1L);
+        User res = userService.findById(1L);
 
         //then
-        assertThat(res.getName()).isEqualTo(member.getName());
-        assertThat(res.getEmail()).isEqualTo(member.getEmail());
+        assertThat(res.getName()).isEqualTo(user.getName());
+        assertThat(res.getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
@@ -183,7 +183,7 @@ class MemberServiceTest {
         Long id = -1L;
 
         //when then
-        assertThatThrownBy(() -> memberService.findById(id))
+        assertThatThrownBy(() -> userService.findById(id))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -192,13 +192,13 @@ class MemberServiceTest {
     @Disabled(value = "삭제 테스트 어떻게 할까")
     void deleteTest() {
         //given
-        given(memberRepository.findById(1L)).willReturn(Optional.of(member));
+        given(memberRepository.findById(1L)).willReturn(Optional.of(user));
 
         //when
-        memberService.delete(1L);
+        userService.delete(1L);
 
         //then
-        assertThatThrownBy(() -> memberService.findById(1L))
+        assertThatThrownBy(() -> userService.findById(1L))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -209,7 +209,7 @@ class MemberServiceTest {
         Long id = -1L;
 
         //when then
-        assertThatThrownBy(() -> memberService.delete(id))
+        assertThatThrownBy(() -> userService.delete(id))
                 .isInstanceOf(UserNotFoundException.class);
     }
 }
