@@ -31,8 +31,8 @@ public class MemberService {
         if (memberRepository.existsByName(signUpFormDto.getName())) {
             throw new SignUpFailedException("이미 존재하는 유저");
         }
-        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordCheck())) {
-            throw new SignUpFailedException("비밀번호 확인 실패");
+        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
+            throw new SignUpFailedException("비밀번호 검증 실패");
         }
         //TODO
         //비밀번호 암호화
