@@ -1,6 +1,8 @@
 package flab.project.jobfinder.service.member;
 
+import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.member.Member;
+import flab.project.jobfinder.exception.LoginFailedException;
 import flab.project.jobfinder.exception.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    public Member login(LoginFormDto loginFormDto) {
+        Member member = memberRepository.findByName(loginFormDto.getName())
+                .orElseThrow(() -> new UserNotFoundException(loginFormDto.getName()));
+        if (!member.getPassword().equals(loginFormDto.getPassword())) {
+            throw new LoginFailedException();
+        }
+        return member;
+    }
 
     @Transactional
     public Long save(Member memberDto) {
