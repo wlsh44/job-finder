@@ -11,7 +11,10 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -29,20 +32,25 @@ class UserServiceTest {
     @Mock
     MemberRepository memberRepository;
 
+    @Mock
+    PasswordEncoder passwordEncoder;
+
     User user;
     String name = "test";
     String password = "password";
     String email = "email@email.email";
-
+    String encodedPassword;
 
     @BeforeEach
     void clean() {
         memberRepository.deleteAll();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        encodedPassword = encoder.encode(password);
 
         user = User.builder()
                 .id(1L)
                 .name(name)
-                .password(password)
+                .password(encodedPassword)
                 .email(email)
                 .build();
     }
@@ -125,6 +133,7 @@ class UserServiceTest {
         void loginTest() {
             //given
             given(memberRepository.findByEmail(email)).willReturn(Optional.of(user));
+            given(passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())).willReturn(true);
 
             //when
             User res = userService.login(loginFormDto);
