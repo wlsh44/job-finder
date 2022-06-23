@@ -2,11 +2,13 @@ package flab.project.jobfinder.service.parser;
 
 import flab.project.jobfinder.config.jobkorea.JobKoreaPropertiesConfig;
 import flab.project.jobfinder.dto.RecruitDto;
+import flab.project.jobfinder.service.parser.duedate.DueDateParser;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import static flab.project.jobfinder.enums.Platform.JOBKOREA;
 public class JobKoreaParserService implements ParserService {
 
     private final JobKoreaPropertiesConfig config;
+    private final DueDateParser jobKoreaDueDateParser;
 
     @Override
     public List<RecruitDto> parse(Elements recruits) {
@@ -35,13 +38,16 @@ public class JobKoreaParserService implements ParserService {
     }
 
     private RecruitDto getParseDto(Elements corpElement, Elements infoElement, Elements optionElement, Elements etcElement) {
+        boolean alwaysRecruit = parseAlwaysRecruit(optionElement);
+
         RecruitDto recruitDto = RecruitDto.builder()
                 .title(parseTitle(infoElement))
                 .corp(parseCorp(corpElement))
                 .url(parseUrl(corpElement))
                 .career(parseCareer(optionElement))
                 .location(parseLocation(optionElement))
-                .dueDate(parseDueDate(optionElement))
+                .alwaysRecruit(alwaysRecruit)
+                .dueDate(parseDueDate(optionElement, alwaysRecruit))
                 .jobType(parseJobType(optionElement))
                 .techStack(parseTechStack(etcElement))
                 .platform(JOBKOREA.koreaName())
@@ -56,11 +62,20 @@ public class JobKoreaParserService implements ParserService {
         return etcElement.text();
     }
 
-    private String parseDueDate(Elements optionElement) {
+    private boolean parseAlwaysRecruit(Elements optionElement) {
         if (optionElement == null) {
-            return "";
+            return false;
         }
-        return optionElement.select("span.date").text();
+        String dueDateStr = optionElement.select("span.date").text();
+        return jobKoreaDueDateParser.isAlwaysRecruiting(dueDateStr);
+    }
+
+    private LocalDate parseDueDate(Elements optionElement, boolean alwaysRecruit) {
+        if (optionElement == null || alwaysRecruit) {
+            return null;
+        }
+        String dueDateStr = optionElement.select("span.date").text();
+        return jobKoreaDueDateParser.parseDueDate(dueDateStr);
     }
 
     private String parseLocation(Elements optionElement) {
