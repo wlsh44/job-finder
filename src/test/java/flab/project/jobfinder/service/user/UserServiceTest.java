@@ -80,7 +80,7 @@ class UserServiceTest {
         @DisplayName("이미 존재하는 유저인 경우")
         void alreadyExistsMember() {
             //given
-            given(memberRepository.existsByName("test")).willReturn(true);
+            given(memberRepository.existsByEmail(email)).willReturn(true);
 
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
@@ -93,12 +93,12 @@ class UserServiceTest {
         void passwordConfirmFailed() {
             //given
             signUpFormDto = SignUpFormDto.builder()
-                    .name("test")
-                    .password("password1")
+                    .name(name)
+                    .password(password)
                     .passwordConfirm("wrong password")
-                    .email("asdf@asdf.asdf")
+                    .email(email)
                     .build();
-            given(memberRepository.existsByName("test")).willReturn(false);
+            given(memberRepository.existsByEmail(email)).willReturn(false);
 
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
@@ -115,7 +115,7 @@ class UserServiceTest {
 
         @BeforeEach
         void init() {
-            loginFormDto = LoginFormDto.builder().name(name)
+            loginFormDto = LoginFormDto.builder().email(email)
                     .password(password)
                     .build();
         }
@@ -124,7 +124,7 @@ class UserServiceTest {
         @DisplayName("로그인 성공")
         void loginTest() {
             //given
-            given(memberRepository.findByName(name)).willReturn(Optional.of(user));
+            given(memberRepository.findByEmail(email)).willReturn(Optional.of(user));
 
             //when
             User res = userService.login(loginFormDto);
@@ -137,7 +137,7 @@ class UserServiceTest {
         @DisplayName("없는 유저일 경우")
         void notExistsMember() {
             //given
-            given(memberRepository.findByName(name)).willReturn(Optional.empty());
+            given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
 
             //when then
             assertThatThrownBy(() -> userService.login(loginFormDto))
@@ -149,9 +149,9 @@ class UserServiceTest {
         @DisplayName("비밀번호 틀릴 경우")
         void notCorrectPassword() {
             //given
-            given(memberRepository.findByName(name)).willReturn(Optional.of(user));
+            given(memberRepository.findByEmail(email)).willReturn(Optional.of(user));
             loginFormDto = LoginFormDto.builder()
-                                    .name(name)
+                                    .email(email)
                                     .password("wrong passwrod")
                                     .build();
 
