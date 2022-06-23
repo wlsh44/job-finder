@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginFormDto {
-    @NotNull(message = "아이디를 입력해주세요")
-    private String name;
-    @NotNull(message = "비밀번호를 입력해주세요")
+    @Email
+    @NotBlank(message = "이메일을 입력해주세요")
+    private String email;
+    @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
 }

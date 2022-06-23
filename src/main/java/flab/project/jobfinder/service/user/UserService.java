@@ -18,7 +18,7 @@ public class UserService {
     private final MemberRepository memberRepository;
 
     public User login(LoginFormDto loginFormDto) {
-        User user = memberRepository.findByName(loginFormDto.getName())
+        User user = memberRepository.findByEmail(loginFormDto.getEmail())
                 .orElseThrow(() -> new LoginFailedException("존재하지 않는 유저"));
         if (!user.getPassword().equals(loginFormDto.getPassword())) {
             throw new LoginFailedException("비밀번호 틀림");
@@ -28,7 +28,7 @@ public class UserService {
 
     @Transactional
     public Long save(SignUpFormDto signUpFormDto) {
-        if (memberRepository.existsByName(signUpFormDto.getName())) {
+        if (memberRepository.existsByEmail(signUpFormDto.getEmail())) {
             throw new SignUpFailedException("이미 존재하는 유저");
         }
         if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
