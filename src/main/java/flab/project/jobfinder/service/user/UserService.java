@@ -8,6 +8,7 @@ import flab.project.jobfinder.exception.member.SignUpFailedException;
 import flab.project.jobfinder.exception.member.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User login(LoginFormDto loginFormDto) {
         User user = memberRepository.findByEmail(loginFormDto.getEmail())
                 .orElseThrow(() -> new LoginFailedException("존재하지 않는 유저"));
-        if (!user.getPassword().equals(loginFormDto.getPassword())) {
+        if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
             throw new LoginFailedException("비밀번호 틀림");
         }
         return user;
@@ -36,9 +38,10 @@ public class UserService {
         }
         //TODO
         //비밀번호 암호화
+        String password = passwordEncoder.encode(signUpFormDto.getPassword());
         User user = User.builder()
                 .name(signUpFormDto.getName())
-                .password(signUpFormDto.getPassword())
+                .password(password)
                 .email(signUpFormDto.getEmail())
                 .build();
         return memberRepository.save(user).getId();
@@ -46,10 +49,8 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        memberRepository.delete(
-                memberRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(id))
-        );
+        User user = findById(id);
+        memberRepository.delete(user);
     }
 
     public User findById(Long id) {
