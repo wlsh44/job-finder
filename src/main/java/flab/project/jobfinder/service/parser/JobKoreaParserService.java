@@ -19,7 +19,7 @@ import static flab.project.jobfinder.enums.Platform.JOBKOREA;
 public class JobKoreaParserService implements ParserService {
 
     private final JobKoreaPropertiesConfig config;
-    private final DueDateParser jobKoreaDueDateParser;
+    private final DueDateParser dueDateParser;
 
     @Override
     public List<RecruitDto> parse(Elements recruits) {
@@ -67,7 +67,7 @@ public class JobKoreaParserService implements ParserService {
             return false;
         }
         String dueDateStr = optionElement.select("span.date").text();
-        return jobKoreaDueDateParser.isAlwaysRecruiting(dueDateStr);
+        return dueDateParser.isAlwaysRecruiting(dueDateStr, config.getAlwaysRecruitFormat());
     }
 
     private LocalDate parseDueDate(Elements optionElement, boolean alwaysRecruit) {
@@ -75,7 +75,7 @@ public class JobKoreaParserService implements ParserService {
             return null;
         }
         String dueDateStr = optionElement.select("span.date").text();
-        return jobKoreaDueDateParser.parseDueDate(dueDateStr);
+        return dueDateParser.parseDueDate(dueDateStr, config.getParseFormat());
     }
 
     private String parseLocation(Elements optionElement) {
