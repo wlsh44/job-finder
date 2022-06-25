@@ -1,16 +1,13 @@
 package flab.project.jobfinder.dto.form;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Builder
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpFormDto {
