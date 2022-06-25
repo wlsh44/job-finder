@@ -3,15 +3,20 @@ package flab.project.jobfinder.service.user;
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.user.User;
-import flab.project.jobfinder.exception.member.LoginFailedException;
-import flab.project.jobfinder.exception.member.SignUpFailedException;
-import flab.project.jobfinder.exception.member.UserNotFoundException;
+import flab.project.jobfinder.exception.user.LoginFailedException;
+import flab.project.jobfinder.exception.user.SignUpFailedException;
+import flab.project.jobfinder.exception.user.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.NOT_EXISTS_USER;
+import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.WRONG_PASSWORD;
+import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.ALREADY_EXISTS_USER;
+import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.PASSWORD_CONFIRM_NOT_CORRECT;
 
 @Slf4j
 @Service
@@ -21,22 +26,22 @@ public class UserService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User login(LoginFormDto loginFormDto) {
+    public User login(LoginFormDto loginFormDto) throws LoginFailedException {
         User user = memberRepository.findByEmail(loginFormDto.getEmail())
-                .orElseThrow(() -> new LoginFailedException("존재하지 않는 유저"));
+                .orElseThrow(() -> new LoginFailedException(loginFormDto, NOT_EXISTS_USER));
         if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
-            throw new LoginFailedException("비밀번호 틀림");
+            throw new LoginFailedException(loginFormDto, WRONG_PASSWORD);
         }
         return user;
     }
 
     @Transactional
-    public Long save(SignUpFormDto signUpFormDto) {
+    public Long save(SignUpFormDto signUpFormDto) throws SignUpFailedException {
         if (memberRepository.existsByEmail(signUpFormDto.getEmail())) {
-            throw new SignUpFailedException("이미 존재하는 유저");
+            throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
         }
         if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
-            throw new SignUpFailedException("비밀번호 검증 실패");
+            throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
         }
         String password = passwordEncoder.encode(signUpFormDto.getPassword());
         User user = User.builder()
@@ -48,12 +53,12 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id) throws UserNotFoundException {
         User user = findById(id);
         memberRepository.delete(user);
     }
 
-    public User findById(Long id) {
+    public User findById(Long id) throws UserNotFoundException {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }

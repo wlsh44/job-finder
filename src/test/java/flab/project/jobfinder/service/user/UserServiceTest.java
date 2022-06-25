@@ -3,15 +3,14 @@ package flab.project.jobfinder.service.user;
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.dto.user.User;
-import flab.project.jobfinder.exception.member.LoginFailedException;
-import flab.project.jobfinder.exception.member.SignUpFailedException;
-import flab.project.jobfinder.exception.member.UserNotFoundException;
+import flab.project.jobfinder.exception.user.LoginFailedException;
+import flab.project.jobfinder.exception.user.SignUpFailedException;
+import flab.project.jobfinder.exception.user.UserNotFoundException;
 import flab.project.jobfinder.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -93,7 +92,7 @@ class UserServiceTest {
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
-                    .hasMessage("회원가입에 실패했습니다: 이미 존재하는 유저");
+                    .hasMessage("회원가입에 실패: 이미 존재하는 유저입니다.");
         }
 
         @Test
@@ -111,7 +110,7 @@ class UserServiceTest {
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
-                    .hasMessage("회원가입에 실패했습니다: 비밀번호 검증 실패");
+                    .hasMessage("회원가입에 실패: 비밀번호가 일치하지 않습니다.");
         }
     }
 
