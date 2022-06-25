@@ -28,7 +28,7 @@ public class JobFinderController {
 
     private final JobFindFactory jobFindFactory;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getJobFindForm(Model model) {
         SearchFormDto searchFormDto = new SearchFormDto();
 
@@ -38,7 +38,7 @@ public class JobFinderController {
         return "form";
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public String jobFind(@Valid SearchFormDto searchFormDto, BindingResult bindingResult, Model model) {
         log.debug(searchFormDto.toString());
 
