@@ -1,4 +1,4 @@
-package flab.project.jobfinder.exception.member;
+package flab.project.jobfinder.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
 
