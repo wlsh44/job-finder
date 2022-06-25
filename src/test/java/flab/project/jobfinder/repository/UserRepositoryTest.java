@@ -13,11 +13,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    UserRepository userRepository;
 
     @BeforeEach
     void clean() {
-        memberRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -32,10 +32,10 @@ class UserRepositoryTest {
                 .password(password)
                 .email(email)
                 .build();
-        User saveUser = memberRepository.save(user);
+        User saveUser = userRepository.save(user);
 
         //when
-        User result = memberRepository.findById(saveUser.getId()).get();
+        User result = userRepository.findById(saveUser.getId()).get();
 
         //then
         assertThat(result.getName()).isEqualTo(user.getName());

@@ -6,7 +6,7 @@ import flab.project.jobfinder.dto.user.User;
 import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;
-import flab.project.jobfinder.repository.MemberRepository;
+import flab.project.jobfinder.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +23,11 @@ import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.PASSW
 @RequiredArgsConstructor
 public class UserService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public User login(LoginFormDto loginFormDto) throws LoginFailedException {
-        User user = memberRepository.findByEmail(loginFormDto.getEmail())
+        User user = userRepository.findByEmail(loginFormDto.getEmail())
                 .orElseThrow(() -> new LoginFailedException(loginFormDto, NOT_EXISTS_USER));
         if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
             throw new LoginFailedException(loginFormDto, WRONG_PASSWORD);
@@ -37,7 +37,7 @@ public class UserService {
 
     @Transactional
     public Long save(SignUpFormDto signUpFormDto) throws SignUpFailedException {
-        if (memberRepository.existsByEmail(signUpFormDto.getEmail())) {
+        if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
             throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
         }
         if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
@@ -49,17 +49,17 @@ public class UserService {
                 .password(password)
                 .email(signUpFormDto.getEmail())
                 .build();
-        return memberRepository.save(user).getId();
+        return userRepository.save(user).getId();
     }
 
     @Transactional
     public void delete(Long id) throws UserNotFoundException {
         User user = findById(id);
-        memberRepository.delete(user);
+        userRepository.delete(user);
     }
 
     public User findById(Long id) throws UserNotFoundException {
-        return memberRepository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
