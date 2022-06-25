@@ -2,9 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragment/header.html :: fragment-header"></div>
+    <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
     <title>Job-Finder</title>
 </head>
 <body>
-    회원가입
+<div class="container" style="max-width: 800px">
+
+    <div class="py-5 text-center">
+        <h2>회원 가입</h2>
+    </div>
+
+    <form action="" th:object="${signUpFormDto}" method="post">
+        <div class="row">
+            <label for="email">이메일</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error">
+            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email').get(0)}"></div>
+        </div>
+        <br>
+        <div class="row">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control" th:errorclass="field-error">
+            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:text="${#fields.errors('password').get(0)}"></div>
+        </div>
+        <br>
+        <div class="row">
+            <label for="password-confirm">비밀번호 확인</label>
+            <input type="password" id="password-confirm" th:field="*{passwordConfirm}" class="form-control" th:errorclass="field-error">
+            <div class="field-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:text="${#fields.errors('passwordConfirm').get(0)}"></div>
+        </div>
+        <br>
+        <div class="row">
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" th:errorclass="field-error">
+            <div class="field-error" th:if="${#fields.hasErrors('name')}" th:text="${#fields.errors('name').get(0)}"></div>
+        </div>
+        <br>
+        <div class="row">
+            <button type="submit" class="w-50 btn btn-primary btn-lg">회원가입</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
