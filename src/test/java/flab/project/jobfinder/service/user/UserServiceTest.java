@@ -2,7 +2,7 @@ package flab.project.jobfinder.service.user;
 
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.dto.user.User;
+import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;

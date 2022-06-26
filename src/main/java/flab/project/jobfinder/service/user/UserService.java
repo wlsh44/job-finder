@@ -2,7 +2,7 @@ package flab.project.jobfinder.service.user;
 
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.dto.user.User;
+import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.NOT_EXISTS_USER;
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.WRONG_PASSWORD;
-import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.ALREADY_EXISTS_USER;
-import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.PASSWORD_CONFIRM_NOT_CORRECT;
 
 @Slf4j
 @Service

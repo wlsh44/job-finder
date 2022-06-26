@@ -1,7 +1,7 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.config.UserPropertiesConfig;
-import flab.project.jobfinder.dto.user.User;
+import flab.project.jobfinder.entity.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
