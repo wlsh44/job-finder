@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <div th:replace="fragment/head.html :: fragment-head"></div>
 </head>
 <body>
 <div class="container">
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+
     <div>
         <button th:onclick="|location.href='@{/job-find}'|" class="btn-primary">뒤로</button>
     </div>
