@@ -37,12 +37,12 @@ public class UserService {
 
     @Transactional
     public Long save(SignUpFormDto signUpFormDto) throws SignUpFailedException {
-        if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
-            throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
-        }
-        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
-            throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
-        }
+//        if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
+//            throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
+//        }
+//        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
+//            throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
+//        }
         String password = passwordEncoder.encode(signUpFormDto.getPassword());
         User user = User.builder()
                 .name(signUpFormDto.getName())
