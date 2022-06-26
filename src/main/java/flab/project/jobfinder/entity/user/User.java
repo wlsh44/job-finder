@@ -1,4 +1,4 @@
-package flab.project.jobfinder.dto.user;
+package flab.project.jobfinder.entity.user;
 
 import lombok.*;
 

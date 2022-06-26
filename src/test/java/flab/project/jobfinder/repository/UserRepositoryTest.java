@@ -1,6 +1,6 @@
 package flab.project.jobfinder.repository;
 
-import flab.project.jobfinder.dto.user.User;
+import flab.project.jobfinder.entity.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

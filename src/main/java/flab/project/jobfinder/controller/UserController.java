@@ -3,9 +3,7 @@ package flab.project.jobfinder.controller;
 import flab.project.jobfinder.config.UserPropertiesConfig;
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.dto.user.User;
-import flab.project.jobfinder.enums.Location;
-import flab.project.jobfinder.enums.Platform;
+import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +27,11 @@ public class UserController {
     private final UserService userService;
     private final UserPropertiesConfig userPropertiesConfig;
 
+    @GetMapping("/my-page")
+    public String myPage(Model model) {
+
+        return "my-page";
+    }
     @GetMapping("/sign-up")
     public String signUp(Model model) {
         model.addAttribute("signUpFormDto", new SignUpFormDto());
