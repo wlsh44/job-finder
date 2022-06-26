@@ -8,6 +8,8 @@ import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -20,13 +22,20 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     public String UserNotFoundException(UserNotFoundException e, Model model) {
+        log.info("유저 없음");
         return "/";
     }
 
     @ExceptionHandler(LoginFailedException.class)
     public String LoginFailedException(LoginFailedException e, Model model) {
-        model.addAttribute("loginFormDto", new LoginFormDto());
-        return "redirect:/user/login";
+        log.info(e.getCode().errorMsg());
+        LoginFormDto prevForm = e.getLoginFormDto();
+        LoginFormDto loginFormDto = LoginFormDto.builder()
+                .email(prevForm.getEmail())
+                .build();
+        model.addAttribute("loginFormDto", loginFormDto);
+        model.addAttribute("loginFailed", "아이디 또는 비밀번호가 틀렸습니다.");
+        return "login";
     }
 
     @ExceptionHandler(SignUpFailedException.class)

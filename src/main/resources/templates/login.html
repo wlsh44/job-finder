@@ -13,16 +13,20 @@
     </div>
 
     <form action="" th:object="${loginFormDto}" method="post">
+
+        <div class="row">
+            <div class="field-error" th:if="${loginFailed != null}" th:text="${loginFailed}"></div>
+        </div>
+        <br>
+
         <div class="row">
             <label for="email">이메일</label>
             <input type="email" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error">
-            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email').get(0)}"></div>
         </div>
         <br>
         <div class="row">
             <label for="password">비밀번호</label>
             <input type="password" id="password" th:field="*{password}" class="form-control" th:errorclass="field-error">
-            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:text="${#fields.errors('password').get(0)}"></div>
         </div>
         <br>
         <div class="row">
