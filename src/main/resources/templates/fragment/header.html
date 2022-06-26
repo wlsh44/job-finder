@@ -4,7 +4,8 @@
             <div class = "header">
                 <div class="header-menu">
                     <div th:if="${user != null}">
-                        <a th:href="@{/user/me}">마이페이지</a>
+                        <span th:text="|${user.name} 님|"></span>
+                        <a th:href="@{/user/my-page}">마이페이지</a>
                         <a th:href="@{/user/logout}">로그아웃</a>
                     </div>
                     <div th:unless="${user != null}">
