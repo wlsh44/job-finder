@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <div th:replace="fragment/head.html :: fragment-head"></div>
     <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container" style="max-width: 800px">
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+
     <div class="py-5 text-center">
         <h2>직업 검색</h2>
     </div>
