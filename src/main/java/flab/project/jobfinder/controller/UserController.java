@@ -24,51 +24,9 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
-    private final UserPropertiesConfig userPropertiesConfig;
-
     @GetMapping("/my-page")
     public String myPage(Model model) {
 
         return "my-page";
-    }
-    @GetMapping("/sign-up")
-    public String signUp(Model model) {
-        model.addAttribute("signUpFormDto", new SignUpFormDto());
-        return "sign-up";
-    }
-
-    @PostMapping("/sign-up")
-    public String signUp(@Valid SignUpFormDto signUpFormDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "sign-up";
-        }
-        userService.save(signUpFormDto);
-        return "redirect:/";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("loginFormDto", new LoginFormDto());
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid LoginFormDto loginFormDto, HttpServletRequest request) {
-        User loginUser = userService.login(loginFormDto);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(userPropertiesConfig.getLoginSessionId(), loginUser);
-        return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
     }
 }

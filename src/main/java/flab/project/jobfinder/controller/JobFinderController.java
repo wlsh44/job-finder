@@ -35,7 +35,7 @@ public class JobFinderController {
         model.addAttribute("searchFormDto", searchFormDto);
         model.addAttribute("locationMap", Location.getDistrictMap());
         model.addAttribute("platformMap", Platform.getKoreaNameMap());
-        return "form";
+        return "job-find/form";
     }
 
     @PostMapping("")
@@ -46,7 +46,7 @@ public class JobFinderController {
             model.addAttribute("locationMap", Location.getDistrictMap());
             model.addAttribute("platformMap", Platform.getKoreaNameMap());
             log.info("errors={}", bindingResult);
-            return "form";
+            return "job-find/form";
         }
 
         DetailedSearchDto detailedSearchDto = searchFormDto.getDetailedSearchDto();
@@ -63,6 +63,6 @@ public class JobFinderController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("searchFormDto", searchFormDto);
-        return "recruits";
+        return "job-find/recruits";
     }
 }
