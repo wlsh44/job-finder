@@ -38,13 +38,13 @@ class DueDateParserTest {
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("provideFormat")
     @DisplayName("모집 기간 내년인 경우")
-    void parsingNextYearDueDateTest(String platform, String parseFormat, String dueDateFormat) {
+    void parsingNextYearDueDateTest(String platform, String dueDateFormat, String platformDueDate) {
         //given
         LocalDate lastSunday = LocalDate.now().with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
-        String dueDateStr = String.format(dueDateFormat, lastSunday.getMonthValue(), lastSunday.getDayOfMonth());
+        String dueDateStr = String.format(platformDueDate, lastSunday.getMonthValue(), lastSunday.getDayOfMonth());
 
         //when
-        LocalDate dueDate = dueDateParser.parseDueDate(dueDateStr, parseFormat);
+        LocalDate dueDate = dueDateParser.parseDueDate(dueDateStr, dueDateFormat);
 
         //then
         assertThat(dueDate).isEqualTo(lastSunday.plusYears(1));
@@ -53,11 +53,11 @@ class DueDateParserTest {
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("provideAlwaysRecruit")
     @DisplayName("상시 채용 테스트")
-    void alwaysRecruitTest(String platform, String dueDateStr, String alwaysRecruitFormat, boolean res) {
+    void alwaysRecruitTest(String platform, String dueDateStr, String isAlwaysRecruiting, boolean res) {
         //given
 
         //when
-        boolean alwaysRecruiting = dueDateParser.isAlwaysRecruiting(dueDateStr, alwaysRecruitFormat);
+        boolean alwaysRecruiting = dueDateParser.isAlwaysRecruiting(dueDateStr, isAlwaysRecruiting);
 
         //then
         assertThat(alwaysRecruiting).isEqualTo(res);

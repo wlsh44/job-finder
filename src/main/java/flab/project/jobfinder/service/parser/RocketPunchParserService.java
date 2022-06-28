@@ -52,7 +52,7 @@ public class RocketPunchParserService implements ParserService {
                 .url(url)
                 .career(career)
                 .dueDate(dueDate)
-                .alwaysRecruit(alwaysRecruit)
+                .isAlwaysRecruiting(alwaysRecruit)
                 .location("")
                 .jobType("")
                 .platform(ROCKETPUNCH.koreaName())
@@ -69,7 +69,7 @@ public class RocketPunchParserService implements ParserService {
         if (dueDate == null) {
             return false;
         }
-        return dueDateParser.isAlwaysRecruiting(dueDate.text(), config.getAlwaysRecruitFormat());
+        return dueDateParser.isAlwaysRecruiting(dueDate.text(), config.getAlwaysRecruitingFormat());
     }
 
     //기간, 원격 유뮤, 등록 날짜 3개 순으로 되어 있으므로 첫 번째 span 값 가져옴
@@ -78,7 +78,7 @@ public class RocketPunchParserService implements ParserService {
         if (dueDate == null || alwaysRecruit) {
             return null;
         }
-        return dueDateParser.parseDueDate(dueDate.text(), config.getParseFormat());
+        return dueDateParser.parseDueDate(dueDate.text(), config.getDueDateFormat());
     }
 
     private String parseCareer(Element recruitDetail) {

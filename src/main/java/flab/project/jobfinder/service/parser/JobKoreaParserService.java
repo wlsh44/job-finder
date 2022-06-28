@@ -46,7 +46,7 @@ public class JobKoreaParserService implements ParserService {
                 .url(parseUrl(corpElement))
                 .career(parseCareer(optionElement))
                 .location(parseLocation(optionElement))
-                .alwaysRecruit(alwaysRecruit)
+                .isAlwaysRecruiting(alwaysRecruit)
                 .dueDate(parseDueDate(optionElement, alwaysRecruit))
                 .jobType(parseJobType(optionElement))
                 .techStack(parseTechStack(etcElement))
@@ -67,7 +67,7 @@ public class JobKoreaParserService implements ParserService {
             return false;
         }
         String dueDateStr = optionElement.select("span.date").text();
-        return dueDateParser.isAlwaysRecruiting(dueDateStr, config.getAlwaysRecruitFormat());
+        return dueDateParser.isAlwaysRecruiting(dueDateStr, config.getAlwaysRecruitingFormat());
     }
 
     private LocalDate parseDueDate(Elements optionElement, boolean alwaysRecruit) {
@@ -75,7 +75,7 @@ public class JobKoreaParserService implements ParserService {
             return null;
         }
         String dueDateStr = optionElement.select("span.date").text();
-        return dueDateParser.parseDueDate(dueDateStr, config.getParseFormat());
+        return dueDateParser.parseDueDate(dueDateStr, config.getDueDateFormat());
     }
 
     private String parseLocation(Elements optionElement) {
