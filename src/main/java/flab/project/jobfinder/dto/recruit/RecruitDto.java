@@ -19,6 +19,6 @@ public class RecruitDto {
     private String jobType;
     private String career;
     private LocalDate dueDate;
-    private boolean alwaysRecruit;
+    private boolean isAlwaysRecruiting;
     private String platform;
 }

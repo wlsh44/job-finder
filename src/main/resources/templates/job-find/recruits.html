@@ -23,8 +23,8 @@
                         <span th:text="'| ' + ${recruit.location} + ' | '"></span>
                         <span th:text="${recruit.jobType} + ' | '"></span>
                         <span th:text="${recruit.career} + ' | '"></span>
-                        <span th:if="${recruit.alwaysRecruit}">상시 채용</span>
-                        <span th:unless="${recruit.alwaysRecruit}" th:text="'~' + ${recruit.getDueDate.getMonthValue} + '/' + ${recruit.getDueDate.getDayOfMonth}"></span>
+                        <span th:if="${recruit.isAlwaysRecruiting}">상시 채용</span>
+                        <span th:unless="${recruit.isAlwaysRecruiting}" th:text="'~' + ${recruit.getDueDate.getMonthValue} + '/' + ${recruit.getDueDate.getDayOfMonth}"></span>
                     </div>
                 </div>
                 <div th:text="${recruit.techStack}"></div>
