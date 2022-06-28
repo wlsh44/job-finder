@@ -1,7 +1,7 @@
 package flab.project.jobfinder.service.jobfind.parser;
 
 import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
-import flab.project.jobfinder.service.parser.duedate.DueDateParser;
+import flab.project.jobfinder.service.jobfind.parser.duedate.DueDateParser;
 import flab.project.jobfinder.dto.recruit.RecruitDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;

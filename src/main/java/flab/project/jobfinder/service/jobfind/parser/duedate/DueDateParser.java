@@ -1,4 +1,4 @@
-package flab.project.jobfinder.service.parser.duedate;
+package flab.project.jobfinder.service.jobfind.parser.duedate;
 
 import org.springframework.stereotype.Component;
 
