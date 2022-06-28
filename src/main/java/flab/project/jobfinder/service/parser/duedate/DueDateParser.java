@@ -11,14 +11,16 @@ import java.util.Locale;
 @Component
 public class DueDateParser {
 
-    public LocalDate parseDueDate(String dueDateStr, String parseFormat) {
+    public static final int NEXT_YEAR = 1;
+
+    public LocalDate parseDueDate(String dueDateStr, String dueDateFormat) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern(parseFormat)
+                .appendPattern(dueDateFormat)
                 .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
                 .toFormatter(Locale.KOREA);
         LocalDate dueDate = LocalDate.parse(dueDateStr, formatter);
         if (dueDate.isBefore(LocalDate.now())) {
-            dueDate = dueDate.plusYears(1);
+            dueDate = dueDate.plusYears(NEXT_YEAR);
         }
         return dueDate;
     }
