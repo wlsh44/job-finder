@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -49,7 +50,7 @@ class JobKoreaJobFinderControllerTest {
         recruitDto = RecruitDto.builder()
                 .title("test title")
                 .jobType("test jobType")
-                .dueDate("test dueDate")
+                .dueDate(LocalDate.now())
                 .corp("test corp")
                 .career("test career")
                 .location("test loc")

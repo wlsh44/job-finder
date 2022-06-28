@@ -11,4 +11,6 @@ public abstract class PropertiesConfig {
     protected String delimiter;
     protected String selector;
     protected String pageSelector;
+    protected String dueDateFormat;
+    protected String alwaysRecruitingFormat;
 }

@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Builder
 @ToString
 @Getter
@@ -16,6 +18,7 @@ public class RecruitDto {
     private String techStack;
     private String jobType;
     private String career;
-    private String dueDate;
+    private LocalDate dueDate;
+    private boolean isAlwaysRecruiting;
     private String platform;
 }
