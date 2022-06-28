@@ -22,7 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         User user = (User) session.getAttribute(LOGIN_SESSION_ID);
         if (user != null) {
-            log.info("user: {}", user.getName());
+            log.info("url: {}, user: {}",request.getRequestURI(), user.getName());
             request.setAttribute("user", user);
         }
     }
