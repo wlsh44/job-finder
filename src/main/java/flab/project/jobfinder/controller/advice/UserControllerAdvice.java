@@ -41,7 +41,7 @@ public class UserControllerAdvice {
     @ExceptionHandler(SignUpFailedException.class)
     public String SignUpFailedException(SignUpFailedException e, Model model) {
         switch (e.getCode()) {
-            case ALREADY_EXISTS_USER: {
+            case ALREADY_EXISTS_USER -> {
                 log.info("user email: {}", e.getSignUpFormDto().getEmail());
                 SignUpFormDto prevForm = e.getSignUpFormDto();
                 SignUpFormDto signUpFormDto = SignUpFormDto.builder()
@@ -49,9 +49,8 @@ public class UserControllerAdvice {
                         .build();
                 model.addAttribute("signUpFormDto", signUpFormDto);
                 model.addAttribute("emailError", ALREADY_EXISTS_USER.errorMsg());
-                break;
             }
-            case PASSWORD_CONFIRM_NOT_CORRECT: {
+            case PASSWORD_CONFIRM_NOT_CORRECT -> {
                 log.info("password: {}, passwordConfirm: {}", e.getSignUpFormDto().getPassword(), e.getSignUpFormDto().getPasswordConfirm());
                 SignUpFormDto prevForm = e.getSignUpFormDto();
                 SignUpFormDto signUpFormDto = SignUpFormDto.builder()
@@ -60,7 +59,6 @@ public class UserControllerAdvice {
                         .build();
                 model.addAttribute("signUpFormDto", signUpFormDto);
                 model.addAttribute("passwordError", PASSWORD_CONFIRM_NOT_CORRECT.errorMsg());
-                break;
             }
         }
         return "sign-up";
