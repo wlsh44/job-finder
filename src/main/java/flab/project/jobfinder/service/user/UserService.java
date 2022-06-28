@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.NOT_EXISTS_USER;
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.WRONG_PASSWORD;
+import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.ALREADY_EXISTS_USER;
+import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.PASSWORD_CONFIRM_NOT_CORRECT;
 
 @Slf4j
 @Service
@@ -35,12 +37,12 @@ public class UserService {
 
     @Transactional
     public Long save(SignUpFormDto signUpFormDto) throws SignUpFailedException {
-//        if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
-//            throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
-//        }
-//        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
-//            throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
-//        }
+        if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
+            throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
+        }
+        if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
+            throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
+        }
         String password = passwordEncoder.encode(signUpFormDto.getPassword());
         User user = User.builder()
                 .name(signUpFormDto.getName())
