@@ -26,12 +26,4 @@ public class User {
 
     @OneToMany(mappedBy = "userId")
     private List<Category> categories;
-
-    public User toEntity() {
-        return User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .build();
-    }
 }

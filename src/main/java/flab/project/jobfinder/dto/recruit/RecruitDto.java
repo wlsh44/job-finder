@@ -1,5 +1,7 @@
 package flab.project.jobfinder.dto.recruit;
 
+import flab.project.jobfinder.entity.recruit.Recruit;
+import flab.project.jobfinder.enums.Platform;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -21,4 +23,17 @@ public class RecruitDto {
     private LocalDate dueDate;
     private boolean isAlwaysRecruiting;
     private String platform;
+
+    public Recruit toEntity() {
+        return Recruit.builder()
+                .title(title)
+                .url(url)
+                .location(location)
+                .techStack(techStack)
+                .corp(corp)
+                .dueDate(dueDate)
+                .isAlwaysRecruiting(isAlwaysRecruiting)
+                .platform(Platform.valueOf(platform))
+                .jobType(jobType).build();
+    }
 }
