@@ -22,12 +22,4 @@ public class User {
 
     @Column(length = 255, nullable = false, unique = true)
     private String password;
-
-    public User toEntity() {
-        return User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .build();
-    }
 }
