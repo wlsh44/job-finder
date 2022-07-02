@@ -15,7 +15,7 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(length = 100, nullable = false, unique = true)
@@ -24,6 +24,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private List<Category> categories;
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(
         uniqueConstraints =
-        @UniqueConstraint(columnNames = {"user_id", "name"})
+        @UniqueConstraint(name = "", columnNames = {"user_id", "name"})
 )
 @Builder
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User userId;
+    private User user;
 
     @ManyToMany(mappedBy = "categories")
     private List<Recruit> recruits;
