@@ -39,7 +39,7 @@ public class BookmarkService {
     }
 
     public CategoryResponseDto createCategory(User user, NewCategoryRequestDto dto) {
-        if (categoryRepository.existsByUserIdAndName(user.getId(), dto.getName())) {
+        if (categoryRepository.existsByUserAndName(user, dto.getName())) {
             throw new CreateCategoryFailedException(dto, ALREADY_EXISTS_CATEGORY);
         }
 
