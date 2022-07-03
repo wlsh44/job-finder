@@ -1,6 +1,6 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.entity.recruit.Category;
+import flab.project.jobfinder.dto.bookmark.CategoryResponseDto;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/my-bookmark")
     public String bookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
-        List<Category> userCategoryList = bookmarkService.findCategoryByUser(user);
+        List<CategoryResponseDto> userCategoryList = bookmarkService.findCategoryByUser(user);
         model.addAttribute("categories", userCategoryList);
         return "user/my-bookmark";
     }
