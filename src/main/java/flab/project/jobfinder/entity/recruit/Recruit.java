@@ -30,10 +30,9 @@ public class Recruit {
     @Convert(converter = PlatformConverter.class)
     private Platform platform;
 
-    @Column(nullable = false)
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category categories;
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 
     @ManyToMany
     @JoinTable(
