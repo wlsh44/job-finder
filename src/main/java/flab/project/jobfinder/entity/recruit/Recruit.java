@@ -31,12 +31,9 @@ public class Recruit {
     private Platform platform;
 
     @Column(nullable = false)
-    @ManyToMany
-    @JoinTable(
-            name = "Category_Recruit",
-            joinColumns = @JoinColumn(name = "recruit_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
-    private List<Category> categories;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category categories;
 
     @ManyToMany
     @JoinTable(

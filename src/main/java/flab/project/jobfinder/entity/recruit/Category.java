@@ -28,6 +28,6 @@ public class Category {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories")
     private List<Recruit> recruits;
 }
