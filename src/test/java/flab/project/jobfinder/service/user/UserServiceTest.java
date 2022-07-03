@@ -41,8 +41,7 @@ class UserServiceTest {
     String encodedPassword;
 
     @BeforeEach
-    void clean() {
-        userRepository.deleteAll();
+    void init() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         encodedPassword = encoder.encode(password);
 
@@ -74,7 +73,8 @@ class UserServiceTest {
         @DisplayName("저장 성공")
         void saveTest() {
             //given
-            given(userRepository.save(any())).willReturn(user);
+            given(userRepository.save(any()))
+                    .willReturn(user);
 
             //when
             Long res = userService.save(signUpFormDto);
@@ -87,7 +87,8 @@ class UserServiceTest {
         @DisplayName("이미 존재하는 유저인 경우")
         void alreadyExistsMember() {
             //given
-            given(userRepository.existsByEmail(email)).willReturn(true);
+            given(userRepository.existsByEmail(email))
+                    .willReturn(true);
 
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
@@ -131,8 +132,10 @@ class UserServiceTest {
         @DisplayName("로그인 성공")
         void loginTest() {
             //given
-            given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
-            given(passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())).willReturn(true);
+            given(userRepository.findByEmail(email))
+                    .willReturn(Optional.of(user));
+            given(passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword()))
+                    .willReturn(true);
 
             //when
             User res = userService.login(loginFormDto);
@@ -145,7 +148,8 @@ class UserServiceTest {
         @DisplayName("없는 유저일 경우")
         void notExistsMember() {
             //given
-            given(userRepository.findByEmail(email)).willReturn(Optional.empty());
+            given(userRepository.findByEmail(email))
+                    .willReturn(Optional.empty());
 
             //when then
             assertThatThrownBy(() -> userService.login(loginFormDto))
@@ -157,7 +161,8 @@ class UserServiceTest {
         @DisplayName("비밀번호 틀릴 경우")
         void notCorrectPassword() {
             //given
-            given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+            given(userRepository.findByEmail(email))
+                    .willReturn(Optional.of(user));
             loginFormDto = LoginFormDto.builder()
                                     .email(email)
                                     .password("wrong passwrod")
@@ -174,7 +179,8 @@ class UserServiceTest {
     @DisplayName("조회 테스트")
     void findByIdTest() {
         //given
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(1L))
+                .willReturn(Optional.of(user));
 
         //when
         User res = userService.findById(1L);
@@ -200,7 +206,8 @@ class UserServiceTest {
     @Disabled(value = "삭제 테스트 어떻게 할까")
     void deleteTest() {
         //given
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(1L))
+                .willReturn(Optional.of(user));
 
         //when
         userService.delete(1L);

@@ -35,7 +35,7 @@ public class LoginController {
     @PostMapping("/sign-up")
     public String signUp(@Valid SignUpFormDto signUpFormDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
+            log.info("sign up errors={}", bindingResult);
             return "sign-up";
         }
         userService.save(signUpFormDto);
@@ -49,7 +49,11 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginFormDto loginFormDto, HttpServletRequest request) {
+    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            log.info("login errors={}", bindingResult);
+            return "login";
+        }
         User loginUser = userService.login(loginFormDto);
 
         HttpSession session = request.getSession();

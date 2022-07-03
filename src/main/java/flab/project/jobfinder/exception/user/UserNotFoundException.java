@@ -2,11 +2,9 @@ package flab.project.jobfinder.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
 
-    public UserNotFoundException(String name) {
-        super("name=" + name + "인 유저가 없습니다.");
+    public static final String FAILED_MSG = "해당 유저가 없습니다. id: %s";
 
-    }
     public UserNotFoundException(Long id) {
-        super("id=" + id + "인 유저가 없습니다.");
+        super(FAILED_MSG.formatted(id));
     }
 }

@@ -7,11 +7,12 @@ import lombok.Getter;
 @Getter
 public class SignUpFailedException extends RuntimeException {
 
+    public static final String FAILED_MSG = "회원가입 실패: %s";
     private final SignUpFormDto signUpFormDto;
     private final SignUpFailedErrorCode code;
 
     public SignUpFailedException(SignUpFormDto dto, SignUpFailedErrorCode code) {
-        super("회원가입 실패: " + code.errorMsg());
+        super(FAILED_MSG.formatted(code.errorMsg()));
         this.signUpFormDto = dto;
         this.code = code;
     }

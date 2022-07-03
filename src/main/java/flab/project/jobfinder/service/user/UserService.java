@@ -32,6 +32,7 @@ public class UserService {
         if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
             throw new LoginFailedException(loginFormDto, WRONG_PASSWORD);
         }
+
         return user;
     }
 
@@ -40,9 +41,11 @@ public class UserService {
         if (userRepository.existsByEmail(signUpFormDto.getEmail())) {
             throw new SignUpFailedException(signUpFormDto, ALREADY_EXISTS_USER);
         }
+
         if (!signUpFormDto.getPassword().equals(signUpFormDto.getPasswordConfirm())) {
             throw new SignUpFailedException(signUpFormDto, PASSWORD_CONFIRM_NOT_CORRECT);
         }
+
         String password = passwordEncoder.encode(signUpFormDto.getPassword());
         User user = User.builder()
                 .name(signUpFormDto.getName())

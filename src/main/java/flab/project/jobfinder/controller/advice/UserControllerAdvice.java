@@ -20,7 +20,7 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     public String UserNotFoundException(UserNotFoundException e, Model model) {
-        log.info("유저 없음");
+        log.info(e.getMessage());
         return "/";
     }
 
