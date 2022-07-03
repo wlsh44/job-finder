@@ -25,6 +25,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Category> categories;
 }
