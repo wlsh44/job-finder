@@ -7,10 +7,8 @@ import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
-import flab.project.jobfinder.exception.user.UserNotFoundException;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
-import flab.project.jobfinder.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,6 @@ public class BookmarkService {
 
     private final RecruitRepository recruitRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
 
     public List<CategoryResponseDto> findCategoriesByUser(User user) {
         List<Category> categoryList = categoryRepository.findAllByUser(user);
