@@ -28,10 +28,6 @@ public class BookmarkService {
     private final UserRepository userRepository;
 
     public List<CategoryResponseDto> findCategoriesByUser(User user) {
-        if (!userRepository.existsById(user.getId())) {
-            throw new UserNotFoundException(user.getId());
-        }
-
         List<Category> categoryList = categoryRepository.findAllByUser(user);
         return categoryList.stream()
                 .map(CategoryResponseDto::new)
@@ -48,8 +44,8 @@ public class BookmarkService {
     }
 
     public CategoryResponseDto deleteCategory(User user, DeleteCategoryRequestDto dto) {
-        if (!userRepository.existsById(user.getId())) {
-            throw new UserNotFoundException(user.getId());
+        if (!categoryRepository.existsByUserAndName(user, dto.getName())) {
+            throw new CategoryNotFoundException(dto.getName());
         }
 
         Category category = findCategoryByUserAndName(user, dto.getName());
