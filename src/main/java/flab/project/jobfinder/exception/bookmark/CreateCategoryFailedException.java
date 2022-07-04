@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class CreateCategoryFailedException extends RuntimeException {
 
-    public static final String ERROR_MSG = "카테고리 생성에 실패했습니다: %s";
+    private static final String ERROR_MSG = "카테고리 생성에 실패했습니다: %s";
     private final NewCategoryRequestDto dto;
     private final CreateCategoryFailedErrorCode code;
 
