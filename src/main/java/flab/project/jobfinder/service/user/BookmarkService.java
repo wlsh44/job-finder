@@ -27,7 +27,7 @@ public class BookmarkService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    public List<CategoryResponseDto> findCategoryByUser(User user) {
+    public List<CategoryResponseDto> findCategoriesByUser(User user) {
         if (!userRepository.existsById(user.getId())) {
             throw new UserNotFoundException(user.getId());
         }

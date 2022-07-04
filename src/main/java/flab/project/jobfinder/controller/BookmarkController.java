@@ -29,7 +29,7 @@ public class BookmarkController {
 
     @GetMapping("/category")
     public ResponseDto<List<CategoryResponseDto>> categoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user) {
-        List<CategoryResponseDto> categoryResponseDtoList = bookmarkService.findCategoryByUser(user);
+        List<CategoryResponseDto> categoryResponseDtoList = bookmarkService.findCategoriesByUser(user);
         return new ResponseDto<>(HttpStatus.OK, GET_CATEGORIES.message(), categoryResponseDtoList);
     }
 
