@@ -2,16 +2,37 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragment/head.html :: fragment-head"></div>
+    <link th:href="@{/css/modal.css}" rel="stylesheet" type="text/css">
+    <script th:inline="javascript">
+        function popOpen(recruit) {
+
+            console.log(recruit)
+
+            var modalPop = document.getElementById('modal-wrap');
+            var modalBg = document.getElementById('modal-bg');
+
+            modalPop.style.display = "block";
+            modalBg.style.display = "block";
+        }
+
+        function popClose() {
+            var modalPop = document.getElementById('modal-wrap');
+            var modalBg = document.getElementById('modal-bg');
+
+            modalPop.style.display = "none";
+            modalBg.style.display = "none";
+        }
+    </script>
 </head>
 <body>
 <div th:replace="fragment/header.html :: fragment-header"></div>
 <div class="container">
-
     <div>
         <button th:onclick="|location.href='@{/job-find}'|" class="btn-primary">뒤로</button>
     </div>
+
     <table class="table">
-        <tr th:each="recruit: ${recruitDtoList}">
+        <tr th:each="recruit, idx: ${recruitDtoList}">
             <td>
                 <div th:text="${recruit.corp}"></div>
                 <div th:text="${recruit.platform}"></div>
@@ -28,6 +49,9 @@
                     </div>
                 </div>
                 <div th:text="${recruit.techStack}"></div>
+            </td>
+            <td>
+                <button class="btn btn-secondary" th:onclick="popOpen([[${idx.index}]])" th:text="'+'"></button>
             </td>
         </tr>
     </table>
@@ -120,5 +144,14 @@
         </ul>
     </nav>
 </div>
+<div class="modal-bg" id="modal-bg" onclick="popClose()">
+    <div class="window">
+        <div class="modal-wrap" id="modal-wrap">
+            asdf
+            <button class="btn btn-secondary" onclick="popClose()">닫기</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
