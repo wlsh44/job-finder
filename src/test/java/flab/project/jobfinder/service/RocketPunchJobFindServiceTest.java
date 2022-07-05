@@ -2,12 +2,13 @@ package flab.project.jobfinder.service;
 
 import flab.project.jobfinder.config.rocketpunch.RocketPunchConfig;
 import flab.project.jobfinder.config.rocketpunch.RocketPunchPropertiesConfig;
-import flab.project.jobfinder.dto.DetailedSearchDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
+import flab.project.jobfinder.dto.form.DetailedSearchDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
 import flab.project.jobfinder.enums.Platform;
-import flab.project.jobfinder.service.crawler.RocketPunchCrawlerService;
-import flab.project.jobfinder.service.parser.RocketPunchParserService;
-import flab.project.jobfinder.service.parser.pagination.RocketPunchPaginationParser;
+import flab.project.jobfinder.service.jobfind.RocketPunchJobFindService;
+import flab.project.jobfinder.service.jobfind.crawler.RocketPunchCrawlerService;
+import flab.project.jobfinder.service.jobfind.parser.RocketPunchParserService;
+import flab.project.jobfinder.service.jobfind.parser.pagination.RocketPunchPaginationParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package flab.project.jobfinder.config.rocketpunch;
 
-import flab.project.jobfinder.service.crawler.generator.QueryParamGenerator;
-import flab.project.jobfinder.service.crawler.generator.RocketPunchQueryParamGenerator;
+import flab.project.jobfinder.service.jobfind.crawler.generator.QueryParamGenerator;
+import flab.project.jobfinder.service.jobfind.crawler.generator.RocketPunchQueryParamGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,6 +1,6 @@
 package flab.project.jobfinder.controller.advice;
 
-import flab.project.jobfinder.dto.SearchFormDto;
+import flab.project.jobfinder.dto.form.SearchFormDto;
 import flab.project.jobfinder.enums.Location;
 import flab.project.jobfinder.enums.Platform;
 import flab.project.jobfinder.exception.CrawlFailedException;
