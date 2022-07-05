@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,7 +40,7 @@ public class Recruit {
             name = "Recruit_Tag",
             joinColumns = @JoinColumn(name = "recruit_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @Column(nullable = false, columnDefinition = "TINYINT")
     private boolean isAlwaysRecruiting;
