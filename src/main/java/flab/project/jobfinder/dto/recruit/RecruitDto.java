@@ -1,7 +1,9 @@
 package flab.project.jobfinder.dto.recruit;
 
+import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.enums.Platform;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 @ToString
 @Getter
+@AllArgsConstructor
 public class RecruitDto {
     private String title;
     private String corp;
@@ -24,7 +27,20 @@ public class RecruitDto {
     private boolean isAlwaysRecruiting;
     private String platform;
 
-    public Recruit toEntity() {
+    public RecruitDto(Recruit recruit) {
+        this.title = recruit.getTitle();
+        this.corp = recruit.getCorp();
+        this.url = recruit.getUrl();
+        this.location = recruit.getLocation();
+        this.techStack = recruit.getTechStack();
+        this.jobType = recruit.getJobType();
+        this.career = recruit.getCareer();
+        this.dueDate = recruit.getDueDate();
+        this.isAlwaysRecruiting = recruit.isAlwaysRecruiting();
+        this.platform = recruit.getPlatform().koreaName();
+    }
+
+    public Recruit toEntity(Category category) {
         return Recruit.builder()
                 .title(title)
                 .url(url)
@@ -34,6 +50,8 @@ public class RecruitDto {
                 .dueDate(dueDate)
                 .isAlwaysRecruiting(isAlwaysRecruiting)
                 .platform(Platform.valueOf(platform))
-                .jobType(jobType).build();
+                .jobType(jobType)
+                .category(category)
+                .build();
     }
 }
