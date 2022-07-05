@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -66,16 +65,17 @@ class CategoryRepositoryTest {
 
     @Test
     @DisplayName("특정 카테고리 조회 테스트")
-    void findCategoryByUserAndNameTest() {
+    void findCategoryByUserAndIdTest() {
         //given
         String categoryName = "category";
         Category category = Category.builder()
                 .user(user)
-                .name(categoryName).build();
-        categoryRepository.save(category);
+                .name(categoryName)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
 
         //when
-        Category res = categoryRepository.findCategoryByUserAndName(user, categoryName).get();
+        Category res = categoryRepository.findByUserAndId(user, saveCategory.getId()).get();
 
         //then
         assertThat(res.getName()).isEqualTo(categoryName);
