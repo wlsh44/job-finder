@@ -41,44 +41,44 @@ public class BookmarkService {
         return new CategoryResponseDto(category);
     }
 
-    public CategoryResponseDto deleteCategory(User user, DeleteCategoryRequestDto dto) {
-        if (!categoryRepository.existsByUserAndName(user, dto.getName())) {
-            throw new CategoryNotFoundException(dto.getName());
+    public CategoryResponseDto deleteCategory(User user, Long categoryId) {
+        if (!categoryRepository.existsByUserAndId(user, categoryId)) {
+            throw new CategoryNotFoundException(categoryId);
         }
 
-        Category category = findCategoryByUserAndName(user, dto.getName());
+        Category category = findCategoryByUserAndId(user, categoryId);
         categoryRepository.delete(category);
         return new CategoryResponseDto(category);
     }
 
-    public Category findCategoryByUserAndName(User user, String name) {
-        return categoryRepository.findCategoryByUserAndName(user, name)
-                .orElseThrow(() -> new CategoryNotFoundException(name));
+    public Category findCategoryByUserAndId(User user, Long id) {
+        return categoryRepository.findByUserAndId(user, id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
-    public BookmarkResponseDto bookmarkedRecruit(User user, NewBookmarkRequestDto dto) {
-        Category category = findCategoryByUserAndName(user, dto.getCategoryName());
+    public BookmarkResponseDto bookmarkRecruit(User user, Long categoryId, NewBookmarkRequestDto dto) {
+        Category category = findCategoryByUserAndId(user, categoryId);
         RecruitDto recruitDto = dto.getRecruitDto();
         Recruit recruit = recruitRepository.save(recruitDto.toEntity(category));
 
         return new BookmarkResponseDto(recruit.getId(), recruitDto);
     }
 
-    public BookmarkResponseDto unbookmarkedRecruit(User user, UnbookmarkRequestDto dto) {
-        Category category = findCategoryByUserAndName(user, dto.getCategoryName());
+    public BookmarkResponseDto unbookmarkRecruit(User user, Long categoryId, Long bookmarkId) {
+        Category category = findCategoryByUserAndId(user, categoryId);
         Recruit removeRecruit = category.getRecruits()
                 .stream()
-                .filter(recruit -> recruit.getId().equals(dto.getBookmarkId()))
+                .filter(recruit -> recruit.getId().equals(bookmarkId))
                 .findAny()
-                .orElseThrow(() -> new BookmarkNotFoundException(dto.getBookmarkId()));
+                .orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
         recruitRepository.delete(removeRecruit);
 
         RecruitDto recruitDto = new RecruitDto(removeRecruit);
         return new BookmarkResponseDto(removeRecruit.getId(), recruitDto);
     }
 
-    public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, BookmarkListRequestDto dto) {
-        Category category = findCategoryByUserAndName(user, dto.getCategoryName());
+    public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, Long categoryId) {
+        Category category = findCategoryByUserAndId(user, categoryId);
         List<Recruit> recruits = category.getRecruits();
         return recruits
                 .stream()
