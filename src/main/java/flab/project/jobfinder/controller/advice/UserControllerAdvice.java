@@ -31,23 +31,16 @@ public class UserControllerAdvice {
     }
 
     @ExceptionHandler(LoginFailedException.class)
-    public List<String> LoginFailedException(LoginFailedException e, Model model) {
+    public String LoginFailedException(LoginFailedException e, Model model) {
 //        log.info(e.getCode().errorMsg());
         log.info(e.getMessage());
 //        LoginFormDto prevForm = e.getLoginFormDto();
 //        LoginFormDto loginFormDto = LoginFormDto.builder()
 //                .email(prevForm.getEmail())
 //                .build();
-//        model.addAttribute("loginFormDto", loginFormDto);
+        model.addAttribute("loginFormDto", new LoginFormDto());
 //        model.addAttribute("loginFailed", "아이디 또는 비밀번호가 틀렸습니다.");
-//        return "login";
-        return e.getBindingResult()
-                .getAllErrors()
-                .stream()
-                .filter(error -> error instanceof FieldError)
-                .map(objectError -> (FieldError) objectError)
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.toList());
+        return "login";
     }
 
     @ExceptionHandler(SignUpFailedException.class)
