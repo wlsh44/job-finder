@@ -128,21 +128,21 @@ class UserServiceTest {
                     .build();
         }
 
-        @Test
-        @DisplayName("로그인 성공")
-        void loginTest() {
-            //given
-            given(userRepository.findByEmail(email))
-                    .willReturn(Optional.of(user));
-            given(passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword()))
-                    .willReturn(true);
-
-            //when
-            User res = userService.login(loginFormDto);
-
-            //then
-            assertThat(res).isEqualTo(user);
-        }
+//        @Test
+//        @DisplayName("로그인 성공")
+//        void loginTest() {
+//            //given
+//            given(userRepository.findByEmail(email))
+//                    .willReturn(Optional.of(user));
+//            given(passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword()))
+//                    .willReturn(true);
+//
+//            //when
+//            User res = userService.login(loginFormDto);
+//
+//            //then
+//            assertThat(res).isEqualTo(user);
+//        }
 
         @Test
         @DisplayName("없는 유저일 경우")

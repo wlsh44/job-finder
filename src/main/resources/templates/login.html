@@ -16,8 +16,11 @@
 
     <form action="" th:object="${loginFormDto}" method="post">
 
-        <div class="row">
-            <div class="field-error" th:if="${loginFailed != null}" th:text="${loginFailed}"></div>
+<!--        <div class="row">-->
+<!--            <div class="field-error" th:if="${loginFailed != null}" th:text="${loginFailed}"></div>-->
+<!--        </div>-->
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
         </div>
         <br>
 

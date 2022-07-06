@@ -7,11 +7,16 @@ import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;
 import flab.project.jobfinder.repository.UserRepository;
+import flab.project.jobfinder.service.user.validator.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.MethodParameter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.NOT_EXISTS_USER;
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.WRONG_PASSWORD;
@@ -25,15 +30,27 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LoginValidator loginValidator;
 
     public User login(LoginFormDto loginFormDto) throws LoginFailedException {
-        User user = userRepository.findByEmail(loginFormDto.getEmail())
-                .orElseThrow(() -> new LoginFailedException(loginFormDto, NOT_EXISTS_USER));
-        if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
-            throw new LoginFailedException(loginFormDto, WRONG_PASSWORD);
+//        User user = userRepository.findByEmail(loginFormDto.getEmail())
+//                .orElseThrow(() -> new LoginFailedException(loginFormDto, NOT_EXISTS_USER));
+//        if (!passwordEncoder.matches(loginFormDto.getPassword(), user.getPassword())) {
+//            throw new LoginFailedException(loginFormDto, WRONG_PASSWORD);
+//        }
+        BindingResult errors = new BeanPropertyBindingResult(loginFormDto, "loginFormDto");
+        loginValidator.validate(loginFormDto, errors);
+        if (errors.hasErrors()) {
+            try {
+                throw new LoginFailedException(WRONG_PASSWORD, new MethodParameter(this.getClass().getDeclaredMethod("login", LoginFormDto.class), 0),
+                        errors);
+            } catch (NoSuchMethodException e) {
+                log.error("해당 메서드가 존재하지 않습니다.");
+                //TODO
+            }
         }
 
-        return user;
+        return userRepository.findByEmail(loginFormDto.getEmail());
     }
 
     @Transactional

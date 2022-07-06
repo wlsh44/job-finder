@@ -4,6 +4,7 @@ import flab.project.jobfinder.config.UserPropertiesConfig;
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
 import flab.project.jobfinder.entity.user.User;
+import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +50,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult, HttpServletRequest request) {
+    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult, HttpServletRequest request) throws LoginFailedException {
         if (bindingResult.hasErrors()) {
             log.info("login errors={}", bindingResult);
             return "login";
