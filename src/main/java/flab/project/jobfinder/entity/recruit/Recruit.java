@@ -24,7 +24,7 @@ public class Recruit {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String url;
 
     @Column(length = 20, nullable = false)
