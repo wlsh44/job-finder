@@ -25,14 +25,14 @@ public class BookmarkService {
     private final RecruitRepository recruitRepository;
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryResponseDto> findCategoriesByUser(User user) {
+    public List<CategoryDto> findCategoriesByUser(User user) {
         List<Category> categoryList = categoryRepository.findAllByUser(user);
         return categoryList.stream()
-                .map(CategoryResponseDto::new)
+                .map(CategoryDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<CategoryResponseDto> createCategory(User user, NewCategoryRequestDto dto) {
+    public List<CategoryDto> createCategory(User user, NewCategoryRequestDto dto) {
         if (categoryRepository.existsByUserAndName(user, dto.getName())) {
             throw new CreateCategoryFailedException(dto, ALREADY_EXISTS_CATEGORY);
         }
@@ -41,14 +41,14 @@ public class BookmarkService {
         return findCategoriesByUser(user);
     }
 
-    public CategoryResponseDto deleteCategory(User user, Long categoryId) {
+    public CategoryDto deleteCategory(User user, Long categoryId) {
         if (!categoryRepository.existsByUserAndId(user, categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
 
         Category category = findCategoryByUserAndId(user, categoryId);
         categoryRepository.delete(category);
-        return new CategoryResponseDto(category);
+        return new CategoryDto(category);
     }
 
     public Category findCategoryByUserAndName(User user, String name) {

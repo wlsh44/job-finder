@@ -15,7 +15,6 @@ import java.util.List;
 
 import static flab.project.jobfinder.consts.SessionConst.LOGIN_SESSION_ID;
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
-import static flab.project.jobfinder.enums.bookmark.CategoryResponseCode.*;
 
 @Slf4j
 @Controller
@@ -30,16 +29,16 @@ public class BookmarkController {
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
         log.info(requestDto.getName());
-        List<CategoryResponseDto> categoryList = bookmarkService.createCategory(user, requestDto);
+        List<CategoryDto> categoryList = bookmarkService.createCategory(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
     }
 
     @GetMapping("/category")
     public String categoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
-        List<CategoryResponseDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
-        for (CategoryResponseDto responseDto : categoryList) {
+        for (CategoryDto responseDto : categoryList) {
             log.info(responseDto.getName());
         }
         model.addAttribute("categoryList", categoryList);

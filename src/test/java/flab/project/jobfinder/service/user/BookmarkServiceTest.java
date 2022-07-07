@@ -84,10 +84,10 @@ class BookmarkServiceTest {
                     .willReturn(categoryList);
 
             //when
-            List<CategoryResponseDto> categoryResponseDto = bookmarkService.findCategoriesByUser(user);
+            List<CategoryDto> categoryDto = bookmarkService.findCategoriesByUser(user);
 
             //then
-            assertThat(categoryResponseDto.size()).isEqualTo(3);
+            assertThat(categoryDto.size()).isEqualTo(3);
         }
 
         @Test
@@ -107,7 +107,7 @@ class BookmarkServiceTest {
                     .willReturn(category);
 
             //when
-            CategoryResponseDto responseDto = bookmarkService.createCategory(user, dto);
+            CategoryDto responseDto = bookmarkService.createCategory(user, dto);
 
             //then
             assertThat(responseDto.getId()).isEqualTo(1L);
@@ -146,7 +146,7 @@ class BookmarkServiceTest {
                     .willReturn(Optional.of(category));
 
             //when
-            CategoryResponseDto responseDto = bookmarkService.deleteCategory(user, categoryId);
+            CategoryDto responseDto = bookmarkService.deleteCategory(user, categoryId);
 
             //then
             assertThat(responseDto.getId()).isEqualTo(1L);
