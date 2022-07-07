@@ -3,16 +3,14 @@ package flab.project.jobfinder.dto.recruit;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.enums.Platform;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Builder
 @ToString
-@Getter
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class RecruitDto {
     private String title;
@@ -49,7 +47,7 @@ public class RecruitDto {
                 .corp(corp)
                 .dueDate(dueDate)
                 .isAlwaysRecruiting(isAlwaysRecruiting)
-                .platform(Platform.valueOf(platform))
+                .platform(Platform.of(platform))
                 .jobType(jobType)
                 .category(category)
                 .build();
