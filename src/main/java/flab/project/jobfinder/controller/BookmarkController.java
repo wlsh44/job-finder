@@ -28,7 +28,7 @@ public class BookmarkController {
             @SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
-        log.info(requestDto.getName());
+        log.info("category name: {}", requestDto.getName());
         List<CategoryDto> categoryList = bookmarkService.createCategory(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
@@ -38,9 +38,6 @@ public class BookmarkController {
     public String categoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
         List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
-        for (CategoryDto responseDto : categoryList) {
-            log.info(responseDto.getName());
-        }
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
     }
