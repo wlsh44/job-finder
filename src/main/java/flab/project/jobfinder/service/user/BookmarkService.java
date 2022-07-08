@@ -7,15 +7,18 @@ import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.BookmarkNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
+import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static flab.project.jobfinder.enums.exception.CreateBookmarkFailedErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
 import static flab.project.jobfinder.enums.exception.CreateCategoryFailedErrorCode.ALREADY_EXISTS_CATEGORY;
 
 @Service
@@ -69,36 +72,42 @@ public class BookmarkService {
 //        return new BookmarkResponseDto(recruit.getId(), recruitDto);
 //    }
 
-    public BookmarkResponseDto bookmarkRecruit(User user, NewBookmarkRequestDto2 dto) {
+    public List<BookmarkResponseDto> bookmarkRecruit(User user, NewBookmarkRequestDto2 dto) {
         List<String> categoryList = dto.getCategoryList();
+        if (categoryList.isEmpty()) {
+            throw new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY);
+        }
+        List<BookmarkResponseDto> responseDtoList = new ArrayList<>();
+
         for (String categoryName : categoryList) {
             Category category = findCategoryByUserAndName(user, categoryName);
             RecruitDto recruitDto = dto.getRecruitDto();
-            recruitRepository.save(recruitDto.toEntity(category));
+            Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category));
+            responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName, new RecruitDto(savedRecruit)));
         }
 
-        return new BookmarkResponseDto(null, null);
+        return responseDtoList;
     }
 
-    public BookmarkResponseDto unbookmarkRecruit(User user, Long categoryId, Long bookmarkId) {
-        Category category = findCategoryByUserAndId(user, categoryId);
-        Recruit removeRecruit = category.getRecruits()
-                .stream()
-                .filter(recruit -> recruit.getId().equals(bookmarkId))
-                .findAny()
-                .orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
-        recruitRepository.delete(removeRecruit);
-
-        RecruitDto recruitDto = new RecruitDto(removeRecruit);
-        return new BookmarkResponseDto(removeRecruit.getId(), recruitDto);
-    }
-
-    public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, Long categoryId) {
-        Category category = findCategoryByUserAndId(user, categoryId);
-        List<Recruit> recruits = category.getRecruits();
-        return recruits
-                .stream()
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit)))
-                .toList();
-    }
+//    public BookmarkResponseDto unbookmarkRecruit(User user, Long categoryId, Long bookmarkId) {
+//        Category category = findCategoryByUserAndId(user, categoryId);
+//        Recruit removeRecruit = category.getRecruits()
+//                .stream()
+//                .filter(recruit -> recruit.getId().equals(bookmarkId))
+//                .findAny()
+//                .orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
+//        recruitRepository.delete(removeRecruit);
+//
+//        RecruitDto recruitDto = new RecruitDto(removeRecruit);
+//        return new BookmarkResponseDto(removeRecruit.getId(), recruitDto);
+//    }
+//
+//    public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, Long categoryId) {
+//        Category category = findCategoryByUserAndId(user, categoryId);
+//        List<Recruit> recruits = category.getRecruits();
+//        return recruits
+//                .stream()
+//                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit)))
+//                .toList();
+//    }
 }

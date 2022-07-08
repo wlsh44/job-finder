@@ -65,11 +65,11 @@ public class BookmarkController {
 
     @ResponseBody
     @PostMapping("/bookmark")
-    public ResponseDto<BookmarkResponseDto> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+    public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                                             @RequestBody NewBookmarkRequestDto2 dto) {
         log.info("bookmark");
         log.info(dto.toString());
-        BookmarkResponseDto responseDto = bookmarkService.bookmarkRecruit(user, dto);
+        List<BookmarkResponseDto> responseDto = bookmarkService.bookmarkRecruit(user, dto);
         return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
     }
 //

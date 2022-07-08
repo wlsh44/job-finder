@@ -9,5 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BookmarkResponseDto {
     private Long id;
+    private String categoryName;
     private RecruitDto recruitDto;
 }
