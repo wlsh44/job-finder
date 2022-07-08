@@ -22,12 +22,14 @@ import static flab.project.jobfinder.enums.bookmark.CategoryResponseCode.FAILED_
 @ControllerAdvice
 public class BookmarkControllerAdvice {
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CreateCategoryFailedException.class)
     public ResponseDto<CategoryDto> createCategoryFailedException(CreateCategoryFailedException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_CATEGORY.message(), null);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseDto<List<CategoryDto>> categoryNotFoundException(CategoryNotFoundException e) {
         log.info(e.getMessage());
