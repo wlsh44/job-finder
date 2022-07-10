@@ -2,7 +2,6 @@ package flab.project.jobfinder.service.user.validator;
 
 import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.util.Optional;
 
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.NOT_EXISTS_USER;
 import static flab.project.jobfinder.enums.exception.LoginFailedErrorCode.WRONG_PASSWORD;

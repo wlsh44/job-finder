@@ -1,21 +1,12 @@
 package flab.project.jobfinder.controller.advice;
 
-import flab.project.jobfinder.dto.form.LoginFormDto;
 import flab.project.jobfinder.dto.form.SignUpFormDto;
-import flab.project.jobfinder.enums.exception.SignUpFailedErrorCode;
-import flab.project.jobfinder.exception.user.LoginFailedException;
 import flab.project.jobfinder.exception.user.SignUpFailedException;
 import flab.project.jobfinder.exception.user.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.ALREADY_EXISTS_USER;
 import static flab.project.jobfinder.enums.exception.SignUpFailedErrorCode.PASSWORD_CONFIRM_NOT_CORRECT;
@@ -28,19 +19,6 @@ public class UserControllerAdvice {
     public String UserNotFoundException(UserNotFoundException e, Model model) {
         log.info(e.getMessage());
         return "/";
-    }
-
-    @ExceptionHandler(LoginFailedException.class)
-    public String LoginFailedException(LoginFailedException e, Model model) {
-//        log.info(e.getCode().errorMsg());
-        log.info(e.getMessage());
-//        LoginFormDto prevForm = e.getLoginFormDto();
-//        LoginFormDto loginFormDto = LoginFormDto.builder()
-//                .email(prevForm.getEmail())
-//                .build();
-        model.addAttribute("loginFormDto", new LoginFormDto());
-//        model.addAttribute("loginFailed", "아이디 또는 비밀번호가 틀렸습니다.");
-        return "login";
     }
 
     @ExceptionHandler(SignUpFailedException.class)
