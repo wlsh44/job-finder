@@ -35,7 +35,7 @@ public class BookmarkController {
     }
 
     @GetMapping("/category")
-    public String categoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
+    public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
         List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
