@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,16 +32,15 @@ public class UserControllerAdvice {
     }
 
     @ExceptionHandler(LoginFailedException.class)
-    public String LoginFailedException(LoginFailedException e, Model model) {
-//        log.info(e.getCode().errorMsg());
+    public ModelAndView LoginFailedException(LoginFailedException e) {
         log.info(e.getMessage());
-//        LoginFormDto prevForm = e.getLoginFormDto();
-//        LoginFormDto loginFormDto = LoginFormDto.builder()
-//                .email(prevForm.getEmail())
-//                .build();
-        model.addAttribute("loginFormDto", new LoginFormDto());
-//        model.addAttribute("loginFailed", "아이디 또는 비밀번호가 틀렸습니다.");
-        return "login";
+
+        final BindingResult bindingResult = e.getBindingResult();
+
+        final ModelAndView mav = new ModelAndView("login", bindingResult.getModel());
+        mav.addObject("loginFormDto", new LoginFormDto());
+
+        return mav;
     }
 
     @ExceptionHandler(SignUpFailedException.class)
