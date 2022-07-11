@@ -94,3 +94,17 @@ function addCategory() {
         '</div>'
     $("#bookmark-footer").html(addCategory)
 }
+
+function deleteBookmark(deleteId, categoryId) {
+    console.log("왜 안돼")
+    $.ajax({
+        url: `/my-page/bookmark/${categoryId}?bookmarkId=${deleteId}`,
+        type: "DELETE",
+    }).done(function (fragment) {
+        alert("삭제되었습니다.")
+        $("#bookmarkList").replaceWith(fragment);
+    }).fail(function(data) {
+        alert("삭제에 실패했습니다.")
+        console.log(data)
+    });
+}

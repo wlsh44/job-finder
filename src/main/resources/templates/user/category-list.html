@@ -8,6 +8,8 @@
 <body>
 <div class="container" style="max-width: 800px">
     <div th:replace="fragment/header.html :: fragment-header"></div>
-    북마크
+    <div th:each="category : ${categoryList}">
+        <a th:href="@{'/my-page/bookmark/' + ${category.id}}" th:text="${category.name}"></a>
+    </div>
 </div>
 </body>

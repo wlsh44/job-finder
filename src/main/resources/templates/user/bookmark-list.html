@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragment/head.html :: fragment-head"></div>
+    <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
+    <title>Job-Finder</title>
+</head>
+<body>
+<div class="container" style="max-width: 800px">
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <table class="table" id="bookmarkList" th:fragment="bookmarkList">
+        <tr th:each="bookmark: ${bookmarkList}" th:with="recruit=${bookmark.recruitDto}">
+            <td>
+                <div th:text="${recruit.corp}"></div>
+                <div th:text="${recruit.platform}"></div>
+            </td>
+            <td>
+                <div>
+                    <a th:href="${recruit.url}" th:text="${recruit.title}" target="_blank"></a>
+                    <div>
+                        <span th:text="'| ' + ${recruit.location} + ' | '"></span>
+                        <span th:text="${recruit.jobType} + ' | '"></span>
+                        <span th:text="${recruit.career} + ' | '"></span>
+                        <span th:if="${recruit.isAlwaysRecruiting}">상시 채용</span>
+                        <span th:unless="${recruit.isAlwaysRecruiting}" th:text="'~' + ${recruit.getDueDate.getMonthValue} + '/' + ${recruit.getDueDate.getDayOfMonth}"></span>
+                    </div>
+                </div>
+                <div th:text="${recruit.techStack}"></div>
+            </td>
+            <td>
+                <button class="btn btn-secondary" th:onclick="deleteBookmark([[${bookmark.id}]], [[${categoryId}]])" th:text="'x'"></button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
