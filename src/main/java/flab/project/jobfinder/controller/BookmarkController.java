@@ -1,6 +1,7 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.bookmark.*;
+import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +36,50 @@ public class BookmarkController {
     }
 
     @GetMapping("/category")
-    public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
+    public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                    Model model) {
         List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
+    }
+
+    @GetMapping("/my-page/bookmark")
+    public String myPageCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                     Model model) {
+        List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        log.info("categoryList");
+        model.addAttribute("categoryList", categoryList);
+        return "/user/category-list";
+    }
+
+    @GetMapping("/my-page/bookmark/{categoryId}")
+    public String bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                               @PathVariable Long categoryId, Model model) {
+        List<BookmarkResponseDto> bookmarkList = bookmarkService.findAllBookmarksByCategory(user, categoryId);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("bookmarkList", bookmarkList);
+        return "/user/bookmark-list";
+    }
+
+    @ResponseBody
+    @PostMapping("/bookmark")
+    public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                                            @RequestBody NewBookmarkRequestDto2 dto) {
+        log.info("bookmark");
+        log.info(dto.toString());
+        List<BookmarkResponseDto> responseDto = bookmarkService.bookmarkRecruit(user, dto);
+        return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
+    }
+
+    @DeleteMapping("/my-page/bookmark/{categoryId}")
+    public String unbookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                             @PathVariable Long categoryId, @RequestParam Long bookmarkId,
+                             Model model) {
+        List<BookmarkResponseDto> bookmarkList = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("bookmarkList", bookmarkList);
+        return "user/bookmark-list :: bookmarkList";
     }
 
 //    @GetMapping("")
@@ -63,20 +103,4 @@ public class BookmarkController {
 //        return new ResponseDto<>(HttpStatus.OK, GET_BOOKMARKS.message(), responseDtoList);
 //    }
 
-    @ResponseBody
-    @PostMapping("/bookmark")
-    public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                                                            @RequestBody NewBookmarkRequestDto2 dto) {
-        log.info("bookmark");
-        log.info(dto.toString());
-        List<BookmarkResponseDto> responseDto = bookmarkService.bookmarkRecruit(user, dto);
-        return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
-    }
-//
-//    @DeleteMapping("/{categoryId}/{bookmarkId}")
-//    public ResponseDto<BookmarkResponseDto> unbookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-//                                                       @PathVariable Long categoryId, @PathVariable Long bookmarkId) {
-//        BookmarkResponseDto responseDto = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
-//        return new ResponseDto<>(HttpStatus.OK, DELETE_BOOKMARK.message(), responseDto);
-//    }
 }
