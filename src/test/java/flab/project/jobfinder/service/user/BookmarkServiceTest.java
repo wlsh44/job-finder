@@ -5,8 +5,6 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.enums.exception.CreateBookmarkFailedErrorCode;
-import flab.project.jobfinder.exception.bookmark.BookmarkNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
@@ -30,7 +28,6 @@ import static flab.project.jobfinder.enums.JobType.FULL_TIME;
 import static flab.project.jobfinder.enums.Location.GANGNAM;
 import static flab.project.jobfinder.enums.PayType.ANNUAL;
 import static flab.project.jobfinder.enums.Platform.JOBKOREA;
-import static flab.project.jobfinder.enums.Platform.ROCKETPUNCH;
 import static flab.project.jobfinder.enums.exception.CreateBookmarkFailedErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
 import static flab.project.jobfinder.enums.exception.CreateCategoryFailedErrorCode.ALREADY_EXISTS_CATEGORY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,7 +84,7 @@ class BookmarkServiceTest {
                     .willReturn(categoryList);
 
             //when
-            List<CategoryDto> categoryDto = bookmarkService.findCategoriesByUser(user);
+            List<CategoryResponseDto> categoryDto = bookmarkService.findCategoriesByUser(user);
 
             //then
             assertThat(categoryDto.size()).isEqualTo(3);
@@ -110,7 +107,7 @@ class BookmarkServiceTest {
                     .willReturn(List.of(category));
 
             //when
-            List<CategoryDto> categoryDtoList = bookmarkService.createCategory(user, dto);
+            List<CategoryResponseDto> categoryDtoList = bookmarkService.createCategory(user, dto);
 
             //then
             assertThat(categoryDtoList.get(0).getId()).isEqualTo(1L);
@@ -149,7 +146,7 @@ class BookmarkServiceTest {
                     .willReturn(Optional.of(category));
 
             //when
-            CategoryDto responseDto = bookmarkService.deleteCategory(user, categoryId);
+            CategoryResponseDto responseDto = bookmarkService.deleteCategory(user, categoryId);
 
             //then
             assertThat(responseDto.getId()).isEqualTo(1L);
@@ -220,7 +217,7 @@ class BookmarkServiceTest {
         @DisplayName("북마크 생성 - 카테고리 한 개")
         void bookmarkedRecruitTest_oneCategory() {
             //given
-            NewBookmarkRequestDto2 dto = new NewBookmarkRequestDto2(List.of(categoryName), recruitDto);
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of(categoryName), recruitDto);
             List<BookmarkResponseDto> expect = List.of(new BookmarkResponseDto(1L, categoryName, recruitDto));
             given(categoryRepository.findByUserAndName(user, categoryName))
                     .willReturn(Optional.of(category));
@@ -257,7 +254,7 @@ class BookmarkServiceTest {
                     .name("category3")
                     .recruits(List.of(recruit))
                     .build();
-            NewBookmarkRequestDto2 dto = new NewBookmarkRequestDto2(List.of("category1", "category2", "category3"), recruitDto);
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of("category1", "category2", "category3"), recruitDto);
             List<BookmarkResponseDto> expect = List.of(
                     new BookmarkResponseDto(1L, "category1", recruitDto),
                     new BookmarkResponseDto(1L, "category2", recruitDto),
@@ -283,7 +280,7 @@ class BookmarkServiceTest {
         @DisplayName("북마크 생성 실패- 카테고리 선택 안 한 경우")
         void bookmarkedRecruitTest_Fail_noCategoryInList() {
             //given
-            NewBookmarkRequestDto2 dto = new NewBookmarkRequestDto2(List.of(), recruitDto);
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of(), recruitDto);
 
             //when then
             assertThatThrownBy(() -> bookmarkService.bookmarkRecruit(user, dto))
@@ -295,7 +292,7 @@ class BookmarkServiceTest {
         @DisplayName("북마크 생성 실패- 없는 카테고리 선택한 경우")
         void bookmarkedRecruitTest_Fail_noCategoryName() {
             //given
-            NewBookmarkRequestDto2 dto = new NewBookmarkRequestDto2(List.of("없는 카테고리 이름"), recruitDto);
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of("없는 카테고리 이름"), recruitDto);
 
             //when then
             assertThatThrownBy(() -> bookmarkService.bookmarkRecruit(user, dto))

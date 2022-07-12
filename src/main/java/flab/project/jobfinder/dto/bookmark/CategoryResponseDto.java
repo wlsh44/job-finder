@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class CategoryDto {
+public class CategoryResponseDto {
     private Long id;
     private String name;
 
-    public CategoryDto(Category category) {
+    public CategoryResponseDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
     }

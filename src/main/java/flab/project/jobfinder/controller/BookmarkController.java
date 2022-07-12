@@ -29,7 +29,7 @@ public class BookmarkController {
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
         log.info("category name: {}", requestDto.getName());
-        List<CategoryDto> categoryList = bookmarkService.createCategory(user, requestDto);
+        List<CategoryResponseDto> categoryList = bookmarkService.createCategory(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
     }
@@ -37,7 +37,7 @@ public class BookmarkController {
     @GetMapping("/category")
     public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                     Model model) {
-        List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
@@ -46,7 +46,7 @@ public class BookmarkController {
     @GetMapping("/my-page/bookmark")
     public String myPageCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                      Model model) {
-        List<CategoryDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = bookmarkService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "/user/category-list";
@@ -55,7 +55,7 @@ public class BookmarkController {
     @DeleteMapping("/my-page/bookmark/")
     public String deleteCategory(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                  @RequestParam Long categoryId, Model model) {
-        List<CategoryDto> categoryList = bookmarkService.deleteCategory(user, categoryId);
+        List<CategoryResponseDto> categoryList = bookmarkService.deleteCategory(user, categoryId);
         model.addAttribute("categoryList", categoryList);
         return "user/category-list :: categoryList";
     }
@@ -72,7 +72,7 @@ public class BookmarkController {
     @ResponseBody
     @PostMapping("/bookmark")
     public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                                                            @RequestBody NewBookmarkRequestDto2 dto) {
+                                                            @RequestBody NewBookmarkRequestDto dto) {
         log.info("bookmark");
         log.info(dto.toString());
         List<BookmarkResponseDto> responseDto = bookmarkService.bookmarkRecruit(user, dto);
@@ -88,20 +88,4 @@ public class BookmarkController {
         model.addAttribute("bookmarkList", bookmarkList);
         return "user/bookmark-list :: bookmarkList";
     }
-
-//    @GetMapping("")
-//    public ResponseDto<List<CategoryResponseDto>> categoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user) {
-//        List<CategoryResponseDto> responseDtoList = bookmarkService.findCategoriesByUser(user);
-//        log.info("categoryList");
-//        return new ResponseDto<>(HttpStatus.OK, GET_CATEGORIES.message(), responseDtoList);
-//    }
-
-//
-//    @GetMapping("/{categoryId}")
-//    public ResponseDto<List<BookmarkResponseDto>> bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-//                                                               @PathVariable Long categoryId) {
-//        List<BookmarkResponseDto> responseDtoList = bookmarkService.findAllBookmarksByCategory(user, categoryId);
-//        return new ResponseDto<>(HttpStatus.OK, GET_BOOKMARKS.message(), responseDtoList);
-//    }
-
 }

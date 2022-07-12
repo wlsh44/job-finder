@@ -31,15 +31,15 @@ public class BookmarkService {
     private final RecruitRepository recruitRepository;
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryDto> findCategoriesByUser(User user) {
+    public List<CategoryResponseDto> findCategoriesByUser(User user) {
         List<Category> categoryList = categoryRepository.findAllByUser(user);
         return categoryList.stream()
-                .map(CategoryDto::new)
+                .map(CategoryResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<CategoryDto> createCategory(User user, NewCategoryRequestDto dto) {
+    public List<CategoryResponseDto> createCategory(User user, NewCategoryRequestDto dto) {
         if (categoryRepository.existsByUserAndName(user, dto.getName())) {
             throw new CreateCategoryFailedException(dto, ALREADY_EXISTS_CATEGORY);
         }
@@ -49,7 +49,7 @@ public class BookmarkService {
     }
 
     @Transactional
-    public List<CategoryDto> deleteCategory(User user, Long categoryId) {
+    public List<CategoryResponseDto> deleteCategory(User user, Long categoryId) {
         if (!categoryRepository.existsByUserAndId(user, categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
@@ -68,16 +68,8 @@ public class BookmarkService {
                 .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
-//    public BookmarkResponseDto bookmarkRecruit(User user, Long categoryId, NewBookmarkRequestDto dto) {
-//        Category category = findCategoryByUserAndId(user, categoryId);
-//        RecruitDto recruitDto = dto.getRecruitDto();
-//        Recruit recruit = recruitRepository.save(recruitDto.toEntity(category));
-//
-//        return new BookmarkResponseDto(recruit.getId(), recruitDto);
-//    }
-
     @Transactional
-    public List<BookmarkResponseDto> bookmarkRecruit(User user, NewBookmarkRequestDto2 dto) {
+    public List<BookmarkResponseDto> bookmarkRecruit(User user, NewBookmarkRequestDto dto) {
         List<String> categoryList = dto.getCategoryList();
         if (categoryList.isEmpty()) {
             throw new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY);

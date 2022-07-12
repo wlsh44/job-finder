@@ -1,6 +1,6 @@
 package flab.project.jobfinder.controller.advice;
 
-import flab.project.jobfinder.dto.bookmark.CategoryDto;
+import flab.project.jobfinder.dto.bookmark.CategoryResponseDto;
 import flab.project.jobfinder.dto.bookmark.ResponseDto;
 import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
@@ -26,28 +26,28 @@ public class BookmarkControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CreateCategoryFailedException.class)
-    public ResponseDto<CategoryDto> createCategoryFailedException(CreateCategoryFailedException e) {
+    public ResponseDto<CategoryResponseDto> createCategoryFailedException(CreateCategoryFailedException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_CATEGORY.message(), null);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseDto<List<CategoryDto>> categoryNotFoundException(CategoryNotFoundException e) {
+    public ResponseDto<List<CategoryResponseDto>> categoryNotFoundException(CategoryNotFoundException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_GET_CATEGORIES.message(), null);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public ResponseDto<List<CategoryDto>> bindingException(BindException e) {
+    public ResponseDto<List<CategoryResponseDto>> bindingException(BindException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_CATEGORY.message(), null);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CreateBookmarkFailedException.class)
-    public ResponseDto<List<CategoryDto>> createBookmarkFailedException(CreateCategoryFailedException e) {
+    public ResponseDto<List<CategoryResponseDto>> createBookmarkFailedException(CreateCategoryFailedException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_BOOKMARK.message(), null);
     }
