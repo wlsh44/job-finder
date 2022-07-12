@@ -92,8 +92,8 @@ public class BookmarkService {
             throw new CategoryNotFoundException(categoryId);
         }
 
-        Recruit recruit = recruitRepository.findById(bookmarkId).
-                orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
+        Recruit recruit = recruitRepository.findById(bookmarkId)
+                .orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
         Category category = recruit.getCategory();
 
         if (!category.getId().equals(categoryId)) {
