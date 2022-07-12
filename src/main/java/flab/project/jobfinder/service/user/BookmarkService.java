@@ -49,14 +49,13 @@ public class BookmarkService {
     }
 
     @Transactional
-    public CategoryDto deleteCategory(User user, Long categoryId) {
+    public List<CategoryDto> deleteCategory(User user, Long categoryId) {
         if (!categoryRepository.existsByUserAndId(user, categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
 
-        Category category = findCategoryByUserAndId(user, categoryId);
-        categoryRepository.delete(category);
-        return new CategoryDto(category);
+        categoryRepository.deleteById(categoryId);
+        return findCategoriesByUser(user);
     }
 
     public Category findCategoryByUserAndName(User user, String name) {

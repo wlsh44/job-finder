@@ -53,6 +53,14 @@ public class BookmarkController {
         return "/user/category-list";
     }
 
+    @DeleteMapping("/my-page/bookmark/")
+    public String deleteCategory(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                 @RequestParam Long categoryId, Model model) {
+        List<CategoryDto> categoryList = bookmarkService.deleteCategory(user, categoryId);
+        model.addAttribute("categoryList", categoryList);
+        return "user/category-list :: categoryList";
+    }
+
     @GetMapping("/my-page/bookmark/{categoryId}")
     public String bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                @PathVariable Long categoryId, Model model) {
@@ -89,12 +97,6 @@ public class BookmarkController {
 //        return new ResponseDto<>(HttpStatus.OK, GET_CATEGORIES.message(), responseDtoList);
 //    }
 
-//    @DeleteMapping("/{categoryId}")
-//    public ResponseDto<CategoryResponseDto> deleteCategory(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-//                                                    @PathVariable Long categoryId) {
-//        CategoryResponseDto categoryResponseDto = bookmarkService.deleteCategory(user, categoryId);
-//        return new ResponseDto<>(HttpStatus.OK, DELETE_CATEGORY.message(), categoryResponseDto);
-//    }
 //
 //    @GetMapping("/{categoryId}")
 //    public ResponseDto<List<BookmarkResponseDto>> bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
