@@ -95,8 +95,20 @@ function addCategory() {
     $("#bookmark-footer").html(addCategory)
 }
 
+function deleteCategory(deleteId) {
+    $.ajax({
+        url: `/my-page/bookmark/?categoryId=${deleteId}`,
+        type: "DELETE",
+    }).done(function (fragment) {
+        alert("삭제되었습니다.")
+        $("#categoryList").replaceWith(fragment);
+    }).fail(function(data) {
+        alert("삭제에 실패했습니다.")
+        console.log(data)
+    });
+}
+
 function deleteBookmark(deleteId, categoryId) {
-    console.log("왜 안돼")
     $.ajax({
         url: `/my-page/bookmark/${categoryId}?bookmarkId=${deleteId}`,
         type: "DELETE",
