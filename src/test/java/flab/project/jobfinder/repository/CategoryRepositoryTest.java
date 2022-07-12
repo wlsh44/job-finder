@@ -24,9 +24,11 @@ class CategoryRepositoryTest {
 
     User user;
 
-    @BeforeAll
-    void init() {
+
+    @BeforeEach
+    void cleanBeforeTest() {
         userRepository.deleteAll();
+        categoryRepository.deleteAll();
         user = User.builder()
                 .name("test")
                 .password("password")
@@ -35,8 +37,9 @@ class CategoryRepositoryTest {
         user = userRepository.save(user);
     }
 
-    @BeforeEach
-    void clean() {
+    @AfterEach
+    void cleanAfterTest() {
+        userRepository.deleteAll();
         categoryRepository.deleteAll();
     }
 
@@ -64,8 +67,8 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("특정 카테고리 조회 테스트")
-    void findCategoryByUserAndIdTest() {
+    @DisplayName("특정 카테고리 조회 테스트 - id")
+    void findByUserAndIdTest() {
         //given
         String categoryName = "category";
         Category category = Category.builder()
@@ -83,7 +86,26 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("특정 카테고리 조회 체크 테스트")
+    @DisplayName("특정 카테고리 조회 테스트 - 이름")
+    void findByUserAndNameTest() {
+        //given
+        String categoryName = "category";
+        Category category = Category.builder()
+                .user(user)
+                .name(categoryName)
+                .build();
+        categoryRepository.save(category);
+
+        //when
+        Category res = categoryRepository.findByUserAndName(user, categoryName).get();
+
+        //then
+        assertThat(res.getName()).isEqualTo(categoryName);
+        assertThat(res.getUser()).isEqualTo(user);
+    }
+
+    @Test
+    @DisplayName("특정 카테고리 조회 체크 테스트 - 이름")
     void existsByUserAndNameTest() {
         //given
         String categoryName = "category";
@@ -94,6 +116,23 @@ class CategoryRepositoryTest {
 
         //when
         boolean res = categoryRepository.existsByUserAndName(user, categoryName);
+
+        //then
+        assertThat(res).isTrue();
+    }
+
+    @Test
+    @DisplayName("특정 카테고리 조회 체크 테스트 - id")
+    void existsByUserAndIdTest() {
+        //given
+        String categoryName = "category";
+        Category category = Category.builder()
+                .user(user)
+                .name(categoryName).build();
+        Category save = categoryRepository.save(category);
+
+        //when
+        boolean res = categoryRepository.existsByUserAndId(user, save.getId());
 
         //then
         assertThat(res).isTrue();
