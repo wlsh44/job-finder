@@ -1,7 +1,6 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.bookmark.*;
-import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
 import lombok.RequiredArgsConstructor;
