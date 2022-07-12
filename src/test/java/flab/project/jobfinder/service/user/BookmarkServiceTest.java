@@ -5,16 +5,13 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
+import flab.project.jobfinder.exception.bookmark.BookmarkNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
 import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
-import flab.project.jobfinder.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,6 +25,7 @@ import static flab.project.jobfinder.enums.JobType.FULL_TIME;
 import static flab.project.jobfinder.enums.Location.GANGNAM;
 import static flab.project.jobfinder.enums.PayType.ANNUAL;
 import static flab.project.jobfinder.enums.Platform.JOBKOREA;
+import static flab.project.jobfinder.enums.Platform.ROCKETPUNCH;
 import static flab.project.jobfinder.enums.exception.CreateBookmarkFailedErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
 import static flab.project.jobfinder.enums.exception.CreateCategoryFailedErrorCode.ALREADY_EXISTS_CATEGORY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,9 +45,6 @@ class BookmarkServiceTest {
     @Mock
     CategoryRepository categoryRepository;
 
-    @Mock
-    UserRepository userRepository;
-
     User user;
 
     @BeforeEach
@@ -65,6 +60,27 @@ class BookmarkServiceTest {
     @DisplayName("카테고리 테스트")
     class CategoryTest {
 
+        Category category1;
+        Category category2;
+        Category category3;
+        List<Category> categoryList;
+
+        @BeforeEach
+        void init() {
+            category1 = Category.builder()
+                    .id(1L)
+                    .user(user)
+                    .name("category1").build();
+            category2 = Category.builder()
+                    .id(2L)
+                    .user(user)
+                    .name("category2").build();
+            category3 = Category.builder()
+                    .id(3L)
+                    .user(user)
+                    .name("category3").build();
+            categoryList = List.of(category1, category2, category3);
+        }
 
         @Test
         @DisplayName("전체 카테고리 조회")
@@ -133,24 +149,22 @@ class BookmarkServiceTest {
         @DisplayName("카테고리 삭제")
         void deleteCategoryTest() {
             //given
-            String categoryName = "category";
             Long categoryId = 1L;
-            Category category = Category.builder()
-                    .id(categoryId)
-                    .user(user)
-                    .name(categoryName)
-                    .build();
             given(categoryRepository.existsByUserAndId(user, categoryId))
                     .willReturn(true);
-            given(categoryRepository.findByUserAndId(user, categoryId))
-                    .willReturn(Optional.of(category));
+            given(categoryRepository.findAllByUser(user))
+                    .willReturn(List.of(category2, category3));
 
             //when
-            CategoryResponseDto responseDto = bookmarkService.deleteCategory(user, categoryId);
+            List<CategoryResponseDto> responseDto = bookmarkService.deleteCategory(user, categoryId);
 
             //then
-            assertThat(responseDto.getId()).isEqualTo(1L);
-            assertThat(responseDto.getName()).isEqualTo(categoryName);
+            int id = 2;
+            for (CategoryResponseDto categoryResponseDto : responseDto) {
+                assertThat(categoryResponseDto.getId()).isEqualTo(id);
+                assertThat(categoryResponseDto.getName()).isEqualTo("category" + id);
+                id++;
+            }
         }
 
         @Test
@@ -172,13 +186,16 @@ class BookmarkServiceTest {
     class BookmarkTest {
 
         RecruitDto recruitDto;
-        Category category;
-        String categoryName;
+        Category category1;
+        Category category2;
+        String categoryName1;
+        String categoryName2;
         Recruit recruit;
 
         @BeforeEach
         void init() {
-            categoryName = "category";
+            categoryName1 = "category1";
+            categoryName2 = "category2";
             recruitDto = RecruitDto.builder()
                     .career("career")
                     .corp("corp")
@@ -205,22 +222,18 @@ class BookmarkServiceTest {
                     .url("url")
                     .id(1L)
                     .build();
-            category = Category.builder()
-                    .id(1L)
-                    .user(user)
-                    .name(categoryName)
-                    .recruits(List.of(recruit))
-                    .build();
+            category1 = new Category(1L, categoryName1, user, List.of(recruit));
+            category2 = new Category(2L, categoryName2, user, List.of(recruit));
         }
 
         @Test
         @DisplayName("북마크 생성 - 카테고리 한 개")
         void bookmarkedRecruitTest_oneCategory() {
             //given
-            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of(categoryName), recruitDto);
-            List<BookmarkResponseDto> expect = List.of(new BookmarkResponseDto(1L, categoryName, recruitDto));
-            given(categoryRepository.findByUserAndName(user, categoryName))
-                    .willReturn(Optional.of(category));
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of(categoryName1), recruitDto);
+            List<BookmarkResponseDto> expect = List.of(new BookmarkResponseDto(1L, categoryName1, recruitDto));
+            given(categoryRepository.findByUserAndName(user, categoryName1))
+                    .willReturn(Optional.of(category1));
             given(recruitRepository.save(any()))
                     .willReturn(recruit);
 
@@ -233,36 +246,12 @@ class BookmarkServiceTest {
         }
 
         @Test
-        @DisplayName("북마크 생성 - 카테고리 여러 개")
+        @DisplayName("북마크 생성 - 카테고리 여러개에 북마크 할 경우")
         void bookmarkedRecruitTest_moreThanOneCategory() {
             //given
-            Category category1 = Category.builder()
-                    .id(1L)
-                    .user(user)
-                    .name("category1")
-                    .recruits(List.of(recruit))
-                    .build();
-            Category category2 = Category.builder()
-                    .id(2L)
-                    .user(user)
-                    .name("category2")
-                    .recruits(List.of(recruit))
-                    .build();
-            Category category3 = Category.builder()
-                    .id(3L)
-                    .user(user)
-                    .name("category3")
-                    .recruits(List.of(recruit))
-                    .build();
-            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of("category1", "category2", "category3"), recruitDto);
-            List<BookmarkResponseDto> expect = List.of(
-                    new BookmarkResponseDto(1L, "category1", recruitDto),
-                    new BookmarkResponseDto(1L, "category2", recruitDto),
-                    new BookmarkResponseDto(1L, "category3", recruitDto)
-            );
+            NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of("category1", "category2"), recruitDto);
             given(categoryRepository.findByUserAndName(user, "category1")).willReturn(Optional.of(category1));
             given(categoryRepository.findByUserAndName(user, "category2")).willReturn(Optional.of(category2));
-            given(categoryRepository.findByUserAndName(user, "category3")).willReturn(Optional.of(category3));
             given(recruitRepository.save(any()))
                     .willReturn(recruit);
 
@@ -270,10 +259,12 @@ class BookmarkServiceTest {
             List<BookmarkResponseDto> result = bookmarkService.bookmarkRecruit(user, dto);
 
             //then
-            for (int i = 0; i < expect.size(); i++) {
-                assertThat(result.get(i).getId()).isEqualTo(expect.get(i).getId());
-                assertThat(result.get(i).getCategoryName()).isEqualTo(expect.get(i).getCategoryName());
+            int num = 1;
+            for (BookmarkResponseDto responseDto : result) {
+                assertThat(responseDto.getId()).isEqualTo(1);
+                assertThat(responseDto.getCategoryName()).isEqualTo("category" + num++);
             }
+
         }
 
         @Test
@@ -300,63 +291,69 @@ class BookmarkServiceTest {
                     .hasMessage(new CategoryNotFoundException("없는 카테고리 이름").getMessage());
         }
 
-//        @Test
-//        @DisplayName("북마크 삭제")
-//        void unbookmarkedRecruitTest() {
-//            //given
-//            Long categoryId = 1L;
-//            Long bookmarkId = 1L;
-//            BookmarkResponseDto expect = new BookmarkResponseDto(1L, recruitDto);
-//            given(categoryRepository.findByUserAndId(user, categoryId))
-//                    .willReturn(Optional.of(category));
-//
-//            //when
-//            BookmarkResponseDto result = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
-//
-//            //then
-//            assertThat(result.getId()).isEqualTo(expect.getId());
-//        }
-//
-//        @Test
-//        @DisplayName("유저에게 없는 북마크 삭제하는 경우")
-//        void unbookmarkedRecruitTest_NotExits_Fail() {
-//            //given
-//            Long categoryId = 1L;
-//            Long bookmarkId = 2L;
-//            given(categoryRepository.findByUserAndId(user, categoryId))
-//                    .willReturn(Optional.of(category));
-//
-//            //when then
-//            assertThatThrownBy(() -> bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId))
-//                    .isInstanceOf(BookmarkNotFoundException.class);
-//        }
-//
-//        @Test
-//        @DisplayName("북마크 전체 조회")
-//        void findAllBookmarksByCategory() {
-//            //given
-//            Long categoryId = 1L;
-//            Recruit recruit2 = Recruit.builder().id(2L)
-//                    .platform(JOBKOREA)
-//                    .build();
-//            Recruit recruit3 = Recruit.builder().id(3L)
-//                    .platform(ROCKETPUNCH)
-//                    .build();
-//            Category category = Category.builder()
-//                    .name(categoryName)
-//                    .recruits(List.of(recruit, recruit2, recruit3))
-//                    .build();
-//            given(categoryRepository.findByUserAndId(user, categoryId))
-//                    .willReturn(Optional.of(category));
-//
-//            //when
-//            List<BookmarkResponseDto> result = bookmarkService.findAllBookmarksByCategory(user, categoryId);
-//
-//            Long id = 1L;
-//            for (BookmarkResponseDto responseDto : result) {
-//                assertThat(responseDto.getId()).isEqualTo(id);
-//                id++;
-//            }
-//        }
+        @Test
+        @Disabled
+        @DisplayName("북마크 삭제")
+        void unbookmarkedRecruitTest() {
+            //given
+            Long categoryId = 1L;
+            Long bookmarkId = 1L;
+            Category category = new Category(1L, "category", user, List.of());
+            given(categoryRepository.existsByUserAndId(user, categoryId))
+                    .willReturn(true);
+            given(recruitRepository.findById(bookmarkId))
+                    .willReturn(Optional.of(recruit));
+
+            //when
+            List<BookmarkResponseDto> result = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
+
+            //then
+            assertThat(result.size()).isEqualTo(0);
+        }
+
+        @Test
+        @DisplayName("유저에게 없는 북마크 삭제하는 경우")
+        void unbookmarkedRecruitTest_NotExits_Fail() {
+            //given
+            Long categoryId = 1L;
+            Long bookmarkId = 2L;
+            given(categoryRepository.existsByUserAndId(user, categoryId))
+                    .willReturn(true);
+            given(recruitRepository.findById(bookmarkId))
+                    .willThrow(new BookmarkNotFoundException(bookmarkId));
+
+            //when then
+            assertThatThrownBy(() -> bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId))
+                    .isInstanceOf(BookmarkNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("북마크 전체 조회")
+        void findAllBookmarksByCategory() {
+            //given
+            Long categoryId = 1L;
+            Recruit recruit2 = Recruit.builder().id(2L)
+                    .platform(JOBKOREA)
+                    .build();
+            Recruit recruit3 = Recruit.builder().id(3L)
+                    .platform(ROCKETPUNCH)
+                    .build();
+            Category category = Category.builder()
+                    .name(categoryName1)
+                    .recruits(List.of(recruit, recruit2, recruit3))
+                    .build();
+            given(categoryRepository.findByUserAndId(user, categoryId))
+                    .willReturn(Optional.of(category));
+
+            //when
+            List<BookmarkResponseDto> result = bookmarkService.findAllBookmarksByCategory(user, categoryId);
+
+            Long id = 1L;
+            for (BookmarkResponseDto responseDto : result) {
+                assertThat(responseDto.getId()).isEqualTo(id);
+                assertThat(responseDto.getCategoryName()).isEqualTo(categoryName1);
+                id++;
+            }
+        }
     }
 }
