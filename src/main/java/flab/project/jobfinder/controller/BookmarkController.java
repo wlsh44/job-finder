@@ -24,7 +24,7 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping("/category")
-    public String createBookmark(
+    public String createCategory(
             @SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
