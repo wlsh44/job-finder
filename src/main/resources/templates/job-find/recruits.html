@@ -5,6 +5,7 @@
     <link th:href="@{/css/modal.css}" rel="stylesheet" type="text/css">
     <script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
     <script type="text/javascript" th:inline="javascript">
+        var isUserExists = [[ ${user != null} ]]
         var recruitDtoList = [[ ${recruitDtoList} ]]
     </script>
 </head>

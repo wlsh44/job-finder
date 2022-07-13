@@ -1,8 +1,12 @@
 var bookmarkNum
+var isUserExists
 
 function popOpen(recruit) {
-
-    console.log(recruit)
+    if (!isUserExists) {
+        alert("로그인이 필요합니다.")
+        window.location.href = "/login"
+    }
+    console.log(recruit);
     bookmarkNum = recruit
 
     $('#bookmark-modal').modal('show');
