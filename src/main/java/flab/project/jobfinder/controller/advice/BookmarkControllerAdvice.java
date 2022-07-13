@@ -47,7 +47,7 @@ public class BookmarkControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CreateBookmarkFailedException.class)
-    public ResponseDto<List<CategoryResponseDto>> createBookmarkFailedException(CreateCategoryFailedException e) {
+    public ResponseDto<List<CategoryResponseDto>> createBookmarkFailedException(CreateBookmarkFailedException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_BOOKMARK.message(), null);
     }
