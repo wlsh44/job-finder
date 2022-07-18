@@ -216,3 +216,23 @@ function addTag() {
         alert("태그 추가에 실패했습니다.")
     })
 }
+
+function untag(bookmarkNum, tagId) {
+
+    const unTagRequestDto = {
+        tagId: tagId
+    }
+
+    $.ajax({
+        type: "DELETE",
+        url: `/tag?bookmarkId=${bookmarkNum}`,
+        contentType: "application/json",
+        data: JSON.stringify(unTagRequestDto)
+    }).done(function (fragment) {
+        alert("태그가 삭제되었습니다.")
+        window.location.reload()
+    }).fail(function (data) {
+        console.log(data)
+        alert("태그 삭제에 실패했습니다.")
+    })
+}
