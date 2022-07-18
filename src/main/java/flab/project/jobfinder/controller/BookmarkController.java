@@ -15,6 +15,7 @@ import java.util.List;
 
 import static flab.project.jobfinder.consts.SessionConst.LOGIN_SESSION_ID;
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.ADD_TAG;
 
 @Slf4j
 @Controller
@@ -87,5 +88,30 @@ public class BookmarkController {
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("bookmarkList", bookmarkList);
         return "user/bookmark-list :: bookmarkList";
+    }
+
+    @PostMapping("/tag")
+    public String createTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                            @Valid NewTagRequestDto dto, Model model) {
+        List<TagDto> responseDtoList = bookmarkService.createTag(user, dto);
+        model.addAttribute("tagList", responseDtoList);
+        return "user/bookmark-list :: tagList";
+    }
+
+    @ResponseBody
+    @PutMapping("/tag")
+    public ResponseDto<List<TagDto>> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                          @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
+        log.info(dto.toString());
+        List<TagDto> tagList = bookmarkService.tagging(user, bookmarkId, dto);
+        return new ResponseDto<>(HttpStatus.OK, ADD_TAG.message(), tagList);
+    }
+
+    @GetMapping("/tag")
+    public String getBookmarkTags(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                  Model model) {
+        List<TagDto> tagList = bookmarkService.findTagByUser(user);
+        model.addAttribute("tagList", tagList);
+        return "user/bookmark-list :: tagList";
     }
 }
