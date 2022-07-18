@@ -4,13 +4,17 @@
     <div th:replace="fragment/head.html :: fragment-head"></div>
     <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
     <script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        var isUserExists = [[ ${user != null} ]]
+        var bookmarkDtoList = [[ ${bookmarkDtoList} ]]
+    </script>
     <title>Job-Finder</title>
 </head>
 <body>
 <div class="container" style="max-width: 800px">
     <div th:replace="fragment/header.html :: fragment-header"></div>
     <table class="table" id="bookmarkList" th:fragment="bookmarkList">
-        <tr th:each="bookmark: ${bookmarkList}" th:with="recruit=${bookmark.recruitDto}">
+        <tr th:each="bookmark, idx: ${bookmarkList}" th:with="recruit=${bookmark.recruitDto}">
             <td>
                 <div th:text="${recruit.corp}"></div>
                 <div th:text="${recruit.platform}"></div>
@@ -27,11 +31,44 @@
                     </div>
                 </div>
                 <div th:text="${recruit.techStack}"></div>
+                <div>
+                    <span th:each="tag: ${bookmark.tagList}" th:text="|${tag.name} |"></span>
+                    <button class="btn btn-secondary" th:onclick="popTagOpen([[${bookmark.id}]])" th:text="'+'"></button>
+                </div>
             </td>
             <td>
                 <button class="btn btn-secondary" th:onclick="deleteBookmark([[${bookmark.id}]], [[${categoryId}]])" th:text="'x'"></button>
             </td>
         </tr>
     </table>
+</div>
+
+<div class="modal fade" id="bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="tagModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tagModal">태그 선택</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tagList" th:fragment="tagList">
+                    <ul>
+                        <li th:each="tag : ${tagList}" class="tag-list">
+                            <input type="checkbox" class="tag-input">
+                            <label class="tag-label">
+                                [[${tag.name}]]
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer" id="tag-footer">
+                <button type="button" id="new-tag-button" class="btn btn-primary" onclick="createTagForm()">새 태그</button>
+                <button type="button" id="add-tag-button" class="btn btn-primary" onclick="addTag()">태그 추가</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
