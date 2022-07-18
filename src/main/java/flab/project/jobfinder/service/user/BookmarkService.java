@@ -4,6 +4,7 @@ import flab.project.jobfinder.dto.bookmark.*;
 import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
+import flab.project.jobfinder.entity.recruit.Tag;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.CategoryRepository;
@@ -148,6 +149,27 @@ public class BookmarkService {
                 .filter(tag -> !bookmark.getTags().contains(tag))
                 .forEach(tag -> bookmark.getTags().add(tag));
         return getTagsDtoByBookmark(bookmark);
+    }
+
+    @Transactional
+    public List<TagDto> untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
+        Long tagId = Long.valueOf(dto.getTagId());
+        Recruit bookmark = recruitRepository.findById(bookmarkId)
+                .orElseThrow(() -> new UnTaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Tag untag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
+        List<Tag> tags = bookmark.getTags();
+        if (!tags.contains(untag)) {
+            throw new UnTaggingFailedException(TAG_NOT_FOUND, tagId);
+        }
+
+        tags.remove(untag);
+        return getTagsDtoByBookmark(bookmark);
+    }
+
+    @Transactional
+    public List<TagDto> removeTag(User user, Long tagId) {
+        
     }
 
     public List<TagDto> findTagByUser(User user) {
