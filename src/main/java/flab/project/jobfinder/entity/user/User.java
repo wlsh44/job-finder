@@ -1,6 +1,7 @@
 package flab.project.jobfinder.entity.user;
 
 import flab.project.jobfinder.entity.recruit.Category;
+import flab.project.jobfinder.entity.recruit.Tag;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,6 +34,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Category> categories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Tag> tags = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdAt;
