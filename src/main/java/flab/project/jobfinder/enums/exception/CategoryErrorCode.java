@@ -1,11 +1,11 @@
 package flab.project.jobfinder.enums.exception;
 
-public enum CreateBookmarkFailedErrorCode implements ErrorCode{
-    REQUIRED_AT_LEAST_ONE_CATEGORY("하나 이상의 카테고리가 필요");
+public enum CategoryErrorCode implements ErrorCode{
+    ALREADY_EXISTS_CATEGORY("이미 존재하는 카테고리");
 
     private final String errorMsg;
 
-    CreateBookmarkFailedErrorCode(String errorMsg) {
+    CategoryErrorCode(String errorMsg) {
         this.errorMsg = errorMsg;
     }
 

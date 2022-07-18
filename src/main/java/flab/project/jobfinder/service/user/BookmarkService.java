@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static flab.project.jobfinder.enums.exception.CreateBookmarkFailedErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
-import static flab.project.jobfinder.enums.exception.CreateCategoryFailedErrorCode.ALREADY_EXISTS_CATEGORY;
+import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.ALREADY_EXISTS_CATEGORY;
+import static flab.project.jobfinder.enums.exception.TagErrorCode.ALREADY_EXISTS_TAG;
+import static flab.project.jobfinder.enums.exception.TagErrorCode.TAG_NOT_FOUND;
 
 @Slf4j
 @Service

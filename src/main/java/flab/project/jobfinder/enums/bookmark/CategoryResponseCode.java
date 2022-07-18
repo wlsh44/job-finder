@@ -10,13 +10,13 @@ public enum CategoryResponseCode {
     UPDATE_CATEGORY("카테고리 수정"),
     FAILED_UPDATE_CATEGORY("카테고리 수정 실패");
 
-    private final java.lang.String message;
+    private final String message;
 
-    CategoryResponseCode(java.lang.String message) {
+    CategoryResponseCode(String message) {
         this.message = message;
     }
 
-    public java.lang.String message() {
+    public String message() {
         return message;
     }
 }
