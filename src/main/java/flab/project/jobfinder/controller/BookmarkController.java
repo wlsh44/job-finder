@@ -15,7 +15,8 @@ import java.util.List;
 
 import static flab.project.jobfinder.consts.SessionConst.LOGIN_SESSION_ID;
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
-import static flab.project.jobfinder.enums.bookmark.TagResponseCode.ADD_TAG;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.TAGGING;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.UNTAGGING;
 
 @Slf4j
 @Controller
@@ -104,7 +105,7 @@ public class BookmarkController {
                           @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
         log.info(dto.toString());
         List<TagDto> tagList = bookmarkService.tagging(user, bookmarkId, dto);
-        return new ResponseDto<>(HttpStatus.OK, ADD_TAG.message(), tagList);
+        return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagList);
     }
 
     @GetMapping("/tag")
@@ -113,5 +114,13 @@ public class BookmarkController {
         List<TagDto> tagList = bookmarkService.findTagByUser(user);
         model.addAttribute("tagList", tagList);
         return "user/bookmark-list :: tagList";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/tag")
+    public ResponseDto<List<TagDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                               @RequestBody @Valid UnTagRequestDto dto, @RequestParam Long bookmarkId) {
+        List<TagDto> tagList = bookmarkService.untagging(user, dto, bookmarkId);
+        return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), tagList);
     }
 }

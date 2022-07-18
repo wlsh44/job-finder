@@ -3,8 +3,10 @@ package flab.project.jobfinder.enums.bookmark;
 public enum TagResponseCode {
     CREATE_TAG("태그 생성"),
     FAILED_CREATE_TAG("태그 생성 실패"),
-    ADD_TAG("태그 추가"),
-    FAILED_ADD_TAG("태그 추가 실패"),
+    TAGGING("태그 추가"),
+    FAILED_TAGGING("태그 추가 실패"),
+    UNTAGGING("태그 제거"),
+    FAILED_UNTAGGING("태그 제거 실패"),
     DELETE_TAG("태그 삭제"),
     FAILED_DELETE_TAG("태그 삭제 실패"),
     GET_TAG("태그 조회"),
