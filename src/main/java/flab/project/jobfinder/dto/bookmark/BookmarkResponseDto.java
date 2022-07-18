@@ -1,9 +1,10 @@
 package flab.project.jobfinder.dto.bookmark;
 
 import flab.project.jobfinder.dto.recruit.RecruitDto;
-import flab.project.jobfinder.entity.recruit.Recruit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -11,4 +12,5 @@ public class BookmarkResponseDto {
     private Long id;
     private String categoryName;
     private RecruitDto recruitDto;
+    private List<TagDto> tagList;
 }
