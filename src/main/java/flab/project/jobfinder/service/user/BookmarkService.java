@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
@@ -85,7 +86,8 @@ public class BookmarkService {
             Category category = findCategoryByUserAndName(user, categoryName);
             RecruitDto recruitDto = dto.getRecruitDto();
             Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category));
-            responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName, new RecruitDto(savedRecruit), getTagsDtoByBookmark(savedRecruit)));
+            responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName,
+                    new RecruitDto(savedRecruit), getTagsDtoByBookmark(savedRecruit)));
         }
 
         return responseDtoList;
@@ -97,16 +99,15 @@ public class BookmarkService {
             throw new CategoryNotFoundException(categoryId);
         }
 
-        Recruit recruit = recruitRepository.findById(bookmarkId)
-                .orElseThrow(() -> new BookmarkNotFoundException(bookmarkId));
-        Category category = recruit.getCategory();
+        Recruit bookmark = getBookmarkById(bookmarkId, () -> new BookmarkNotFoundException(bookmarkId));
+        Category category = bookmark.getCategory();
 
         if (!category.getId().equals(categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
 
-        recruitRepository.delete(recruit);
-        category.getRecruits().remove(recruit);
+        recruitRepository.delete(bookmark);
+        category.getRecruits().remove(bookmark);
         return toBookmarkResponseDtoList(category.getName(), category.getRecruits());
     }
 
@@ -119,7 +120,8 @@ public class BookmarkService {
     public List<BookmarkResponseDto> toBookmarkResponseDtoList(String categoryName, List<Recruit> recruits) {
         return recruits
                 .stream()
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), categoryName, new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
+                .map(recruit -> new BookmarkResponseDto(recruit.getId(), categoryName,
+                        new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
                 .toList();
     }
 
@@ -142,14 +144,12 @@ public class BookmarkService {
 
     @Transactional
     public List<TagDto> tagging(User user, Long bookmarkId, TaggingRequestDto dto) {
-        Recruit bookmark = recruitRepository.findById(bookmarkId)
-                .orElseThrow(() -> new TaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Recruit bookmark = getBookmarkById(bookmarkId,
+                () -> new TaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
         List<String> newTagList = dto.getTagList();
 
         List<Tag> tags = getTagsByBookmark(bookmark);
 
-        //태그 가져옴
-        //북마크의 recruitTag 리스트에서 태그 북마크 있는지 체크
         List<TagDto> tagDtoList = newTagList.stream()
                 .map(tagName -> tagRepository.findByUserAndName(user, tagName)
                         .orElseThrow(() -> new TaggingFailedException(TAG_NOT_FOUND, tagName)))
@@ -174,24 +174,32 @@ public class BookmarkService {
     @Transactional
     public void untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
-        Recruit bookmark = recruitRepository.findById(bookmarkId)
-                .orElseThrow(() -> new UnTaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
-        Tag untag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
+        Recruit bookmark = getBookmarkById(bookmarkId,
+                () -> new UnTaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Tag untag = getTagById(tagId, () -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
         RecruitTag recruitTag = recruitTagRepository.findByRecruitAndTag(bookmark, untag)
                 .orElseThrow(() -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
         recruitTagRepository.delete(recruitTag);
     }
 
+    private Recruit getBookmarkById(Long bookmarkId, Supplier<? extends RuntimeException> e) {
+        return recruitRepository.findById(bookmarkId)
+                .orElseThrow(e);
+    }
+
     @Transactional
     public void removeTag(User user, Long tagId) {
-        Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new RemoveTagFailedException(TAG_NOT_FOUND, tagId));
+        Tag tag = getTagById(tagId, () -> new RemoveTagFailedException(TAG_NOT_FOUND, tagId));
         recruitTagRepository.deleteAllInBatch(tag.getRecruitTagList());
         if (!tag.getUser().equals(user)) {
             throw new RemoveTagFailedException(TAG_NOT_FOUND, tagId);
         }
         tagRepository.delete(tag);
+    }
+
+    private Tag getTagById(Long tagId, Supplier<? extends RuntimeException> e) {
+        return tagRepository.findById(tagId)
+                .orElseThrow(e);
     }
 
     public List<TagDto> findTagByUser(User user) {
