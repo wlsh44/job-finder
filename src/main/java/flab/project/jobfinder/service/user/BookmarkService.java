@@ -52,14 +52,14 @@ public class BookmarkService {
     @Transactional
     public List<BookmarkResponseDto> unbookmark(User user, Long categoryId, Long bookmarkId) {
         if (!categoryService.existsByUserAndId(user, categoryId)) {
-            throw new CategoryNotFoundException(categoryId);
+            throw new FindCategoryFailedException(categoryId);
         }
 
         Recruit bookmark = getBookmarkById(bookmarkId, () -> new BookmarkNotFoundException(bookmarkId));
         Category category = bookmark.getCategory();
 
         if (!category.getId().equals(categoryId)) {
-            throw new CategoryNotFoundException(categoryId);
+            throw new FindCategoryFailedException(categoryId);
         }
 
         recruitTagRepository.deleteAllInBatch(bookmark.getRecruitTagList());

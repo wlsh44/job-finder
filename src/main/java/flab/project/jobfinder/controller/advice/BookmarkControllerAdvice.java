@@ -2,7 +2,7 @@ package flab.project.jobfinder.controller.advice;
 
 import flab.project.jobfinder.dto.bookmark.CategoryResponseDto;
 import flab.project.jobfinder.dto.bookmark.ResponseDto;
-import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
+import flab.project.jobfinder.exception.bookmark.FindCategoryFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,8 @@ public class BookmarkControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseDto<List<CategoryResponseDto>> categoryNotFoundException(CategoryNotFoundException e) {
+    @ExceptionHandler(FindCategoryFailedException.class)
+    public ResponseDto<List<CategoryResponseDto>> categoryNotFoundException(FindCategoryFailedException e) {
         log.info(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_GET_CATEGORIES.message(), null);
     }

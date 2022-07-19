@@ -4,8 +4,9 @@ import flab.project.jobfinder.dto.bookmark.CategoryResponseDto;
 import flab.project.jobfinder.dto.bookmark.NewCategoryRequestDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
+import flab.project.jobfinder.exception.bookmark.FindCategoryFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
+import flab.project.jobfinder.exception.bookmark.DeleteCategoryFailedException;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitTagRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static flab.project.jobfinder.enums.exception.CategoryErrorCode.ALREADY_EXISTS_CATEGORY;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class CategoryService {
     @Transactional
     public List<CategoryResponseDto> create(User user, NewCategoryRequestDto dto) {
         if (categoryRepository.existsByUserAndName(user, dto.getName())) {
-            throw new CreateCategoryFailedException(dto, ALREADY_EXISTS_CATEGORY);
+            throw new CreateCategoryFailedException(ALREADY_EXISTS_CATEGORY, dto.getName());
         }
 
         categoryRepository.save(dto.toEntity(user));
@@ -44,7 +45,7 @@ public class CategoryService {
     @Transactional
     public List<CategoryResponseDto> delete(User user, Long categoryId) {
         Category category = categoryRepository.findByUserAndId(user, categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+                .orElseThrow(() -> new DeleteCategoryFailedException(CATEGORY_ID_NOT_FOUND, categoryId));
 
         category.getRecruits()
                 .forEach(recruit -> recruitTagRepository.deleteAllInBatch(recruit.getRecruitTagList()));
@@ -58,11 +59,11 @@ public class CategoryService {
 
     public Category findByUserAndName(User user, String name) {
         return categoryRepository.findByUserAndName(user, name)
-                .orElseThrow(() -> new CategoryNotFoundException(name));
+                .orElseThrow(() -> new FindCategoryFailedException(CATEGORY_NAME_NOT_FOUND, name));
     }
 
     public Category findByUserAndId(User user, Long id) {
         return categoryRepository.findByUserAndId(user, id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+                .orElseThrow(() -> new FindCategoryFailedException(CATEGORY_ID_NOT_FOUND, id));
     }
 }

@@ -6,7 +6,7 @@ import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.BookmarkNotFoundException;
-import flab.project.jobfinder.exception.bookmark.CategoryNotFoundException;
+import flab.project.jobfinder.exception.bookmark.FindCategoryFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
 import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
 import flab.project.jobfinder.repository.CategoryRepository;
@@ -177,7 +177,7 @@ class BookmarkServiceTest {
 
             //when then
             assertThatThrownBy(() -> bookmarkService.deleteCategory(user, categoryId))
-                    .isInstanceOf(CategoryNotFoundException.class);
+                    .isInstanceOf(FindCategoryFailedException.class);
         }
     }
 
@@ -287,8 +287,8 @@ class BookmarkServiceTest {
 
             //when then
             assertThatThrownBy(() -> bookmarkService.bookmark(user, dto))
-                    .isInstanceOf(CategoryNotFoundException.class)
-                    .hasMessage(new CategoryNotFoundException("없는 카테고리 이름").getMessage());
+                    .isInstanceOf(FindCategoryFailedException.class)
+                    .hasMessage(new FindCategoryFailedException("없는 카테고리 이름").getMessage());
         }
 
         @Test

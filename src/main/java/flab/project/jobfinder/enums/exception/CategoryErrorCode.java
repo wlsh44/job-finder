@@ -1,7 +1,9 @@
 package flab.project.jobfinder.enums.exception;
 
 public enum CategoryErrorCode implements ErrorCode{
-    ALREADY_EXISTS_CATEGORY("이미 존재하는 카테고리");
+    ALREADY_EXISTS_CATEGORY("이미 존재하는 카테고리입니다. 카테고리 이름: %s"),
+    CATEGORY_ID_NOT_FOUND("해당 카테고리가 존재하지 않습니다. 카테고리 id: %d"),
+    CATEGORY_NAME_NOT_FOUND("해당 카테고리가 존재하지 않습니다. 카테고리 이름: %s");
 
     private final String errorMsg;
 
