@@ -6,6 +6,7 @@ import flab.project.jobfinder.enums.Platform;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Builder
 @Data
@@ -49,6 +50,7 @@ public class RecruitDto {
                 .platform(Platform.of(platform))
                 .jobType(jobType)
                 .category(category)
+                .recruitTagList(new ArrayList<>())
                 .build();
     }
 }

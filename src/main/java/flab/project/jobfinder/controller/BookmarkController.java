@@ -3,6 +3,8 @@ package flab.project.jobfinder.controller;
 import flab.project.jobfinder.dto.bookmark.*;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
+import flab.project.jobfinder.service.user.CategoryService;
+import flab.project.jobfinder.service.user.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import static flab.project.jobfinder.enums.bookmark.TagResponseCode.UNTAGGING;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
+    private final CategoryService categoryService;
+    private final TagService tagService;
 
     @PostMapping("/category")
     public String createCategory(
@@ -31,7 +35,7 @@ public class BookmarkController {
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
         log.info("category name: {}", requestDto.getName());
-        List<CategoryResponseDto> categoryList = bookmarkService.createCategory(user, requestDto);
+        List<CategoryResponseDto> categoryList = categoryService.createCategory(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
     }
@@ -39,7 +43,7 @@ public class BookmarkController {
     @GetMapping("/category")
     public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                     Model model) {
-        List<CategoryResponseDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = categoryService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
@@ -48,7 +52,7 @@ public class BookmarkController {
     @GetMapping("/my-page/bookmark")
     public String myPageCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                      Model model) {
-        List<CategoryResponseDto> categoryList = bookmarkService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = categoryService.findCategoriesByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "/user/category-list";
@@ -57,7 +61,7 @@ public class BookmarkController {
     @DeleteMapping("/my-page/bookmark/")
     public String deleteCategory(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                  @RequestParam Long categoryId, Model model) {
-        List<CategoryResponseDto> categoryList = bookmarkService.deleteCategory(user, categoryId);
+        List<CategoryResponseDto> categoryList = categoryService.deleteCategory(user, categoryId);
         model.addAttribute("categoryList", categoryList);
         return "user/category-list :: categoryList";
     }
@@ -94,7 +98,7 @@ public class BookmarkController {
     @PostMapping("/tag")
     public String createTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                             @Valid NewTagRequestDto dto, Model model) {
-        List<TagDto> responseDtoList = bookmarkService.createTag(user, dto);
+        List<TagDto> responseDtoList = tagService.createTag(user, dto);
         model.addAttribute("tagList", responseDtoList);
         return "user/bookmark-list :: tagList";
     }
@@ -104,14 +108,14 @@ public class BookmarkController {
     public ResponseDto<List<TagDto>> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                           @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
         log.info(dto.toString());
-        List<TagDto> tagList = bookmarkService.tagging(user, bookmarkId, dto);
+        List<TagDto> tagList = tagService.tagging(user, bookmarkId, dto);
         return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagList);
     }
 
     @GetMapping("/bookmark/tag")
     public String getBookmarkTags(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                   Model model) {
-        List<TagDto> tagList = bookmarkService.findTagByUser(user);
+        List<TagDto> tagList = tagService.findTagByUser(user);
         model.addAttribute("tagList", tagList);
         return "user/bookmark-list :: tagList";
     }
@@ -120,15 +124,15 @@ public class BookmarkController {
     @DeleteMapping("/bookmark/tag")
     public ResponseDto<List<TagDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                                @RequestBody @Valid UnTagRequestDto dto, @RequestParam Long bookmarkId) {
-        bookmarkService.untagging(user, dto, bookmarkId);
+        tagService.untagging(user, dto, bookmarkId);
         return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), null);
     }
 
     @DeleteMapping("/tag")
     public String removeTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                             @RequestParam Long tagId, Model model) {
-        bookmarkService.removeTag(user, tagId);
-        List<TagDto> tagList = bookmarkService.findTagByUser(user);
+        tagService.removeTag(user, tagId);
+        List<TagDto> tagList = tagService.findTagByUser(user);
         model.addAttribute("tagList", tagList);
         return "user/bookmark-list :: tagList";
     }
