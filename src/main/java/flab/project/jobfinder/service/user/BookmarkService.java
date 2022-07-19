@@ -5,13 +5,10 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.recruit.RecruitTag;
-import flab.project.jobfinder.entity.recruit.Tag;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.*;
-import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
 import flab.project.jobfinder.repository.RecruitTagRepository;
-import flab.project.jobfinder.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,12 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
-import static flab.project.jobfinder.enums.exception.CategoryErrorCode.ALREADY_EXISTS_CATEGORY;
-import static flab.project.jobfinder.enums.exception.TagErrorCode.ALREADY_EXISTS_TAG;
-import static flab.project.jobfinder.enums.exception.TagErrorCode.TAG_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -46,7 +39,7 @@ public class BookmarkService {
         List<BookmarkResponseDto> responseDtoList = new ArrayList<>();
 
         for (String categoryName : categoryList) {
-            Category category = categoryService.findCategoryByUserAndName(user, categoryName);
+            Category category = categoryService.findByUserAndName(user, categoryName);
             RecruitDto recruitDto = dto.getRecruitDto();
             Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category));
             responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName,
@@ -76,7 +69,7 @@ public class BookmarkService {
     }
 
     public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, Long categoryId) {
-        Category category = categoryService.findCategoryByUserAndId(user, categoryId);
+        Category category = categoryService.findByUserAndId(user, categoryId);
         List<Recruit> recruits = category.getRecruits();
         return toBookmarkResponseDtoList(category.getName(), recruits);
     }

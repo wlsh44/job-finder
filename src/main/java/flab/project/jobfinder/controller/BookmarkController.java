@@ -35,7 +35,7 @@ public class BookmarkController {
             @Valid NewCategoryRequestDto requestDto, Model model) {
         log.info("createBookmark");
         log.info("category name: {}", requestDto.getName());
-        List<CategoryResponseDto> categoryList = categoryService.createCategory(user, requestDto);
+        List<CategoryResponseDto> categoryList = categoryService.create(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
     }
@@ -43,7 +43,7 @@ public class BookmarkController {
     @GetMapping("/category")
     public String modalCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                     Model model) {
-        List<CategoryResponseDto> categoryList = categoryService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = categoryService.findAllByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
@@ -52,7 +52,7 @@ public class BookmarkController {
     @GetMapping("/my-page/bookmark")
     public String myPageCategoryList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                      Model model) {
-        List<CategoryResponseDto> categoryList = categoryService.findCategoriesByUser(user);
+        List<CategoryResponseDto> categoryList = categoryService.findAllByUser(user);
         log.info("categoryList");
         model.addAttribute("categoryList", categoryList);
         return "/user/category-list";
@@ -61,7 +61,7 @@ public class BookmarkController {
     @DeleteMapping("/my-page/bookmark/")
     public String deleteCategory(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                  @RequestParam Long categoryId, Model model) {
-        List<CategoryResponseDto> categoryList = categoryService.deleteCategory(user, categoryId);
+        List<CategoryResponseDto> categoryList = categoryService.delete(user, categoryId);
         model.addAttribute("categoryList", categoryList);
         return "user/category-list :: categoryList";
     }

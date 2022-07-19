@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/my-bookmark")
     public String bookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user, Model model) {
-        List<CategoryResponseDto> userCategoryList = categoryService.findCategoriesByUser(user);
+        List<CategoryResponseDto> userCategoryList = categoryService.findAllByUser(user);
         model.addAttribute("categories", userCategoryList);
         return "bookmark";
     }
