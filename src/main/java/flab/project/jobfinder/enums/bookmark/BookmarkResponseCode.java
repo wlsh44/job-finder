@@ -1,6 +1,6 @@
 package flab.project.jobfinder.enums.bookmark;
 
-public enum BookmarkResponseCode {
+public enum BookmarkResponseCode implements ResponseCode {
     CREATE_BOOKMARK("북마크 생성"),
     FAILED_CREATE_BOOKMARK("북마크 생성 실패"),
     DELETE_BOOKMARK("북마크 삭제"),
@@ -16,6 +16,7 @@ public enum BookmarkResponseCode {
         this.message = message;
     }
 
+    @Override
     public String message() {
         return message;
     }

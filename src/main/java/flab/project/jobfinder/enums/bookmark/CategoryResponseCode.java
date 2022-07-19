@@ -1,6 +1,6 @@
 package flab.project.jobfinder.enums.bookmark;
 
-public enum CategoryResponseCode {
+public enum CategoryResponseCode implements ResponseCode {
     CREATE_CATEGORY("카테고리 생성"),
     FAILED_CREATE_CATEGORY("카테고리 생성 실패"),
     DELETE_CATEGORY("카테고리 삭제"),
@@ -16,6 +16,7 @@ public enum CategoryResponseCode {
         this.message = message;
     }
 
+    @Override
     public String message() {
         return message;
     }

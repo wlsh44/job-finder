@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_ID_NOT_FOUND;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_NAME_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -34,12 +37,13 @@ public class BookmarkService {
     public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
         List<String> categoryList = dto.getCategoryList();
         if (categoryList.isEmpty()) {
-            throw new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY);
+            throw new BookmarkException(FAILED_CREATE_BOOKMARK, REQUIRED_AT_LEAST_ONE_CATEGORY);
         }
         List<BookmarkResponseDto> responseDtoList = new ArrayList<>();
 
         for (String categoryName : categoryList) {
-            Category category = categoryService.findByUserAndName(user, categoryName);
+            Category category = categoryService.findByUserAndName(user, categoryName,
+                    () -> new BookmarkException(FAILED_CREATE_BOOKMARK, CATEGORY_NAME_NOT_FOUND, categoryName));
             RecruitDto recruitDto = dto.getRecruitDto();
             Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category));
             responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName,
@@ -52,14 +56,15 @@ public class BookmarkService {
     @Transactional
     public List<BookmarkResponseDto> unbookmark(User user, Long categoryId, Long bookmarkId) {
         if (!categoryService.existsByUserAndId(user, categoryId)) {
-            throw new FindCategoryFailedException(categoryId);
+            throw new BookmarkException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId);
         }
 
-        Recruit bookmark = getBookmarkById(bookmarkId, () -> new BookmarkNotFoundException(bookmarkId));
+        Recruit bookmark = getBookmarkById(bookmarkId,
+                () -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         Category category = bookmark.getCategory();
 
         if (!category.getId().equals(categoryId)) {
-            throw new FindCategoryFailedException(categoryId);
+            throw new BookmarkException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId);
         }
 
         recruitTagRepository.deleteAllInBatch(bookmark.getRecruitTagList());
@@ -69,7 +74,8 @@ public class BookmarkService {
     }
 
     public List<BookmarkResponseDto> findAllByCategory(User user, Long categoryId) {
-        Category category = categoryService.findByUserAndId(user, categoryId);
+        Category category = categoryService.findByUserAndId(user, categoryId,
+                () -> new BookmarkException(FAILED_GET_BOOKMARKS, CATEGORY_ID_NOT_FOUND, categoryId));
         List<Recruit> recruits = category.getRecruits();
         return toBookmarkResponseDtoList(category.getName(), recruits);
     }

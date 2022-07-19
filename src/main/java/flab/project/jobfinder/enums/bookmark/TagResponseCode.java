@@ -1,6 +1,6 @@
 package flab.project.jobfinder.enums.bookmark;
 
-public enum TagResponseCode {
+public enum TagResponseCode implements ResponseCode {
     CREATE_TAG("태그 생성"),
     FAILED_CREATE_TAG("태그 생성 실패"),
     TAGGING("태그 추가"),
@@ -20,6 +20,7 @@ public enum TagResponseCode {
         this.message = message;
     }
 
+    @Override
     public String message() {
         return message;
     }

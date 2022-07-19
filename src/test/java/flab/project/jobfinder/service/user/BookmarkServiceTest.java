@@ -5,10 +5,7 @@ import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.exception.bookmark.BookmarkNotFoundException;
-import flab.project.jobfinder.exception.bookmark.FindCategoryFailedException;
-import flab.project.jobfinder.exception.bookmark.CreateBookmarkFailedException;
-import flab.project.jobfinder.exception.bookmark.CreateCategoryFailedException;
+import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
 import org.junit.jupiter.api.*;
@@ -141,7 +138,7 @@ class BookmarkServiceTest {
 
             //when then
             assertThatThrownBy(() -> bookmarkService.createCategory(user, dto))
-                    .isInstanceOf(CreateCategoryFailedException.class)
+                    .isInstanceOf(CategoryException.class)
                     .hasMessage("카테고리 생성에 실패했습니다: " + ALREADY_EXISTS_CATEGORY.errorMsg());
         }
 
@@ -177,7 +174,7 @@ class BookmarkServiceTest {
 
             //when then
             assertThatThrownBy(() -> bookmarkService.deleteCategory(user, categoryId))
-                    .isInstanceOf(FindCategoryFailedException.class);
+                    .isInstanceOf(CategoryException.class);
         }
     }
 
@@ -276,7 +273,7 @@ class BookmarkServiceTest {
             //when then
             assertThatThrownBy(() -> bookmarkService.bookmark(user, dto))
                     .isInstanceOf(CreateBookmarkFailedException.class)
-                    .hasMessage(new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY).getMessage());
+                    .hasMessage(new BookmarkException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY).getMessage());
         }
 
         @Test
@@ -288,7 +285,7 @@ class BookmarkServiceTest {
             //when then
             assertThatThrownBy(() -> bookmarkService.bookmark(user, dto))
                     .isInstanceOf(FindCategoryFailedException.class)
-                    .hasMessage(new FindCategoryFailedException("없는 카테고리 이름").getMessage());
+                    .hasMessage(new BookmarkException("없는 카테고리 이름").getMessage());
         }
 
         @Test
@@ -320,11 +317,11 @@ class BookmarkServiceTest {
             given(categoryRepository.existsByUserAndId(user, categoryId))
                     .willReturn(true);
             given(recruitRepository.findById(bookmarkId))
-                    .willThrow(new BookmarkNotFoundException(bookmarkId));
+                    .willThrow(new BookmarkException(bookmarkId));
 
             //when then
             assertThatThrownBy(() -> bookmarkService.unbookmark(user, categoryId, bookmarkId))
-                    .isInstanceOf(BookmarkNotFoundException.class);
+                    .isInstanceOf(BookmarkException.class);
         }
 
         @Test

@@ -131,7 +131,7 @@ public class BookmarkController {
     @DeleteMapping("/tag")
     public String removeTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                             @RequestParam Long tagId, Model model) {
-        tagService.remove(user, tagId);
+        tagService.delete(user, tagId);
         List<TagDto> tagList = tagService.findTagByUser(user);
         model.addAttribute("tagList", tagList);
         return "user/bookmark-list :: tagList";

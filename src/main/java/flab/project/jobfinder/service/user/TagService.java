@@ -8,10 +8,7 @@ import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.recruit.Tag;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.exception.bookmark.CreateTagFailedException;
-import flab.project.jobfinder.exception.bookmark.RemoveTagFailedException;
-import flab.project.jobfinder.exception.bookmark.TaggingFailedException;
-import flab.project.jobfinder.exception.bookmark.UnTaggingFailedException;
+import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.RecruitRepository;
 import flab.project.jobfinder.repository.RecruitTagRepository;
 import flab.project.jobfinder.repository.TagRepository;
@@ -23,6 +20,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.TagErrorCode.ALREADY_EXISTS_TAG;
 import static flab.project.jobfinder.enums.exception.TagErrorCode.TAG_NOT_FOUND;
@@ -38,7 +36,7 @@ public class TagService {
     @Transactional
     public List<TagDto> create(User user, NewTagRequestDto dto) {
         if (tagRepository.existsByNameAndUser(dto.getName(), user)) {
-            throw new CreateTagFailedException(dto, ALREADY_EXISTS_TAG);
+            throw new TagException(FAILED_CREATE_TAG, ALREADY_EXISTS_TAG);
         }
 
         tagRepository.save(dto.toEntity(user));
@@ -55,7 +53,7 @@ public class TagService {
     @Transactional
     public List<TagDto> tag(User user, Long bookmarkId, TaggingRequestDto dto) {
         Recruit bookmark = recruitRepository.findById(bookmarkId).orElseThrow(
-                () -> new TaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
+                () -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         List<String> newTagList = dto.getTagList();
 
         List<TagDto> tagDtoList = newTagList.stream()
@@ -71,17 +69,17 @@ public class TagService {
     public void untag(User user, UnTagRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
         if (!recruitTagRepository.existsByRecruit_IdAndTag_Id(bookmarkId, tagId)) {
-            throw new UnTaggingFailedException(TAG_NOT_FOUND, tagId);
+            throw new TagException(FAILED_UNTAGGING, TAG_NOT_FOUND, tagId);
         }
         recruitTagRepository.deleteByRecruit_idAndTag_Id(bookmarkId, tagId);
     }
 
     @Transactional
-    public void remove(User user, Long tagId) {
-        Tag tag = getTagById(tagId, () -> new RemoveTagFailedException(TAG_NOT_FOUND, tagId));
+    public void delete(User user, Long tagId) {
+        Tag tag = getTagById(tagId, () -> new TagException(FAILED_DELETE_TAG, TAG_NOT_FOUND, tagId));
         recruitTagRepository.deleteAllInBatch(tag.getRecruitTagList());
         if (!tag.getUser().equals(user)) {
-            throw new RemoveTagFailedException(TAG_NOT_FOUND, tagId);
+            throw new TagException(FAILED_DELETE_TAG, TAG_NOT_FOUND, tagId);
         }
         tagRepository.delete(tag);
     }
@@ -94,7 +92,7 @@ public class TagService {
 
     private RecruitTag makeRecruitTag(User user, Recruit bookmark, String tagName) {
         Tag tag = tagRepository.findByUserAndName(user, tagName)
-                .orElseThrow(() -> new TaggingFailedException(TAG_NOT_FOUND, tagName));
+                .orElseThrow(() -> new TagException(FAILED_TAGGING, TAG_NOT_FOUND, tagName));
         return RecruitTag.builder()
                 .recruit(bookmark)
                 .tag(tag)
