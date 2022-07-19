@@ -37,7 +37,7 @@
                         <span  th:text="|${tag.name} |"></span>
                         <a th:onclick="untag([[${bookmark.id}]], [[${tag.id}]])" th:text="'x'"></a>
                     </span>
-                    <button class="btn btn-secondary" th:onclick="popTagOpen([[${bookmark.id}]])" th:text="'+'"></button>
+                    <button class="btn btn-secondary btn-sm" th:onclick="popTagOpen([[${bookmark.id}]])" th:text="'+'"></button>
                 </div>
             </td>
             <td>
@@ -58,14 +58,19 @@
             </div>
             <div class="modal-body">
                 <div id="tagList" th:fragment="tagList">
-                    <ul>
-                        <li th:each="tag : ${tagList}" class="tag-list">
-                            <input type="checkbox" class="tag-input">
-                            <label class="tag-label">
-                                [[${tag.name}]]
-                            </label>
-                        </li>
-                    </ul>
+                    <table class="table">
+                        <tr th:each="tag : ${tagList}" class="tag-list">
+                            <td>
+                                <input type="checkbox" class="tag-input">
+                                <label class="tag-label">
+                                    [[${tag.name}]]
+                                </label>
+                            </td>
+                            <td>
+                                <a th:onclick="removeTag([[${tag.id}]])" th:text="x" style="cursor: pointer"></a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="modal-footer" id="tag-footer">

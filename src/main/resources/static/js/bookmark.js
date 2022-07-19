@@ -141,7 +141,7 @@ function popTagOpen(recruit) {
 function getTagList() {
     $.ajax({
         type: "GET",
-        url: "/tag",
+        url: "/bookmark/tag",
         dataType: "text",
     }).done(function (fragment) {
         $("#tagList").replaceWith(fragment);
@@ -225,7 +225,7 @@ function untag(bookmarkNum, tagId) {
 
     $.ajax({
         type: "DELETE",
-        url: `/tag?bookmarkId=${bookmarkNum}`,
+        url: `/bookmark/tag?bookmarkId=${bookmarkNum}`,
         contentType: "application/json",
         data: JSON.stringify(unTagRequestDto)
     }).done(function (fragment) {
@@ -234,5 +234,19 @@ function untag(bookmarkNum, tagId) {
     }).fail(function (data) {
         console.log(data)
         alert("태그 삭제에 실패했습니다.")
+        window.location.reload()
     })
+}
+
+function removeTag(tagId) {
+    $.ajax({
+        type: "DELETE",
+        url: `/tag?tagId=${tagId}`
+    }).done(function (fragment) {
+        alert("태그가 삭제되었습니다.")
+        $("#tagList").replaceWith(fragment);
+    }).fail(function (data) {
+        console.log(data)
+        alert("태그 삭제에 실패했습니다.")
+    });
 }
