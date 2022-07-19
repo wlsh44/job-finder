@@ -238,7 +238,7 @@ class BookmarkServiceTest {
                     .willReturn(recruit);
 
             //when
-            List<BookmarkResponseDto> result = bookmarkService.bookmarkRecruit(user, dto);
+            List<BookmarkResponseDto> result = bookmarkService.bookmark(user, dto);
 
             //then
             assertThat(result.get(0).getId()).isEqualTo(expect.get(0).getId());
@@ -256,7 +256,7 @@ class BookmarkServiceTest {
                     .willReturn(recruit);
 
             //when
-            List<BookmarkResponseDto> result = bookmarkService.bookmarkRecruit(user, dto);
+            List<BookmarkResponseDto> result = bookmarkService.bookmark(user, dto);
 
             //then
             int num = 1;
@@ -274,7 +274,7 @@ class BookmarkServiceTest {
             NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of(), recruitDto);
 
             //when then
-            assertThatThrownBy(() -> bookmarkService.bookmarkRecruit(user, dto))
+            assertThatThrownBy(() -> bookmarkService.bookmark(user, dto))
                     .isInstanceOf(CreateBookmarkFailedException.class)
                     .hasMessage(new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY).getMessage());
         }
@@ -286,7 +286,7 @@ class BookmarkServiceTest {
             NewBookmarkRequestDto dto = new NewBookmarkRequestDto(List.of("없는 카테고리 이름"), recruitDto);
 
             //when then
-            assertThatThrownBy(() -> bookmarkService.bookmarkRecruit(user, dto))
+            assertThatThrownBy(() -> bookmarkService.bookmark(user, dto))
                     .isInstanceOf(CategoryNotFoundException.class)
                     .hasMessage(new CategoryNotFoundException("없는 카테고리 이름").getMessage());
         }
@@ -305,7 +305,7 @@ class BookmarkServiceTest {
                     .willReturn(Optional.of(recruit));
 
             //when
-            List<BookmarkResponseDto> result = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
+            List<BookmarkResponseDto> result = bookmarkService.unbookmark(user, categoryId, bookmarkId);
 
             //then
             assertThat(result.size()).isEqualTo(0);
@@ -323,7 +323,7 @@ class BookmarkServiceTest {
                     .willThrow(new BookmarkNotFoundException(bookmarkId));
 
             //when then
-            assertThatThrownBy(() -> bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId))
+            assertThatThrownBy(() -> bookmarkService.unbookmark(user, categoryId, bookmarkId))
                     .isInstanceOf(BookmarkNotFoundException.class);
         }
 
@@ -346,7 +346,7 @@ class BookmarkServiceTest {
                     .willReturn(Optional.of(category));
 
             //when
-            List<BookmarkResponseDto> result = bookmarkService.findAllBookmarksByCategory(user, categoryId);
+            List<BookmarkResponseDto> result = bookmarkService.findAllByCategory(user, categoryId);
 
             Long id = 1L;
             for (BookmarkResponseDto responseDto : result) {

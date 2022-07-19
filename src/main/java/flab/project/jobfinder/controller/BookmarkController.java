@@ -69,7 +69,7 @@ public class BookmarkController {
     @GetMapping("/my-page/bookmark/{categoryId}")
     public String bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                @PathVariable Long categoryId, Model model) {
-        List<BookmarkResponseDto> bookmarkList = bookmarkService.findAllBookmarksByCategory(user, categoryId);
+        List<BookmarkResponseDto> bookmarkList = bookmarkService.findAllByCategory(user, categoryId);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("bookmarkList", bookmarkList);
         return "/user/bookmark-list";
@@ -81,7 +81,7 @@ public class BookmarkController {
                                                             @RequestBody NewBookmarkRequestDto dto) {
         log.info("bookmark");
         log.info(dto.toString());
-        List<BookmarkResponseDto> responseDto = bookmarkService.bookmarkRecruit(user, dto);
+        List<BookmarkResponseDto> responseDto = bookmarkService.bookmark(user, dto);
         return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
     }
 
@@ -89,7 +89,7 @@ public class BookmarkController {
     public String unbookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                              @PathVariable Long categoryId, @RequestParam Long bookmarkId,
                              Model model) {
-        List<BookmarkResponseDto> bookmarkList = bookmarkService.unbookmarkRecruit(user, categoryId, bookmarkId);
+        List<BookmarkResponseDto> bookmarkList = bookmarkService.unbookmark(user, categoryId, bookmarkId);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("bookmarkList", bookmarkList);
         return "user/bookmark-list :: bookmarkList";

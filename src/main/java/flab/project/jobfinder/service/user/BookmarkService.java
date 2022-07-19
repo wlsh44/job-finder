@@ -31,7 +31,7 @@ public class BookmarkService {
     private final CategoryService categoryService;
 
     @Transactional
-    public List<BookmarkResponseDto> bookmarkRecruit(User user, NewBookmarkRequestDto dto) {
+    public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
         List<String> categoryList = dto.getCategoryList();
         if (categoryList.isEmpty()) {
             throw new CreateBookmarkFailedException(dto, REQUIRED_AT_LEAST_ONE_CATEGORY);
@@ -50,7 +50,7 @@ public class BookmarkService {
     }
 
     @Transactional
-    public List<BookmarkResponseDto> unbookmarkRecruit(User user, Long categoryId, Long bookmarkId) {
+    public List<BookmarkResponseDto> unbookmark(User user, Long categoryId, Long bookmarkId) {
         if (!categoryService.existsByUserAndId(user, categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
@@ -68,7 +68,7 @@ public class BookmarkService {
         return toBookmarkResponseDtoList(category.getName(), category.getRecruits());
     }
 
-    public List<BookmarkResponseDto> findAllBookmarksByCategory(User user, Long categoryId) {
+    public List<BookmarkResponseDto> findAllByCategory(User user, Long categoryId) {
         Category category = categoryService.findByUserAndId(user, categoryId);
         List<Recruit> recruits = category.getRecruits();
         return toBookmarkResponseDtoList(category.getName(), recruits);
