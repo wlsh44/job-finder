@@ -4,11 +4,13 @@ import flab.project.jobfinder.dto.bookmark.*;
 import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
+import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.recruit.Tag;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.CategoryRepository;
 import flab.project.jobfinder.repository.RecruitRepository;
+import flab.project.jobfinder.repository.RecruitTagRepository;
 import flab.project.jobfinder.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class BookmarkService {
     private final RecruitRepository recruitRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final RecruitTagRepository recruitTagRepository;
 
     public List<CategoryResponseDto> findCategoriesByUser(User user) {
         List<Category> categoryList = categoryRepository.findAllByUser(user);
@@ -143,33 +146,52 @@ public class BookmarkService {
                 .orElseThrow(() -> new TaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
         List<String> newTagList = dto.getTagList();
 
-        newTagList.stream()
-                .map(tagName -> tagRepository.findByName(tagName)
+        List<Tag> tags = getTagsByBookmark(bookmark);
+
+        //태그 가져옴
+        //북마크의 recruitTag 리스트에서 태그 북마크 있는지 체크
+        List<TagDto> tagDtoList = newTagList.stream()
+                .map(tagName -> tagRepository.findByUserAndName(user, tagName)
                         .orElseThrow(() -> new TaggingFailedException(TAG_NOT_FOUND, tagName)))
-                .filter(tag -> !bookmark.getTags().contains(tag))
-                .forEach(tag -> bookmark.getTags().add(tag));
-        return getTagsDtoByBookmark(bookmark);
+                .filter(tag -> !tags.contains(tag))
+                .map(tag -> recruitTagRepository.save(RecruitTag.builder()
+                        .recruit(bookmark)
+                        .tag(tag)
+                        .build()))
+                .map(recruitTag -> new TagDto(recruitTag.getTag().getId(), recruitTag.getTag().getName()))
+                .collect(Collectors.toList());
+
+        return tagDtoList;
+    }
+
+    private List<Tag> getTagsByBookmark(Recruit bookmark) {
+        return bookmark.getRecruitTagList()
+                .stream()
+                .map(RecruitTag::getTag)
+                .toList();
     }
 
     @Transactional
-    public List<TagDto> untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
+    public void untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
         Recruit bookmark = recruitRepository.findById(bookmarkId)
                 .orElseThrow(() -> new UnTaggingFailedException(BOOKMARK_ID_NOT_FOUND, bookmarkId));
         Tag untag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
-        List<Tag> tags = bookmark.getTags();
-        if (!tags.contains(untag)) {
-            throw new UnTaggingFailedException(TAG_NOT_FOUND, tagId);
-        }
-
-        tags.remove(untag);
-        return getTagsDtoByBookmark(bookmark);
+        RecruitTag recruitTag = recruitTagRepository.findByRecruitAndTag(bookmark, untag)
+                .orElseThrow(() -> new UnTaggingFailedException(TAG_NOT_FOUND, tagId));
+        recruitTagRepository.delete(recruitTag);
     }
 
     @Transactional
-    public List<TagDto> removeTag(User user, Long tagId) {
-        
+    public void removeTag(User user, Long tagId) {
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RemoveTagFailedException(TAG_NOT_FOUND, tagId));
+        recruitTagRepository.deleteAllInBatch(tag.getRecruitTagList());
+        if (!tag.getUser().equals(user)) {
+            throw new RemoveTagFailedException(TAG_NOT_FOUND, tagId);
+        }
+        tagRepository.delete(tag);
     }
 
     public List<TagDto> findTagByUser(User user) {
@@ -179,8 +201,8 @@ public class BookmarkService {
     }
 
     private List<TagDto> getTagsDtoByBookmark(Recruit bookmark) {
-        return bookmark.getTags()
-                .stream()
+        List<Tag> tagList = getTagsByBookmark(bookmark);
+        return tagList.stream()
                 .map(TagDto::new)
                 .toList();
     }

@@ -35,12 +35,8 @@ public class Recruit {
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Recruit_Tag",
-            joinColumns = @JoinColumn(name = "recruit_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private List<Tag> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "recruit")
+    private List<RecruitTag> recruitTagList = new ArrayList<>();
 
     @Column(nullable = false, columnDefinition = "TINYINT")
     private boolean isAlwaysRecruiting;

@@ -27,6 +27,6 @@ public class Tag {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<Recruit> recruits = new ArrayList<>();
+    @OneToMany(mappedBy = "tag")
+    private List<RecruitTag> recruitTagList = new ArrayList<>();
 }

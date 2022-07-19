@@ -108,7 +108,7 @@ public class BookmarkController {
         return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagList);
     }
 
-    @GetMapping("/tag")
+    @GetMapping("/bookmark/tag")
     public String getBookmarkTags(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                   Model model) {
         List<TagDto> tagList = bookmarkService.findTagByUser(user);
@@ -117,10 +117,19 @@ public class BookmarkController {
     }
 
     @ResponseBody
-    @DeleteMapping("/tag")
+    @DeleteMapping("/bookmark/tag")
     public ResponseDto<List<TagDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                                @RequestBody @Valid UnTagRequestDto dto, @RequestParam Long bookmarkId) {
-        List<TagDto> tagList = bookmarkService.untagging(user, dto, bookmarkId);
-        return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), tagList);
+        bookmarkService.untagging(user, dto, bookmarkId);
+        return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), null);
+    }
+
+    @DeleteMapping("/tag")
+    public String removeTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                            @RequestParam Long tagId, Model model) {
+        bookmarkService.removeTag(user, tagId);
+        List<TagDto> tagList = bookmarkService.findTagByUser(user);
+        model.addAttribute("tagList", tagList);
+        return "user/bookmark-list :: tagList";
     }
 }
