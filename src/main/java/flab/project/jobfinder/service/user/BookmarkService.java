@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
@@ -59,8 +58,8 @@ public class BookmarkService {
             throw new BookmarkException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId);
         }
 
-        Recruit bookmark = getBookmarkById(bookmarkId,
-                () -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Recruit bookmark = recruitRepository.findById(bookmarkId)
+                .orElseThrow(() -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         Category category = bookmark.getCategory();
 
         if (!category.getId().equals(categoryId)) {
@@ -86,11 +85,6 @@ public class BookmarkService {
                 .map(recruit -> new BookmarkResponseDto(recruit.getId(), categoryName,
                         new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
                 .toList();
-    }
-
-    private Recruit getBookmarkById(Long bookmarkId, Supplier<? extends RuntimeException> e) {
-        return recruitRepository.findById(bookmarkId)
-                .orElseThrow(e);
     }
 
     private List<TagDto> getTagsDtoByBookmark(Recruit bookmark) {

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.bookmark.TagResponseCode.*;
@@ -52,8 +51,8 @@ public class TagService {
 
     @Transactional
     public List<TagDto> tag(User user, Long bookmarkId, TaggingRequestDto dto) {
-        Recruit bookmark = recruitRepository.findById(bookmarkId).orElseThrow(
-                () -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Recruit bookmark = recruitRepository.findById(bookmarkId)
+                .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         List<String> newTagList = dto.getTagList();
 
         List<TagDto> tagDtoList = newTagList.stream()
@@ -76,7 +75,8 @@ public class TagService {
 
     @Transactional
     public void delete(User user, Long tagId) {
-        Tag tag = getTagById(tagId, () -> new TagException(FAILED_DELETE_TAG, TAG_NOT_FOUND, tagId));
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new TagException(FAILED_DELETE_TAG, TAG_NOT_FOUND, tagId));
         recruitTagRepository.deleteAllInBatch(tag.getRecruitTagList());
         if (!tag.getUser().equals(user)) {
             throw new TagException(FAILED_DELETE_TAG, TAG_NOT_FOUND, tagId);
@@ -97,10 +97,5 @@ public class TagService {
                 .recruit(bookmark)
                 .tag(tag)
                 .build();
-    }
-
-    private Tag getTagById(Long tagId, Supplier<? extends RuntimeException> e) {
-        return tagRepository.findById(tagId)
-                .orElseThrow(e);
     }
 }
