@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -49,7 +50,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult, HttpServletRequest request) {
+    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult, HttpServletRequest request,
+                        @RequestParam(defaultValue = "/") String redirectURL) {
         if (bindingResult.hasErrors()) {
             log.info("login errors={}", bindingResult);
             return "login";
@@ -58,7 +60,7 @@ public class LoginController {
 
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_SESSION_ID, loginUser);
-        return "redirect:/";
+        return "redirect:" + redirectURL;
     }
 
     @GetMapping("/logout")

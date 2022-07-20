@@ -14,7 +14,7 @@
         <h2>로그인</h2>
     </div>
 
-    <form action="" th:object="${loginFormDto}" method="post">
+    <form action="" th:action th:object="${loginFormDto}" method="post">
 
         <div class="row">
             <div class="field-error" th:if="${loginFailed != null}" th:text="${loginFailed}"></div>

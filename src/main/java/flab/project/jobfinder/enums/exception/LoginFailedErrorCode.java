@@ -1,6 +1,6 @@
 package flab.project.jobfinder.enums.exception;
 
-public enum LoginFailedErrorCode {
+public enum LoginFailedErrorCode implements ErrorCode {
 
     NOT_EXISTS_USER("존재하지 않는 유저"),
     WRONG_PASSWORD("비밀번호 틀림");
@@ -11,6 +11,7 @@ public enum LoginFailedErrorCode {
         this.errorMsg = errorMsg;
     }
 
+    @Override
     public String errorMsg() {
         return errorMsg;
     }

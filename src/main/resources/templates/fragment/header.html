@@ -4,11 +4,13 @@
             <div class = "header">
                 <div class="header-menu">
                     <div th:if="${user != null}">
+                        <a th:href="@{/}">홈</a>
                         <span th:text="|${user.name} 님|"></span>
                         <a th:href="@{/user/my-page}">마이페이지</a>
                         <a th:href="@{/logout}">로그아웃</a>
                     </div>
                     <div th:unless="${user != null}">
+                        <a th:href="@{/}">홈</a>
                         <a th:href="@{/login}">로그인</a>
                         <a th:href="@{/sign-up}">회원가입</a>
                     </div>

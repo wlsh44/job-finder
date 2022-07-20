@@ -23,4 +23,8 @@ public enum Platform {
     public static Map<String, String> getKoreaNameMap() {
         return map;
     }
+
+    public static Platform of(String koreaName) {
+        return Platform.valueOf(map.get(koreaName));
+    }
 }
