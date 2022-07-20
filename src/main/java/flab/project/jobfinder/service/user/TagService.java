@@ -9,7 +9,6 @@ import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.recruit.Tag;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.*;
-import flab.project.jobfinder.repository.RecruitRepository;
 import flab.project.jobfinder.repository.RecruitTagRepository;
 import flab.project.jobfinder.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +27,10 @@ import static flab.project.jobfinder.enums.exception.TagErrorCode.TAG_NOT_FOUND;
 @RequiredArgsConstructor
 public class TagService {
 
-    private final RecruitRepository recruitRepository;
     private final TagRepository tagRepository;
     private final RecruitTagRepository recruitTagRepository;
+
+    private final BookmarkService bookmarkService;
 
     @Transactional
     public List<TagDto> create(User user, NewTagRequestDto dto) {
@@ -51,8 +51,8 @@ public class TagService {
 
     @Transactional
     public List<TagDto> tag(User user, Long bookmarkId, TaggingRequestDto dto) {
-        Recruit bookmark = recruitRepository.findById(bookmarkId)
-                .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Recruit bookmark = bookmarkService.findById(bookmarkId,
+                () -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         List<String> newTagList = dto.getTagList();
 
         List<TagDto> tagDtoList = newTagList.stream()
