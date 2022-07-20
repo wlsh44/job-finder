@@ -40,6 +40,7 @@ public class User {
     private List<Tag> tags = new ArrayList<>();
 
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate

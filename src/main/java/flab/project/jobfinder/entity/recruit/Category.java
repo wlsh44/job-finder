@@ -12,10 +12,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(
-        uniqueConstraints =
-        @UniqueConstraint(name = "UniqueUserCategory", columnNames = {"user_id", "name"})
-)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +25,7 @@ public class Category {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)

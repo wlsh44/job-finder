@@ -18,10 +18,10 @@ public class RecruitTag {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "recruit_id")
+    @JoinColumn(name = "recruit_id", nullable = false)
     private Recruit recruit;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id")
+    @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 }

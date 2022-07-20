@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Recruit {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -32,16 +33,16 @@ public class Recruit {
     private Platform platform;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "recruit")
     private List<RecruitTag> recruitTagList = new ArrayList<>();
 
-    @Column(nullable = false, columnDefinition = "TINYINT")
+    @Column(nullable = false)
     private boolean isAlwaysRecruiting;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column
     private LocalDate dueDate;
 
     @Column(length = 20, nullable = false)
