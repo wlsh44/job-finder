@@ -23,10 +23,6 @@ public class Tag {
     @Column(length = 20)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @OneToMany(mappedBy = "tag")
     private List<RecruitTag> recruitTagList = new ArrayList<>();
 }

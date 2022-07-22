@@ -19,6 +19,7 @@
         title varchar(255) not null,
         url varchar(255) not null,
         category_id bigint not null,
+        user_id bigint not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -32,7 +33,6 @@
     create table tag (
        id bigint not null auto_increment,
         name varchar(20),
-        user_id bigint not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -50,32 +50,33 @@
        add constraint UniqueUserCategory unique (user_id, name);
 
     alter table user 
-       add constraint UK_ob8kqyqqgmefl0aco34akdtpe unique (email);
+       add constraint UK_email unique (email);
 
     alter table user 
-       add constraint UK_kiqfjabx9puw3p1eg7kily8kg unique (password);
+       add constraint UK_password unique (password);
 
     alter table category 
-       add constraint FKpfk8djhv5natgshmxiav6xkpu 
+       add constraint FK_categoryUser
        foreign key (user_id) 
        references user (id);
 
     alter table recruit 
-       add constraint FKa9e0dndfl31gli9na0vh3b20c 
+       add constraint FK_recruitCategory
        foreign key (category_id) 
        references category (id);
 
+    alter table recruit
+        add constraint FK_recruitUser
+            foreign key (user_id)
+                references user (id);
+
     alter table recruit_tag 
-       add constraint FKelwb3nmj9ngwt4p959nb6478n 
+       add constraint FK_tagRecruit
        foreign key (recruit_id) 
        references recruit (id);
 
     alter table recruit_tag 
-       add constraint FK70a55wyf8xfl8nyehxicoe8vu 
+       add constraint FK_recruitTag
        foreign key (tag_id) 
        references tag (id);
 
-    alter table tag 
-       add constraint FKld85w5kr7ky5w4wda3nrdo0p8 
-       foreign key (user_id) 
-       references user (id);

@@ -1,6 +1,7 @@
 package flab.project.jobfinder.entity.recruit;
 
 import flab.project.jobfinder.converter.PlatformConverter;
+import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.enums.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,10 @@ public class Recruit {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "recruit")
     private List<RecruitTag> recruitTagList = new ArrayList<>();
