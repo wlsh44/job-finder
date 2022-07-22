@@ -30,7 +30,7 @@ public class Recruit {
     private String url;
 
     @Column(length = 20, nullable = false)
-    @Convert(converter = PlatformConverter.class)
+    @Enumerated(EnumType.STRING)
     private Platform platform;
 
     @ManyToOne
