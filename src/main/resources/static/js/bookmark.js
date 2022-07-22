@@ -125,19 +125,6 @@ function deleteBookmark(deleteId, categoryId) {
     });
 }
 
-function popTagOpen(recruit) {
-    if (!isUserExists) {
-        alert("로그인이 필요합니다.");
-        window.location.href = "/login";
-    }
-    console.log(recruit);
-    bookmarkNum = recruit;
-
-    $('#bookmark-modal').modal('show');
-
-    getTagList();
-}
-
 function getTagList() {
     $.ajax({
         type: "GET",
@@ -148,73 +135,48 @@ function getTagList() {
     });
 }
 
-function rollbackTagModalFooter() {
-    const addButton = '<button type="button" id="new-tag-button" class="btn btn-primary" onClick="createTagForm()">새 태그</button>' +
-        '<button type="button" id="add-tag-button" class="btn btn-primary" onClick="addTag()">태그 추가</button>';
-    $("#tag-footer").html(addButton);
+function rollbackTagBtn(bookmarkId) {
+    const addButton = `<button class="btn btn-secondary btn-sm" id="tag-btn${bookmarkId}"` +
+                              ` onclick="addTagForm(${bookmarkId})">+</button>`
+
+    $("#add-tag").replaceWith(addButton);
 }
 
-function createTagForm() {
-    const createTag = '<div id="create-tag">' +
-        '<input type="text" id="create-tag-input">' +
-        '<button class="btn btn-secondary" onclick="rollbackTagModalFooter()">취소</button>' +
-        '<button id="create-tag" class="btn btn-primary" onclick="createTag()">저장</button>' +
+function addTagForm(bookmarkId) {
+    if (!isUserExists) {
+        alert("로그인이 필요합니다.");
+        window.location.href = "/login";
+    }
+    const createTag = `<div id="add-tag${bookmarkId}">` +
+        `<input type="text" id="add-tag-input${bookmarkId}">` +
+        `<button class="btn btn-secondary btn-sm" onclick="rollbackTagBtn(${bookmarkId})">취소</button>` +
+        `<button id="add-tag${bookmarkId}" class="btn btn-primary btn-sm" onclick="addTag(${bookmarkId})">저장</button>` +
         '</div>';
-    $("#tag-footer").html(createTag);
+    $(`#tag-btn${bookmarkId}`).replaceWith(createTag);
 }
 
-function createTag() {
-    const name = $("#create-tag-input").val();
+function addTag(bookmarkId) {
+    const name = $(`#add-tag-input${bookmarkId}`).val();
 
-    const newTagRequestDto = {
-        name: name
+    const taggingRequestDto = {
+        tagName: name
     };
+
+    console.log(taggingRequestDto)
 
     $.ajax({
         type: "POST",
-        url: `/tag`,
-        data: newTagRequestDto
+        url: `/tag?bookmarkId=${bookmarkId}`,
+        contentType: "application/json",
+        data: JSON.stringify(taggingRequestDto)
     }).done(function (fragment) {
-        $("#tagList").replaceWith(fragment);
+        window.location.reload();
     }).fail(function (xhr, status) {
         console.log(xhr);
         alert(xhr.responseJSON["message"]);
     });
 
-    rollbackTagModalFooter();
-}
-
-function addTag() {
-    let arr = [];
-    $(".tag-input").map(function (idx, ele) {
-        if ($(ele).is(":checked")) {
-            const tagName = $(ele).next("label").text().trim();
-            arr.push(tagName);
-        }
-    });
-
-    for (const arrElement of arr) {
-        console.log(arrElement);
-    }
-
-    const taggingRequestDto = {
-        "tagList": arr
-    };
-    console.log(taggingRequestDto);
-
-    $.ajax({
-        type: "PUT",
-        url: `/tag?bookmarkId=${bookmarkNum}`,
-        contentType: "application/json",
-        data: JSON.stringify(taggingRequestDto)
-    }).done(function (fragment) {
-        alert("태그가 추가되었습니다.");
-        window.location.reload();
-        popClose();
-    }).fail(function (data) {
-        console.log(data);
-        alert("태그 추가에 실패했습니다.");
-    });
+    rollbackTagBtn(bookmarkId);
 }
 
 function untag(bookmarkNum, tagId) {
@@ -236,17 +198,4 @@ function untag(bookmarkNum, tagId) {
         alert("태그 삭제에 실패했습니다.");
         window.location.reload();
     })
-}
-
-function removeTag(tagId) {
-    $.ajax({
-        type: "DELETE",
-        url: `/tag?tagId=${tagId}`
-    }).done(function (fragment) {
-        alert("태그가 삭제되었습니다.");
-        $("#tagList").replaceWith(fragment);
-    }).fail(function (data) {
-        console.log(data);
-        alert("태그 삭제에 실패했습니다.");
-    });
 }

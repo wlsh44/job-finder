@@ -32,7 +32,7 @@
                         <span  th:text="|${tag.name} |"></span>
                         <a th:onclick="untag([[${bookmark.id}]], [[${tag.id}]])" th:text="'x'"></a>
                     </span>
-                    <button class="btn btn-secondary btn-sm" th:onclick="popTagOpen([[${bookmark.id}]])" th:text="'+'"></button>
+                    <button class="btn btn-secondary btn-sm" th:id="|tag-btn${bookmark.id}|" th:onclick="addTagForm([[${bookmark.id}]])" th:text="'+'"></button>
                 </div>
             </td>
             <td>
@@ -40,40 +40,6 @@
             </td>
         </tr>
     </table>
-</div>
-
-<div class="modal fade" id="bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="tagModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tagModal">태그 선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="tagList" th:fragment="tagList">
-                    <table class="table">
-                        <tr th:each="tag : ${tagList}" class="tag-list">
-                            <td>
-                                <input type="checkbox" class="tag-input">
-                                <label class="tag-label">
-                                    [[${tag.name}]]
-                                </label>
-                            </td>
-                            <td>
-                                <a th:onclick="removeTag([[${tag.id}]])" th:text="x" style="cursor: pointer"></a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer" id="tag-footer">
-                <button type="button" id="new-tag-button" class="btn btn-primary" onclick="createTagForm()">새 태그</button>
-                <button type="button" id="add-tag-button" class="btn btn-primary" onclick="addTag()">태그 추가</button>
-            </div>
-        </div>
-    </div>
 </div>
 <script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
 <script type="text/javascript" th:inline="javascript">
