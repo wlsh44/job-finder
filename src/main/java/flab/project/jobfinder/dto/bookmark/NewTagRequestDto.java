@@ -15,10 +15,9 @@ public class NewTagRequestDto {
     @Size(max = 20)
     private String name;
 
-    public Tag toEntity(User user) {
+    public Tag toEntity() {
         return Tag.builder()
                 .name(name)
-                .user(user)
                 .build();
     }
 }

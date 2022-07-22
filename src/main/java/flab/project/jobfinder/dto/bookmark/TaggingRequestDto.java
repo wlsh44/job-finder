@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class TaggingRequestDto {
-    private List<String> tagList;
+    private String tagName;
 }

@@ -2,6 +2,7 @@ package flab.project.jobfinder.dto.recruit;
 
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
+import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.enums.Platform;
 import lombok.*;
 
@@ -38,7 +39,7 @@ public class RecruitDto {
         this.platform = recruit.getPlatform().koreaName();
     }
 
-    public Recruit toEntity(Category category) {
+    public Recruit toEntity(Category category, User user) {
         return Recruit.builder()
                 .title(title)
                 .url(url)
@@ -50,6 +51,7 @@ public class RecruitDto {
                 .platform(Platform.of(platform))
                 .jobType(jobType)
                 .category(category)
+                .user(user)
                 .recruitTagList(new ArrayList<>())
                 .build();
     }

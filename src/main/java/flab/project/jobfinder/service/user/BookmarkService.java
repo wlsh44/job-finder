@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
@@ -45,7 +46,7 @@ public class BookmarkService {
             Category category = categoryService.findByUserAndName(user, categoryName,
                     () -> new BookmarkException(FAILED_CREATE_BOOKMARK, CATEGORY_NAME_NOT_FOUND, categoryName));
             RecruitDto recruitDto = dto.getRecruitDto();
-            Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category));
+            Recruit savedRecruit = recruitRepository.save(recruitDto.toEntity(category, user));
             responseDtoList.add(new BookmarkResponseDto(savedRecruit.getId(), categoryName,
                     new RecruitDto(savedRecruit), getTagsDtoByBookmark(savedRecruit)));
         }
@@ -59,8 +60,8 @@ public class BookmarkService {
             throw new BookmarkException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId);
         }
 
-        Recruit bookmark = findById(bookmarkId,
-                () -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+        Recruit bookmark = findById(user, bookmarkId)
+                .orElseThrow(() -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
         Category category = bookmark.getCategory();
 
         if (!category.getId().equals(categoryId)) {
@@ -88,9 +89,8 @@ public class BookmarkService {
                 .toList();
     }
 
-    public Recruit findById(Long bookmarkId, Supplier<? extends RuntimeException> e) {
-        return recruitRepository.findById(bookmarkId)
-                .orElseThrow(e);
+    public Optional<Recruit> findById(User user, Long bookmarkId) {
+        return Optional.ofNullable(recruitRepository.findByUserAndId(user, bookmarkId));
     }
 
     private List<TagDto> getTagsDtoByBookmark(Recruit bookmark) {

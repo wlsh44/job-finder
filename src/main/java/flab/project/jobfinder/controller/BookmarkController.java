@@ -95,45 +95,23 @@ public class BookmarkController {
         return "user/bookmark-list :: bookmarkList";
     }
 
-    @PostMapping("/tag")
-    public String createTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                            @Valid NewTagRequestDto dto, Model model) {
-        List<TagDto> responseDtoList = tagService.create(user, dto);
-        model.addAttribute("tagList", responseDtoList);
-        return "user/bookmark-list :: tagList";
-    }
-
     @ResponseBody
-    @PutMapping("/tag")
-    public ResponseDto<List<TagDto>> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+    @PostMapping("/tag")
+    public ResponseDto<TagDto> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                           @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
         log.info(dto.toString());
-        List<TagDto> tagList = tagService.tag(user, bookmarkId, dto);
-        return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagList);
-    }
-
-    @GetMapping("/bookmark/tag")
-    public String getBookmarkTags(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                                  Model model) {
-        List<TagDto> tagList = tagService.findTagByUser(user);
-        model.addAttribute("tagList", tagList);
-        return "user/bookmark-list :: tagList";
+        TagDto tagDto = tagService.tag(user, bookmarkId, dto);
+        return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagDto);
     }
 
     @ResponseBody
     @DeleteMapping("/bookmark/tag")
     public ResponseDto<List<TagDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                                @RequestBody @Valid UnTagRequestDto dto, @RequestParam Long bookmarkId) {
-        tagService.untag(user, dto, bookmarkId);
+        int remainTagCnt = tagService.untag(user, dto, bookmarkId);
+        if (remainTagCnt == 0) {
+            tagService.remove(dto);
+        }
         return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), null);
-    }
-
-    @DeleteMapping("/tag")
-    public String removeTag(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                            @RequestParam Long tagId, Model model) {
-        tagService.delete(user, tagId);
-        List<TagDto> tagList = tagService.findTagByUser(user);
-        model.addAttribute("tagList", tagList);
-        return "user/bookmark-list :: tagList";
     }
 }
