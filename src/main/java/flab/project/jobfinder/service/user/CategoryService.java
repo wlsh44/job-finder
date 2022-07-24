@@ -34,6 +34,9 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponseDto create(User user, NewCategoryRequestDto dto) {
+        if (categoryRepository.countByUser(user) > 10) {
+            throw new CategoryException(FAILED_CREATE_CATEGORY, TOO_MANY_CATEGORIES);
+        }
         if (categoryRepository.existsByUserAndName(user, dto.getName())) {
             throw new CategoryException(FAILED_CREATE_CATEGORY, ALREADY_EXISTS_CATEGORY);
         }
