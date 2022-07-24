@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.bookmark.CategoryResponseCode.*;
@@ -33,37 +33,33 @@ public class CategoryService {
     }
 
     @Transactional
-    public List<CategoryResponseDto> create(User user, NewCategoryRequestDto dto) {
+    public CategoryResponseDto create(User user, NewCategoryRequestDto dto) {
         if (categoryRepository.existsByUserAndName(user, dto.getName())) {
             throw new CategoryException(FAILED_CREATE_CATEGORY, ALREADY_EXISTS_CATEGORY);
         }
 
-        categoryRepository.save(dto.toEntity(user));
-        return findAllByUser(user);
+        Category saveCategory = categoryRepository.save(dto.toEntity(user));
+        return new CategoryResponseDto(saveCategory);
     }
 
     @Transactional
-    public List<CategoryResponseDto> delete(User user, Long categoryId) {
+    public void delete(User user, Long categoryId) {
         Category category = categoryRepository.findByUserAndId(user, categoryId)
                 .orElseThrow(() -> new CategoryException(FAILED_DELETE_CATEGORY, CATEGORY_ID_NOT_FOUND, categoryId));
-
         category.getRecruits()
                 .forEach(recruit -> recruitTagRepository.deleteAllInBatch(recruit.getRecruitTagList()));
         categoryRepository.deleteById(categoryId);
-        return findAllByUser(user);
     }
 
     public boolean existsByUserAndId(User user, Long categoryId) {
         return categoryRepository.existsByUserAndId(user, categoryId);
     }
 
-    public Category findByUserAndName(User user, String name, Supplier<? extends RuntimeException> e) {
-        return categoryRepository.findByUserAndName(user, name)
-                .orElseThrow(e);
+    public Optional<Category> findByUserAndName(User user, String name) {
+        return categoryRepository.findByUserAndName(user, name);
     }
 
-    public Category findByUserAndId(User user, Long id, Supplier<? extends RuntimeException> e) {
-        return categoryRepository.findByUserAndId(user, id)
-                .orElseThrow(e);
+    public Optional<Category> findByUserAndId(User user, Long id) {
+        return categoryRepository.findByUserAndId(user, id);
     }
 }

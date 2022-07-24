@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static flab.project.jobfinder.enums.bookmark.TagResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.TagErrorCode.ALREADY_EXISTS_TAG;
@@ -29,11 +26,11 @@ public class TagService {
     private final TagRepository tagRepository;
     private final RecruitTagRepository recruitTagRepository;
 
-    private final BookmarkService bookmarkService;
+    private final RecruitService recruitService;
 
     @Transactional
     public TagDto tag(User user, Long bookmarkId, TaggingRequestDto dto) {
-        Recruit bookmark = bookmarkService.findById(user, bookmarkId)
+        Recruit bookmark = recruitService.findById(user, bookmarkId)
                 .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
         String tagName = dto.getTagName();
@@ -47,7 +44,7 @@ public class TagService {
     }
 
     @Transactional
-    public int untag(User user, UnTagRequestDto dto, Long bookmarkId) {
+    public TagDto untag(User user, UnTagRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
         RecruitTag recruitTag = recruitTagRepository.findByRecruit_IdAndTag_Id(bookmarkId, tagId)
                 .orElseThrow(() -> new TagException(FAILED_UNTAGGING, TAG_NOT_FOUND, tagId));
@@ -57,12 +54,15 @@ public class TagService {
         }
 
         recruitTagRepository.delete(recruitTag);
-        return recruitTagRepository.countByTag_Id(tagId);
+        return new TagDto(recruitTag.getTag());
+    }
+
+    public int countByTag(TagDto tagDto) {
+        return recruitTagRepository.countByTag_Id(tagDto.getId());
     }
 
     @Transactional
-    public long remove(UnTagRequestDto dto) {
-        Long tagId = Long.valueOf(dto.getTagId());
+    public long remove(Long tagId) {
         return tagRepository.removeById(tagId);
     }
 
