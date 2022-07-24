@@ -1,6 +1,5 @@
 package flab.project.jobfinder.entity.recruit;
 
-import flab.project.jobfinder.converter.PlatformConverter;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.enums.Platform;
 import lombok.AllArgsConstructor;
