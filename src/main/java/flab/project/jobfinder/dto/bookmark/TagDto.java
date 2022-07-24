@@ -13,6 +13,9 @@ public class TagDto {
     private String name;
 
     public TagDto(Tag tag) {
+        if (tag == null) {
+            throw new IllegalArgumentException();
+        }
         this.id = tag.getId();
         this.name = tag.getName();
     }

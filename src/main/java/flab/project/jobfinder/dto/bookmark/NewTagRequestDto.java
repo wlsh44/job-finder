@@ -1,7 +1,5 @@
 package flab.project.jobfinder.dto.bookmark;
 
-import flab.project.jobfinder.entity.recruit.Tag;
-import flab.project.jobfinder.entity.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +12,4 @@ public class NewTagRequestDto {
     @NotBlank
     @Size(max = 20)
     private String name;
-
-    public Tag toEntity() {
-        return Tag.builder()
-                .name(name)
-                .build();
-    }
 }

@@ -51,4 +51,11 @@ public class BookmarkControllerAdvice {
         log.error(e.getMessage());
         return new ResponseDto<>(HttpStatus.BAD_REQUEST, e.getMessage(), null);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String illegalArgumentException(IllegalArgumentException e) {
+        log.error(e.getMessage());
+        return "/";
+    }
 }

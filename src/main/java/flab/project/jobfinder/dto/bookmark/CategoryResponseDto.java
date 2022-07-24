@@ -13,6 +13,9 @@ public class CategoryResponseDto {
     private String name;
 
     public CategoryResponseDto(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException();
+        }
         this.id = category.getId();
         this.name = category.getName();
     }

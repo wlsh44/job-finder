@@ -15,6 +15,9 @@ public class NewCategoryRequestDto {
     private String name;
 
     public Category toEntity(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException();
+        }
         return Category.builder()
                 .user(user)
                 .name(name)
