@@ -32,7 +32,6 @@ public class RecruitService {
     private final RecruitRepository recruitRepository;
     private final BookmarkPagination bookmarkPagination;
 
-
     @Transactional
     public List<BookmarkResponseDto> bookmark(User user, RecruitDto recruitDto, List<Category> categoryList) {
         if (categoryList.isEmpty()) {
@@ -47,9 +46,7 @@ public class RecruitService {
 
     @Transactional
     public long unbookmark(Recruit bookmark) {
-        Category category = bookmark.getCategory();
         recruitRepository.delete(bookmark);
-        category.getRecruits().remove(bookmark);
         return bookmark.getId();
     }
 
@@ -58,7 +55,6 @@ public class RecruitService {
         List<BookmarkResponseDto> bookmarkList = page.get()
                 .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
                 .toList();
-        log.info("page.totalPage: " + page.getTotalPages());
         PageDto pageDto = bookmarkPagination.toPageDto(page);
         return BookmarkPageDto.builder()
                 .bookmarkList(bookmarkList)

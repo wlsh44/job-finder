@@ -91,8 +91,6 @@ public class BookmarkController {
     @PostMapping("/bookmark")
     public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                                                             @RequestBody NewBookmarkRequestDto dto) {
-        log.info("bookmark");
-        log.info(dto.toString());
         List<BookmarkResponseDto> responseDto = bookmarkService.bookmark(user, dto);
         return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
     }
@@ -121,7 +119,6 @@ public class BookmarkController {
     @PostMapping("/tag")
     public ResponseDto<TagDto> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                           @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
-        log.info(dto.toString());
         TagDto tagDto = bookmarkService.tagging(user, dto, bookmarkId);
         return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagDto);
     }
