@@ -36,10 +36,29 @@
                 </div>
             </td>
             <td>
-                <button class="btn btn-secondary" th:onclick="deleteBookmark([[${bookmark.id}]], [[${categoryId}]])" th:text="'x'"></button>
+                <button class="btn btn-secondary" th:onclick="deleteBookmark([[${bookmark.id}]], [[${categoryId}]], [[${currentPage}]])" th:text="'x'"></button>
             </td>
         </tr>
     </table>
+    <nav style="text-align: center;">
+        <ul class="pagination" th:with="lastPage=(${startPage + 9 < totalPage ? startPage + 9 : totalPage})">
+            <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${1}} + '\''" th:text="First"></button>
+            </li>
+            <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${currentPage - 1}} + '\''" th:text="Prev"></button>
+            </li>
+            <li th:each="page: ${#numbers.sequence(startPage, lastPage)}" class="page-item">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${page}} + '\''" th:classappend="${page == currentPage} ? 'btn-primary'" th:text="${page}"></button>
+            </li>
+            <li class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${currentPage + 1}} + '\''" th:text="Next"></button>
+            </li>
+            <li th:class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${totalPage}} + '\''" th:text="Last"></button>
+            </li>
+        </ul>
+    </nav>
 </div>
 <script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
 <script type="text/javascript" th:inline="javascript">

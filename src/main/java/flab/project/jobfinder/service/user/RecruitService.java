@@ -1,6 +1,7 @@
 package flab.project.jobfinder.service.user;
 
 import flab.project.jobfinder.dto.bookmark.*;
+import flab.project.jobfinder.dto.page.PageDto;
 import flab.project.jobfinder.dto.recruit.RecruitDto;
 import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
@@ -8,8 +9,11 @@ import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.RecruitRepository;
+import flab.project.jobfinder.service.user.pagination.BookmarkPagination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,8 @@ import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
 public class RecruitService {
 
     private final RecruitRepository recruitRepository;
+    private final BookmarkPagination bookmarkPagination;
+
 
     @Transactional
     public List<BookmarkResponseDto> bookmark(User user, RecruitDto recruitDto, List<Category> categoryList) {
@@ -35,8 +41,7 @@ public class RecruitService {
 
         return categoryList.stream()
                 .map(category -> recruitRepository.save(recruitDto.toEntity(category, user)))
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), recruit.getCategory().getName(),
-                        new RecruitDto(recruit), null))
+                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), null))
                 .collect(Collectors.toList());
     }
 
@@ -48,17 +53,17 @@ public class RecruitService {
         return bookmark.getId();
     }
 
-    public List<BookmarkResponseDto> findAllByCategory(User user, Category category) {
-        List<Recruit> recruits = category.getRecruits();
-        return toBookmarkResponseDtoList(category.getName(), recruits);
-    }
-
-    private List<BookmarkResponseDto> toBookmarkResponseDtoList(String categoryName, List<Recruit> recruits) {
-        return recruits
-                .stream()
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), categoryName,
-                        new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
+    public BookmarkPageDto findAllByCategory(User user, Long categoryId, Pageable pageable) {
+        Page<Recruit> page = recruitRepository.findByUserAndCategory_Id(user, categoryId, pageable);
+        List<BookmarkResponseDto> bookmarkList = page.get()
+                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
                 .toList();
+        log.info("page.totalPage: " + page.getTotalPages());
+        PageDto pageDto = bookmarkPagination.toPageDto(page);
+        return BookmarkPageDto.builder()
+                .bookmarkList(bookmarkList)
+                .pageDto(pageDto)
+                .build();
     }
 
     public Optional<Recruit> findById(User user, Long bookmarkId) {

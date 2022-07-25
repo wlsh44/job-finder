@@ -112,9 +112,9 @@ function bookmarkRecruit() {
     })
 }
 
-function deleteBookmark(deleteId, categoryId) {
+function deleteBookmark(deleteId, categoryId, currentPage) {
     $.ajax({
-        url: `/my-page/bookmark/${categoryId}?bookmarkId=${deleteId}`,
+        url: `/my-page/bookmark/${categoryId}?bookmarkId=${deleteId}&page=${currentPage}`,
         type: "DELETE",
     }).done(function (fragment) {
         alert("삭제되었습니다.");

@@ -7,6 +7,7 @@ import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.BookmarkException;
 import flab.project.jobfinder.exception.bookmark.CategoryException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,10 +43,8 @@ public class BookmarkService {
         return categoryService.findAllByUser(user);
     }
 
-    public List<BookmarkResponseDto> findAllBookmarkByCategory(User user, Long categoryId) {
-        Category category = categoryService.findByUserAndId(user, categoryId)
-                .orElseThrow(() -> new BookmarkException(FAILED_GET_BOOKMARKS, CATEGORY_ID_NOT_FOUND, categoryId));
-        return recruitService.findAllByCategory(user, category);
+    public BookmarkPageDto findAllBookmarkByCategory(User user, Long categoryId, Pageable pageable) {
+        return recruitService.findAllByCategory(user, categoryId, pageable);
     }
 
     public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
@@ -58,15 +57,13 @@ public class BookmarkService {
         return recruitService.bookmark(user, dto.getRecruitDto(), categoryList);
     }
 
-    public List<BookmarkResponseDto> unbookmark(User user, Long categoryId, Long bookmarkId) {
-        Category category = categoryService.findByUserAndId(user, categoryId)
-                .orElseThrow(() -> new BookmarkException(FAILED_GET_BOOKMARKS, CATEGORY_ID_NOT_FOUND, categoryId));
+    public BookmarkPageDto unbookmark(User user, Long categoryId, Long bookmarkId, Pageable pageable) {
         Recruit bookmark = recruitService.findByCategoryIdAndBookmarkId(user, categoryId, bookmarkId)
                 .orElseThrow(() -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
         tagService.deleteAllRecruitTag(bookmark);
         recruitService.unbookmark(bookmark);
-        return recruitService.findAllByCategory(user, category);
+        return recruitService.findAllByCategory(user, categoryId, pageable);
     }
 
     public TagDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {

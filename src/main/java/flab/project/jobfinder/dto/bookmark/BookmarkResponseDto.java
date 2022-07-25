@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class BookmarkResponseDto {
     private Long id;
-    private String categoryName;
     private RecruitDto recruitDto;
     private List<TagDto> tagList;
 }

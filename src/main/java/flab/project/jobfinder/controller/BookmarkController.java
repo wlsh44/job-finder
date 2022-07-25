@@ -1,6 +1,7 @@
 package flab.project.jobfinder.controller;
 
 import flab.project.jobfinder.dto.bookmark.*;
+import flab.project.jobfinder.dto.page.PageDto;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
 import flab.project.jobfinder.service.user.RecruitService;
@@ -8,6 +9,9 @@ import flab.project.jobfinder.service.user.CategoryService;
 import flab.project.jobfinder.service.user.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +31,8 @@ import static flab.project.jobfinder.enums.bookmark.TagResponseCode.UNTAGGING;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
+
+    private static final int PAGE_OFFSET = 1;
 
     @PostMapping("/category")
     public String createCategory(
@@ -63,10 +69,21 @@ public class BookmarkController {
 
     @GetMapping("/my-page/bookmark/{categoryId}")
     public String bookmarkList(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                               @PathVariable Long categoryId, Model model) {
-        List<BookmarkResponseDto> bookmarkList = bookmarkService.findAllBookmarkByCategory(user, categoryId);
+                               @PathVariable Long categoryId, Model model, @RequestParam(required = false) Integer page) {
+        if (page == null || page < PAGE_OFFSET) {
+            page = PAGE_OFFSET;
+        }
+        //JPA 페이징 처리를 0부터 하기 때문에 -1 처리
+        Pageable pageable = PageRequest.of(page - PAGE_OFFSET, 20);
+
+        BookmarkPageDto bookmarkPageDto = bookmarkService.findAllBookmarkByCategory(user, categoryId, pageable);
+        PageDto pageDto = bookmarkPageDto.getPageDto();
+
         model.addAttribute("categoryId", categoryId);
-        model.addAttribute("bookmarkList", bookmarkList);
+        model.addAttribute("bookmarkList", bookmarkPageDto.getBookmarkList());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("startPage", pageDto.getStartPage());
+        model.addAttribute("totalPage", pageDto.getTotalPage());
         return "/user/bookmark-list";
     }
 
@@ -83,12 +100,20 @@ public class BookmarkController {
     @DeleteMapping("/my-page/bookmark/{categoryId}")
     public String unbookmark(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
                              @PathVariable Long categoryId, @RequestParam Long bookmarkId,
-                             Model model) {
-        //TODO
-        //unbookmark 했을 때 태그 없으면 삭제하도록 수정
-        List<BookmarkResponseDto> bookmarkList = bookmarkService.unbookmark(user, categoryId, bookmarkId);
+                             @RequestParam(required = false) Integer page, Model model) {
+        if (page == null || page < PAGE_OFFSET) {
+            page = PAGE_OFFSET;
+        }
+        Pageable pageable = PageRequest.of(page - PAGE_OFFSET, 20);
+
+        BookmarkPageDto bookmarkPageDto = bookmarkService.unbookmark(user, categoryId, bookmarkId, pageable);
+        PageDto pageDto = bookmarkPageDto.getPageDto();
+
         model.addAttribute("categoryId", categoryId);
-        model.addAttribute("bookmarkList", bookmarkList);
+        model.addAttribute("bookmarkList", bookmarkPageDto.getBookmarkList());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("startPage", pageDto.getStartPage());
+        model.addAttribute("totalPage", pageDto.getTotalPage());
         return "user/bookmark-list :: bookmarkList";
     }
 
