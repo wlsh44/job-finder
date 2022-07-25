@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecruitRepository extends JpaRepository<Recruit, Long> {
     Recruit findByUserAndId(User user, Long id);
+    Recruit findByUserAndCategory_IdAndId(User user, Long categoryId, Long bookmarkId);
 }
