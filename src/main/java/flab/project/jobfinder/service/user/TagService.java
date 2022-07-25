@@ -44,26 +44,36 @@ public class TagService {
     }
 
     @Transactional
-    public TagDto untag(User user, UnTagRequestDto dto, Long bookmarkId) {
+    public long untag(User user, UnTagRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
         RecruitTag recruitTag = recruitTagRepository.findByRecruit_IdAndTag_Id(bookmarkId, tagId)
                 .orElseThrow(() -> new TagException(FAILED_UNTAGGING, TAG_NOT_FOUND, tagId));
+
         User bookmarkUser = recruitTag.getRecruit().getUser();
         if (!user.equals(bookmarkUser)) {
             throw new TagException(FAILED_UNTAGGING, BOOKMARK_ID_NOT_FOUND, tagId);
         }
 
         recruitTagRepository.delete(recruitTag);
-        return new TagDto(recruitTag.getTag());
-    }
-
-    public int countByTag(TagDto tagDto) {
-        return recruitTagRepository.countByTag_Id(tagDto.getId());
+        return recruitTag.getId();
     }
 
     @Transactional
-    public long remove(Long tagId) {
-        return tagRepository.removeById(tagId);
+    public long deleteAllRecruitTag(Recruit bookmark) {
+        recruitTagRepository.deleteAllInBatch(bookmark.getRecruitTagList());
+        bookmark.getRecruitTagList()
+                .stream()
+                .map(RecruitTag::getTag)
+                .forEach(tag -> removeIfTaggedOnlyOneBookmark(tag.getId()));
+        return 0;
+    }
+
+    @Transactional
+    public long removeIfTaggedOnlyOneBookmark(Long tagId) {
+        if (recruitTagRepository.countByTag_Id(tagId) == 0) {
+            tagRepository.deleteById(tagId);
+        }
+        return tagId;
     }
 
     private RecruitTag makeRecruitTag(Recruit bookmark, String tagName) {

@@ -1,15 +1,20 @@
 package flab.project.jobfinder.service.user;
 
 import flab.project.jobfinder.dto.bookmark.*;
+import flab.project.jobfinder.entity.recruit.Category;
+import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.BookmarkException;
+import flab.project.jobfinder.exception.bookmark.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.FAILED_CREATE_BOOKMARK;
+import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
+import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_ID_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -29,30 +34,39 @@ public class BookmarkService {
     }
 
     public List<CategoryResponseDto> deleteCategory(User user, Long categoryId) {
-        //TODO
-        categoryService.delete(user, categoryId);
+        Category category = categoryService.findByUserAndId(user, categoryId)
+                .orElseThrow(() -> new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId));
+        category.getRecruits()
+                .forEach(tagService::deleteAllRecruitTag);
+        categoryService.delete(categoryId);
         return categoryService.findAllByUser(user);
     }
 
     public List<BookmarkResponseDto> findAllBookmarkByCategory(User user, Long categoryId) {
-        return recruitService.findAllByCategory(user, categoryId);
+        Category category = categoryService.findByUserAndId(user, categoryId)
+                .orElseThrow(() -> new BookmarkException(FAILED_GET_BOOKMARKS, CATEGORY_ID_NOT_FOUND, categoryId));
+        return recruitService.findAllByCategory(user, category);
     }
 
     public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
-        if (dto.getCategoryList().isEmpty()) {
+        List<String> categoryNameList = dto.getCategoryList();
+        if (categoryNameList.isEmpty()) {
             throw new BookmarkException(FAILED_CREATE_BOOKMARK, REQUIRED_AT_LEAST_ONE_CATEGORY);
         }
 
-        return recruitService.bookmark(user, dto);
+        List<Category> categoryList = categoryService.findByNameIn(dto.getCategoryList());
+        return recruitService.bookmark(user, dto.getRecruitDto(), categoryList);
     }
 
     public List<BookmarkResponseDto> unbookmark(User user, Long categoryId, Long bookmarkId) {
-        BookmarkResponseDto unbookmark = recruitService.unbookmark(user, categoryId, bookmarkId);
-        List<TagDto> tagList = unbookmark.getTagList();
-        tagList.stream()
-                .filter(tagDto -> tagService.countByTag(tagDto) == 0)
-                .forEach(tagDto -> tagService.remove(tagDto.getId()));
-        return recruitService.findAllByCategory(user, categoryId);
+        Category category = categoryService.findByUserAndId(user, categoryId)
+                .orElseThrow(() -> new BookmarkException(FAILED_GET_BOOKMARKS, CATEGORY_ID_NOT_FOUND, categoryId));
+        Recruit bookmark = recruitService.findByCategoryIdAndBookmarkId(user, categoryId, bookmarkId)
+                .orElseThrow(() -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+
+        tagService.deleteAllRecruitTag(bookmark);
+        recruitService.unbookmark(bookmark);
+        return recruitService.findAllByCategory(user, category);
     }
 
     public TagDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {
@@ -60,9 +74,7 @@ public class BookmarkService {
     }
 
     public void untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
-        TagDto untag = tagService.untag(user, dto, bookmarkId);
-        if (tagService.countByTag(untag) == 0) {
-            tagService.remove(Long.valueOf(dto.getTagId()));
-        }
+        tagService.untag(user, dto, bookmarkId);
+        tagService.removeIfTaggedOnlyOneBookmark(Long.valueOf(dto.getTagId()));
     }
 }
