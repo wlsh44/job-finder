@@ -26,7 +26,7 @@ public class CategoryService {
     private static final int MAXIMUM_CATEGORY_NUM = 10;
 
     public List<CategoryResponseDto> findAllByUser(User user) {
-        List<Category> categoryList = categoryRepository.findAllByUser(user);
+        List<Category> categoryList = categoryRepository.findByUser(user);
         return categoryList.stream()
                 .map(CategoryResponseDto::new)
                 .collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class CategoryService {
     }
 
     public List<Category> findByNameIn(List<String> categoryNameList) {
-        return categoryRepository.findAllByNameIn(categoryNameList);
+        return categoryRepository.findByNameIn(categoryNameList);
     }
 
     public boolean existsByUserAndId(User user, Long categoryId) {
@@ -59,10 +59,10 @@ public class CategoryService {
     }
 
     public Optional<Category> findByUserAndName(User user, String name) {
-        return categoryRepository.findByUserAndName(user, name);
+        return categoryRepository.findCategory(user, name);
     }
 
     public Optional<Category> findByUserAndId(User user, Long id) {
-        return categoryRepository.findByUserAndId(user, id);
+        return categoryRepository.findCategory(user, id);
     }
 }

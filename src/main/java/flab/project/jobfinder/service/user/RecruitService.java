@@ -50,8 +50,8 @@ public class RecruitService {
         return bookmark.getId();
     }
 
-    public BookmarkPageDto findAllByCategory(User user, Long categoryId, Pageable pageable) {
-        Page<Recruit> page = recruitRepository.findByUserAndCategory_Id(user, categoryId, pageable);
+    public BookmarkPageDto findByCategory(User user, Long categoryId, Pageable pageable) {
+        Page<Recruit> page = recruitRepository.findRecruits(user, categoryId, pageable);
         List<BookmarkResponseDto> bookmarkList = page.get()
                 .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
                 .toList();
@@ -63,11 +63,11 @@ public class RecruitService {
     }
 
     public Optional<Recruit> findById(User user, Long bookmarkId) {
-        return Optional.ofNullable(recruitRepository.findByUserAndId(user, bookmarkId));
+        return Optional.ofNullable(recruitRepository.findRecruit(user, bookmarkId));
     }
 
     public Optional<Recruit> findByCategoryIdAndBookmarkId(User user, Long categoryId, Long bookmarkId) {
-        return Optional.ofNullable(recruitRepository.findByUserAndCategory_IdAndId(user, categoryId, bookmarkId));
+        return Optional.ofNullable(recruitRepository.findRecruit(user, categoryId, bookmarkId));
     }
 
     private List<TagResponseDto> getTagsDtoByBookmark(Recruit bookmark) {

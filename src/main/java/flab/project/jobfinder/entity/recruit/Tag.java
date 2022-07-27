@@ -1,6 +1,5 @@
 package flab.project.jobfinder.entity.recruit;
 
-import flab.project.jobfinder.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Tag {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 20)

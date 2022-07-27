@@ -9,6 +9,7 @@ import flab.project.jobfinder.exception.bookmark.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class BookmarkService {
     private final RecruitService recruitService;
     private final TagService tagService;
 
+    @Transactional
     public List<CategoryResponseDto> createCategory(User user, NewCategoryRequestDto dto) {
         categoryService.create(user, dto);
         return categoryService.findAllByUser(user);
@@ -34,6 +36,7 @@ public class BookmarkService {
         return categoryService.findAllByUser(user);
     }
 
+    @Transactional
     public List<CategoryResponseDto> deleteCategory(User user, Long categoryId) {
         Category category = categoryService.findByUserAndId(user, categoryId)
                 .orElseThrow(() -> new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId));
@@ -44,9 +47,10 @@ public class BookmarkService {
     }
 
     public BookmarkPageDto findBookmarkByCategory(User user, Long categoryId, Pageable pageable) {
-        return recruitService.findAllByCategory(user, categoryId, pageable);
+        return recruitService.findByCategory(user, categoryId, pageable);
     }
 
+    @Transactional
     public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
         List<String> categoryNameList = dto.getCategoryList();
         if (categoryNameList.isEmpty()) {
@@ -57,19 +61,22 @@ public class BookmarkService {
         return recruitService.bookmark(user, dto.getRecruitDto(), categoryList);
     }
 
+    @Transactional
     public BookmarkPageDto unbookmark(User user, Long categoryId, Long bookmarkId, Pageable pageable) {
         Recruit bookmark = recruitService.findByCategoryIdAndBookmarkId(user, categoryId, bookmarkId)
                 .orElseThrow(() -> new BookmarkException(FAILED_DELETE_BOOKMARK, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
         tagService.deleteAllRecruitTag(bookmark);
         recruitService.unbookmark(bookmark);
-        return recruitService.findAllByCategory(user, categoryId, pageable);
+        return recruitService.findByCategory(user, categoryId, pageable);
     }
 
+    @Transactional
     public TagResponseDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {
         return tagService.tag(user, bookmarkId, dto);
     }
 
+    @Transactional
     public void untagging(User user, UnTaggingRequestDto dto, Long bookmarkId) {
         tagService.untag(user, dto, bookmarkId);
         tagService.removeIfTaggedOnlyOneBookmark(Long.valueOf(dto.getTagId()));

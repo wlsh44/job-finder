@@ -34,7 +34,7 @@ public class TagService {
                 .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
         String tagName = dto.getTagName();
-        if (recruitTagRepository.existsByRecruit_IdAndTag_Name(bookmarkId, tagName)) {
+        if (recruitTagRepository.existsRecruitTag(bookmarkId, tagName)) {
             throw new TagException(FAILED_TAGGING, ALREADY_EXISTS_TAG);
         }
 
@@ -46,7 +46,7 @@ public class TagService {
     @Transactional
     public long untag(User user, UnTaggingRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
-        RecruitTag recruitTag = recruitTagRepository.findByRecruit_IdAndTag_Id(bookmarkId, tagId)
+        RecruitTag recruitTag = recruitTagRepository.findRecruitTag(bookmarkId, tagId)
                 .orElseThrow(() -> new TagException(FAILED_UNTAGGING, TAG_NOT_FOUND, tagId));
 
         User bookmarkUser = recruitTag.getRecruit().getUser();
@@ -70,7 +70,7 @@ public class TagService {
 
     @Transactional
     public long removeIfTaggedOnlyOneBookmark(Long tagId) {
-        if (recruitTagRepository.countByTag_Id(tagId) == 0) {
+        if (recruitTagRepository.countRecruitTag(tagId) == 0) {
             tagRepository.deleteById(tagId);
         }
         return tagId;
