@@ -4,12 +4,8 @@ import flab.project.jobfinder.dto.bookmark.*;
 import flab.project.jobfinder.dto.page.PageDto;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.service.user.BookmarkService;
-import flab.project.jobfinder.service.user.RecruitService;
-import flab.project.jobfinder.service.user.CategoryService;
-import flab.project.jobfinder.service.user.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,9 +26,9 @@ import static flab.project.jobfinder.enums.bookmark.TagResponseCode.UNTAGGING;
 @RequiredArgsConstructor
 public class BookmarkController {
 
-    private final BookmarkService bookmarkService;
-
     private static final int PAGE_OFFSET = 1;
+
+    private final BookmarkService bookmarkService;
 
     @PostMapping("/category")
     public String createCategory(
