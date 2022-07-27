@@ -13,7 +13,7 @@ public class BookmarkPagination {
 
     public PageDto toPageDto(Page<Recruit> page) {
         if (page == null) {
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
         }
         return PageDto.builder()
                 .totalPage(getTotalPage(page.getTotalPages()))

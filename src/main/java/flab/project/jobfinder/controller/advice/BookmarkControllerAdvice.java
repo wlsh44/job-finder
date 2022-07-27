@@ -53,8 +53,8 @@ public class BookmarkControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String illegalArgumentException(IllegalArgumentException e) {
+    @ExceptionHandler(NullPointerException.class)
+    public String nullPointException(NullPointerException e) {
         log.error(e.getMessage());
         return "/";
     }

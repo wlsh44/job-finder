@@ -14,7 +14,7 @@ public class TagDto {
 
     public TagDto(Tag tag) {
         if (tag == null) {
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
         }
         this.id = tag.getId();
         this.name = tag.getName();

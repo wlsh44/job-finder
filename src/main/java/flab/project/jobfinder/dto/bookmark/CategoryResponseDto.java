@@ -14,7 +14,7 @@ public class CategoryResponseDto {
 
     public CategoryResponseDto(Category category) {
         if (category == null) {
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
         }
         this.id = category.getId();
         this.name = category.getName();
