@@ -1,8 +1,8 @@
 package flab.project.jobfinder.service.user;
 
-import flab.project.jobfinder.dto.bookmark.TagDto;
+import flab.project.jobfinder.dto.bookmark.TagResponseDto;
 import flab.project.jobfinder.dto.bookmark.TaggingRequestDto;
-import flab.project.jobfinder.dto.bookmark.UnTagRequestDto;
+import flab.project.jobfinder.dto.bookmark.UnTaggingRequestDto;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.recruit.Tag;
@@ -29,7 +29,7 @@ public class TagService {
     private final RecruitService recruitService;
 
     @Transactional
-    public TagDto tag(User user, Long bookmarkId, TaggingRequestDto dto) {
+    public TagResponseDto tag(User user, Long bookmarkId, TaggingRequestDto dto) {
         Recruit bookmark = recruitService.findById(user, bookmarkId)
                 .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
@@ -40,11 +40,11 @@ public class TagService {
 
         RecruitTag recruitTag = makeRecruitTag(bookmark, tagName);
         RecruitTag saveRecruitTag = recruitTagRepository.save(recruitTag);
-        return new TagDto(saveRecruitTag.getTag());
+        return new TagResponseDto(saveRecruitTag.getTag());
     }
 
     @Transactional
-    public long untag(User user, UnTagRequestDto dto, Long bookmarkId) {
+    public long untag(User user, UnTaggingRequestDto dto, Long bookmarkId) {
         Long tagId = Long.valueOf(dto.getTagId());
         RecruitTag recruitTag = recruitTagRepository.findByRecruit_IdAndTag_Id(bookmarkId, tagId)
                 .orElseThrow(() -> new TagException(FAILED_UNTAGGING, TAG_NOT_FOUND, tagId));

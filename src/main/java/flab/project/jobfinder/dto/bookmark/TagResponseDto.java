@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TagDto {
+public class TagResponseDto {
     private Long id;
     private String name;
 
-    public TagDto(Tag tag) {
+    public TagResponseDto(Tag tag) {
         if (tag == null) {
             throw new NullPointerException();
         }

@@ -70,11 +70,11 @@ public class RecruitService {
         return Optional.ofNullable(recruitRepository.findByUserAndCategory_IdAndId(user, categoryId, bookmarkId));
     }
 
-    private List<TagDto> getTagsDtoByBookmark(Recruit bookmark) {
+    private List<TagResponseDto> getTagsDtoByBookmark(Recruit bookmark) {
         return bookmark.getRecruitTagList()
                 .stream()
                 .map(RecruitTag::getTag)
-                .map(TagDto::new)
+                .map(TagResponseDto::new)
                 .toList();
     }
 }

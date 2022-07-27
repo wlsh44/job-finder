@@ -8,7 +8,7 @@ import javax.validation.constraints.Positive;
 
 @Data
 @NoArgsConstructor
-public class UnTagRequestDto {
+public class UnTaggingRequestDto {
     @NotBlank
     @Positive
     private String tagId;

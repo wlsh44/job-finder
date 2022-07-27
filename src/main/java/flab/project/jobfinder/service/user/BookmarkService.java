@@ -43,7 +43,7 @@ public class BookmarkService {
         return categoryService.findAllByUser(user);
     }
 
-    public BookmarkPageDto findAllBookmarkByCategory(User user, Long categoryId, Pageable pageable) {
+    public BookmarkPageDto findBookmarkByCategory(User user, Long categoryId, Pageable pageable) {
         return recruitService.findAllByCategory(user, categoryId, pageable);
     }
 
@@ -66,11 +66,11 @@ public class BookmarkService {
         return recruitService.findAllByCategory(user, categoryId, pageable);
     }
 
-    public TagDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {
+    public TagResponseDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {
         return tagService.tag(user, bookmarkId, dto);
     }
 
-    public void untagging(User user, UnTagRequestDto dto, Long bookmarkId) {
+    public void untagging(User user, UnTaggingRequestDto dto, Long bookmarkId) {
         tagService.untag(user, dto, bookmarkId);
         tagService.removeIfTaggedOnlyOneBookmark(Long.valueOf(dto.getTagId()));
     }

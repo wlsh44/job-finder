@@ -72,7 +72,7 @@ public class BookmarkController {
         //JPA 페이징 처리를 0부터 하기 때문에 -1 처리
         Pageable pageable = PageRequest.of(page - PAGE_OFFSET, 20);
 
-        BookmarkPageDto bookmarkPageDto = bookmarkService.findAllBookmarkByCategory(user, categoryId, pageable);
+        BookmarkPageDto bookmarkPageDto = bookmarkService.findBookmarkByCategory(user, categoryId, pageable);
         PageDto pageDto = bookmarkPageDto.getPageDto();
 
         model.addAttribute("categoryId", categoryId);
@@ -113,16 +113,16 @@ public class BookmarkController {
 
     @ResponseBody
     @PostMapping("/tag")
-    public ResponseDto<TagDto> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                          @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
-        TagDto tagDto = bookmarkService.tagging(user, dto, bookmarkId);
+    public ResponseDto<TagResponseDto> tagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                               @RequestBody @Valid TaggingRequestDto dto, @RequestParam Long bookmarkId) {
+        TagResponseDto tagDto = bookmarkService.tagging(user, dto, bookmarkId);
         return new ResponseDto<>(HttpStatus.OK, TAGGING.message(), tagDto);
     }
 
     @ResponseBody
     @DeleteMapping("/bookmark/tag")
-    public ResponseDto<List<TagDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                                               @RequestBody @Valid UnTagRequestDto dto, @RequestParam Long bookmarkId) {
+    public ResponseDto<List<TagResponseDto>> untagging(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
+                                                       @RequestBody @Valid UnTaggingRequestDto dto, @RequestParam Long bookmarkId) {
         bookmarkService.untagging(user, dto, bookmarkId);
         return new ResponseDto<>(HttpStatus.OK, UNTAGGING.message(), null);
     }
