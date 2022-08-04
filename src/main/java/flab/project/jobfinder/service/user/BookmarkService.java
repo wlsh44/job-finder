@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
@@ -20,6 +21,7 @@ import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookmarkService {
 
     private final CategoryService categoryService;
@@ -50,7 +52,6 @@ public class BookmarkService {
         return recruitService.findByCategory(user, categoryId, pageable);
     }
 
-    @Transactional
     public List<BookmarkResponseDto> bookmark(User user, NewBookmarkRequestDto dto) {
         List<String> categoryNameList = dto.getCategoryList();
         if (categoryNameList.isEmpty()) {
@@ -58,7 +59,9 @@ public class BookmarkService {
         }
 
         List<Category> categoryList = categoryService.findByNameIn(dto.getCategoryList());
-        return recruitService.bookmark(user, dto.getRecruitDto(), categoryList);
+        return categoryList.stream()
+                .map(category -> recruitService.bookmark(user, dto.getRecruitDto(), category))
+                .collect(Collectors.toList());
     }
 
     @Transactional

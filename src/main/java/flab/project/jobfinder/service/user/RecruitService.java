@@ -7,7 +7,6 @@ import flab.project.jobfinder.entity.recruit.Category;
 import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.recruit.RecruitTag;
 import flab.project.jobfinder.entity.user.User;
-import flab.project.jobfinder.exception.bookmark.*;
 import flab.project.jobfinder.repository.RecruitRepository;
 import flab.project.jobfinder.service.user.pagination.BookmarkPagination;
 import lombok.RequiredArgsConstructor;
@@ -19,29 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
-import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RecruitService {
 
     private final RecruitRepository recruitRepository;
     private final BookmarkPagination bookmarkPagination;
 
-    @Transactional
-    public List<BookmarkResponseDto> bookmark(User user, RecruitDto recruitDto, List<Category> categoryList) {
-        if (categoryList.isEmpty()) {
-            throw new BookmarkException(FAILED_CREATE_BOOKMARK, REQUIRED_AT_LEAST_ONE_CATEGORY);
-        }
 
-        return categoryList.stream()
-                .map(category -> recruitRepository.save(recruitDto.toEntity(category, user)))
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), null))
-                .collect(Collectors.toList());
+    @Transactional
+    public BookmarkResponseDto bookmark(User user, RecruitDto recruitDto, Category category) {
+        Recruit bookmark = recruitRepository.save(recruitDto.toEntity(category, user));
+        return new BookmarkResponseDto(bookmark.getId(), new RecruitDto(bookmark), null);
     }
 
     @Transactional
