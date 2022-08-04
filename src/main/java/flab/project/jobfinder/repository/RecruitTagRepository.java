@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface RecruitTagRepository extends JpaRepository<RecruitTag, Long> {
-    @Query(value = "select * from RecruitTag as rt " +
+    @Query(value = "select * from Recruit_Tag as rt " +
             "left outer join Recruit r on rt.recruit_id = r.id " +
             "left outer join Tag t on rt.tag_id = t.id " +
             "where r.id = ?1 and t.name = ?2 limit 1", nativeQuery = true)
