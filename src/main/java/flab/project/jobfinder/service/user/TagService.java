@@ -34,7 +34,7 @@ public class TagService {
                 .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
 
         String tagName = dto.getTagName();
-        if (recruitTagRepository.existsRecruitTag(bookmarkId, tagName)) {
+        if (recruitTagRepository.existsByRecruit_IdAndTag_Name(bookmarkId, tagName)) {
             throw new TagException(FAILED_TAGGING, ALREADY_EXISTS_TAG);
         }
 
