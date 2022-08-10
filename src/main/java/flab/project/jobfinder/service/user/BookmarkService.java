@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
+import static flab.project.jobfinder.enums.exception.CategoryErrorCode.BOOKMARK_HAS_TAG;
 import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_ID_NOT_FOUND;
 
 @Service
@@ -38,12 +39,14 @@ public class BookmarkService {
         return categoryService.findAllByUser(user);
     }
 
-    @Transactional
     public List<CategoryResponseDto> deleteCategory(User user, Long categoryId) {
         Category category = categoryService.findByUserAndId(user, categoryId)
                 .orElseThrow(() -> new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId));
         category.getRecruits()
                 .forEach(tagService::deleteAllRecruitTag);
+        if (!category.getRecruits().isEmpty()) {
+            throw new CategoryException(FAILED_DELETE_BOOKMARK, BOOKMARK_HAS_TAG);
+        }
         categoryService.delete(categoryId);
         return categoryService.findAllByUser(user);
     }
