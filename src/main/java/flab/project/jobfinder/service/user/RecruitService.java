@@ -31,7 +31,7 @@ public class RecruitService {
     @Transactional
     public BookmarkResponseDto bookmark(User user, RecruitDto recruitDto, Category category) {
         Recruit bookmark = recruitRepository.save(recruitDto.toEntity(category, user));
-        return new BookmarkResponseDto(bookmark.getId(), new RecruitDto(bookmark), null);
+        return new BookmarkResponseDto(bookmark.getId(), new RecruitDto(bookmark), category.getName(), null);
     }
 
     @Transactional
@@ -43,7 +43,8 @@ public class RecruitService {
     public BookmarkPageDto findByCategory(User user, Long categoryId, Pageable pageable) {
         Page<Recruit> page = recruitRepository.findRecruits(user, categoryId, pageable);
         List<BookmarkResponseDto> bookmarkList = page.get()
-                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit), getTagsDtoByBookmark(recruit)))
+                .map(recruit -> new BookmarkResponseDto(recruit.getId(), new RecruitDto(recruit),
+                        recruit.getCategory().getName(), getTagsDtoByBookmark(recruit)))
                 .toList();
         PageDto pageDto = bookmarkPagination.toPageDto(page);
         return BookmarkPageDto.builder()

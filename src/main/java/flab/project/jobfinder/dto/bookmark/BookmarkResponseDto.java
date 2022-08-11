@@ -11,5 +11,6 @@ import java.util.List;
 public class BookmarkResponseDto {
     private Long id;
     private RecruitDto recruitDto;
+    private String categoryName;
     private List<TagResponseDto> tagList;
 }
