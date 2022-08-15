@@ -447,8 +447,10 @@ class BookmarkServiceTest {
             TaggingRequestDto dto = new TaggingRequestDto();
             dto.setTagName(tagName);
             TagResponseDto expect = new TagResponseDto(recruitTag1.getTag());
-            given(tagService.tag(user, bookmarkId, dto))
+            given(tagService.tag(recruit, dto))
                     .willReturn(expect);
+            given(recruitService.findById(user, bookmarkId))
+                    .willReturn(Optional.of(recruit));
 
             //when
             TagResponseDto tagging = bookmarkService.tagging(user, dto, bookmarkId);
@@ -465,8 +467,8 @@ class BookmarkServiceTest {
             Long bookmarkId = 1L;
             TaggingRequestDto dto = new TaggingRequestDto();
             dto.setTagName(tagName);
-            given(tagService.tag(user, bookmarkId, dto))
-                    .willThrow(new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+            given(recruitService.findById(user, bookmarkId))
+                    .willReturn(Optional.empty());
 
             //when then
             assertThatThrownBy(() -> bookmarkService.tagging(user, dto, bookmarkId))
@@ -482,8 +484,10 @@ class BookmarkServiceTest {
             Long bookmarkId = 1L;
             TaggingRequestDto dto = new TaggingRequestDto();
             dto.setTagName(tagName);
-            given(tagService.tag(user, bookmarkId, dto))
+            given(tagService.tag(recruit, dto))
                     .willThrow(new TagException(FAILED_TAGGING, ALREADY_EXISTS_TAG));
+            given(recruitService.findById(user, bookmarkId))
+                    .willReturn(Optional.of(recruit));
 
             //when then
             assertThatThrownBy(() -> bookmarkService.tagging(user, dto, bookmarkId))
