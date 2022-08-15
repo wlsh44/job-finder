@@ -58,11 +58,7 @@ public class CategoryService {
         return categoryRepository.existsByUserAndId(user, categoryId);
     }
 
-    public Optional<Category> findByUserAndName(User user, String name) {
-        return categoryRepository.findCategory(user, name);
-    }
-
-    public Optional<Category> findByUserAndId(User user, Long id) {
-        return categoryRepository.findCategory(user, id);
+    public Optional<Category> findByUserAndId(User user, Long categoryId) {
+        return categoryRepository.findCategory(user, categoryId);
     }
 }
