@@ -22,7 +22,6 @@ import static flab.project.jobfinder.enums.exception.CategoryErrorCode.CATEGORY_
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BookmarkService {
 
     private final CategoryService categoryService;
