@@ -6,6 +6,7 @@ import flab.project.jobfinder.entity.recruit.Recruit;
 import flab.project.jobfinder.entity.user.User;
 import flab.project.jobfinder.exception.bookmark.BookmarkException;
 import flab.project.jobfinder.exception.bookmark.CategoryException;
+import flab.project.jobfinder.exception.bookmark.TagException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.*;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.FAILED_TAGGING;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.REQUIRED_AT_LEAST_ONE_CATEGORY;
 import static flab.project.jobfinder.enums.exception.CategoryErrorCode.BOOKMARK_HAS_TAG;
@@ -78,7 +80,10 @@ public class BookmarkService {
 
     @Transactional
     public TagResponseDto tagging(User user, TaggingRequestDto dto, Long bookmarkId) {
-        return tagService.tag(user, bookmarkId, dto);
+        Recruit bookmark = recruitService.findById(user, bookmarkId)
+                .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
+
+        return tagService.tag(bookmark, dto);
     }
 
     @Transactional

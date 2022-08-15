@@ -26,15 +26,10 @@ public class TagService {
     private final TagRepository tagRepository;
     private final RecruitTagRepository recruitTagRepository;
 
-    private final RecruitService recruitService;
-
     @Transactional
-    public TagResponseDto tag(User user, Long bookmarkId, TaggingRequestDto dto) {
-        Recruit bookmark = recruitService.findById(user, bookmarkId)
-                .orElseThrow(() -> new TagException(FAILED_TAGGING, BOOKMARK_ID_NOT_FOUND, bookmarkId));
-
+    public TagResponseDto tag(Recruit bookmark, TaggingRequestDto dto) {
         String tagName = dto.getTagName();
-        if (recruitTagRepository.existsByRecruit_IdAndTag_Name(bookmarkId, tagName)) {
+        if (recruitTagRepository.existsByRecruit_IdAndTag_Name(bookmark.getId(), tagName)) {
             throw new TagException(FAILED_TAGGING, ALREADY_EXISTS_TAG);
         }
 
