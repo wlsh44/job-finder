@@ -45,9 +45,6 @@ public class BookmarkService {
                 .orElseThrow(() -> new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId));
         category.getRecruits()
                 .forEach(tagService::deleteAllRecruitTag);
-        if (!category.getRecruits().isEmpty()) {
-            throw new CategoryException(FAILED_DELETE_BOOKMARK, BOOKMARK_HAS_TAG);
-        }
         categoryService.delete(categoryId);
         return categoryService.findAllByUser(user);
     }
