@@ -33,7 +33,7 @@ public class BookmarkController {
     @PostMapping("/category")
     public String createCategory(
             @SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-            @Valid NewCategoryRequestDto requestDto, Model model) {
+            @RequestBody @Valid NewCategoryRequestDto requestDto, Model model) {
         List<CategoryResponseDto> categoryList = bookmarkService.createCategory(user, requestDto);
         model.addAttribute("categoryList", categoryList);
         return "job-find/recruits :: categoryList";
@@ -86,7 +86,7 @@ public class BookmarkController {
     @ResponseBody
     @PostMapping("/bookmark")
     public ResponseDto<List<BookmarkResponseDto>> bookmarkRecruit(@SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
-                                                            @RequestBody NewBookmarkRequestDto dto) {
+                                                            @RequestBody @Valid NewBookmarkRequestDto dto) {
         List<BookmarkResponseDto> responseDto = bookmarkService.bookmark(user, dto);
         return new ResponseDto<>(HttpStatus.OK, CREATE_BOOKMARK.message(), responseDto);
     }

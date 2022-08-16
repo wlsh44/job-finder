@@ -9,7 +9,6 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@AllArgsConstructor
 public class NewCategoryRequestDto {
     @NotBlank
     private String name;
