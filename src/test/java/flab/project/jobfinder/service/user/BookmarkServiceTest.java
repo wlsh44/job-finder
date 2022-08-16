@@ -119,7 +119,8 @@ class BookmarkServiceTest {
         void createCategoryTest() {
             //given
             String categoryName = "category";
-            NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+            NewCategoryRequestDto dto = new NewCategoryRequestDto();
+            dto.setName(categoryName);
             Category category = Category.builder()
                     .id(1L)
                     .user(user)
@@ -143,7 +144,8 @@ class BookmarkServiceTest {
         void createCategoryTest_AlreadyExistsCategory_Fail() {
             //given
             String categoryName = "category";
-            NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+            NewCategoryRequestDto dto = new NewCategoryRequestDto();
+            dto.setName(categoryName);
             given(categoryService.create(user, dto))
                     .willThrow(new CategoryException(FAILED_CREATE_BOOKMARK, ALREADY_EXISTS_CATEGORY));
 
@@ -158,7 +160,8 @@ class BookmarkServiceTest {
         void createCategoryTest_OverMaximumCategoryNum_Fail() {
             //given
             String categoryName = "category";
-            NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+            NewCategoryRequestDto dto = new NewCategoryRequestDto();
+            dto.setName(categoryName);
             given(categoryService.create(user, dto))
                     .willThrow(new CategoryException(FAILED_CREATE_BOOKMARK, TOO_MANY_CATEGORIES));
 

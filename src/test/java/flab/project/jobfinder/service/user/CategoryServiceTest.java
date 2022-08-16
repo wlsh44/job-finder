@@ -96,7 +96,8 @@ class CategoryServiceTest {
     void createCategoryTest() {
         //given
         String categoryName = "category";
-        NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+        NewCategoryRequestDto dto = new NewCategoryRequestDto();
+        dto.setName(categoryName);
         Category category = Category.builder()
                 .id(1L)
                 .user(user)
@@ -122,7 +123,8 @@ class CategoryServiceTest {
     void createCategoryTest_AlreadyExistCategoryName_Fail() {
         //given
         String categoryName = "category";
-        NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+        NewCategoryRequestDto dto = new NewCategoryRequestDto();
+        dto.setName(categoryName);
         given(categoryRepository.countByUser(user))
                 .willReturn(0);
         given(categoryRepository.existsByUserAndName(user, dto.getName()))
@@ -140,7 +142,8 @@ class CategoryServiceTest {
     void createCategoryTest_Fail() {
         //given
         String categoryName = "category";
-        NewCategoryRequestDto dto = new NewCategoryRequestDto(categoryName);
+        NewCategoryRequestDto dto = new NewCategoryRequestDto();
+        dto.setName(categoryName);
         given(categoryRepository.countByUser(user))
                 .willReturn(11);
 
