@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static flab.project.jobfinder.enums.bookmark.TagResponseCode.*;
 import static flab.project.jobfinder.enums.exception.BookmarkErrorCode.BOOKMARK_ID_NOT_FOUND;
 import static flab.project.jobfinder.enums.exception.TagErrorCode.ALREADY_EXISTS_TAG;
@@ -55,9 +57,9 @@ public class TagService {
 
     @Transactional
     public long deleteAllRecruitTag(Recruit bookmark) {
-        recruitTagRepository.deleteAllInBatch(bookmark.getRecruitTagList());
-        bookmark.getRecruitTagList()
-                .stream()
+        List<RecruitTag> recruitTagList = bookmark.getRecruitTagList();
+        recruitTagRepository.deleteAllInBatch(recruitTagList);
+        recruitTagList.stream()
                 .map(RecruitTag::getTag)
                 .forEach(tag -> removeIfTaggedOnlyOneBookmark(tag.getId()));
         return 0;
