@@ -185,11 +185,7 @@ class BookmarkServiceTest {
             List<CategoryResponseDto> responseDto = bookmarkService.deleteCategory(user, categoryId);
 
             //then
-            int id = 2;
-            for (CategoryResponseDto categoryResponseDto : responseDto) {
-                assertThat(categoryResponseDto.getId()).isEqualTo(id);
-                assertThat(categoryResponseDto.getName()).isEqualTo("category" + id++);
-            }
+            assertThat(responseDto).isEqualTo(categoryList);
         }
 
         @Test
@@ -197,13 +193,13 @@ class BookmarkServiceTest {
         void deleteCategoryTest_Fail() {
             //given
             Long categoryId = 1L;
-            given(categoryService.existsByUserAndId(user, categoryId))
-                    .willReturn(false);
+            given(categoryService.findByUserAndId(user, categoryId))
+                    .willReturn(Optional.empty());
 
             //when then
             assertThatThrownBy(() -> bookmarkService.deleteCategory(user, categoryId))
                     .isInstanceOf(CategoryException.class)
-                    .hasMessage(new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND).getMessage());
+                    .hasMessage(new CategoryException(FAILED_DELETE_BOOKMARK, CATEGORY_ID_NOT_FOUND, categoryId).getMessage());
         }
     }
 

@@ -93,7 +93,7 @@ class UserServiceTest {
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
-                    .hasMessage("회원가입에 실패: 이미 존재하는 유저입니다.");
+                    .hasMessage("회원가입 실패: 이미 존재하는 유저입니다.");
         }
 
         @Test
@@ -111,7 +111,7 @@ class UserServiceTest {
             //when then
             assertThatThrownBy(() -> userService.save(signUpFormDto))
                     .isInstanceOf(SignUpFailedException.class)
-                    .hasMessage("회원가입에 실패: 비밀번호가 일치하지 않습니다.");
+                    .hasMessage("회원가입 실패: 비밀번호가 일치하지 않습니다.");
         }
     }
 

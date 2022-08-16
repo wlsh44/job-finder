@@ -135,7 +135,7 @@ class RecruitServiceTest {
                 .recruitTagList(new ArrayList<>())
                 .build();
         category1.getRecruits().add(recruit2);
-        Pageable pageable = PageRequest.of(1, 20);
+        Pageable pageable = PageRequest.of(0, 20);
         Page<Recruit> page = new PageImpl<>(List.of(recruit, recruit2), pageable, 3);
         PageDto pageDto = PageDto.builder()
                 .totalPage(1)
@@ -155,7 +155,9 @@ class RecruitServiceTest {
         BookmarkPageDto result = recruitService.findByCategory(user, categoryId, pageable);
 
         //then
-        assertThat(result).isEqualTo(expect);
+        assertThat(result)
+                .usingRecursiveComparison()
+                .isEqualTo(expect);
     }
 
     @Test
