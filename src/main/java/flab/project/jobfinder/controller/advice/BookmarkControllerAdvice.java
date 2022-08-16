@@ -1,7 +1,6 @@
 package flab.project.jobfinder.controller.advice;
 
-import flab.project.jobfinder.dto.bookmark.CategoryResponseDto;
-import flab.project.jobfinder.dto.bookmark.ResponseDto;
+import flab.project.jobfinder.dto.bookmark.*;
 import flab.project.jobfinder.exception.bookmark.BookmarkException;
 import flab.project.jobfinder.exception.bookmark.CategoryException;
 import flab.project.jobfinder.exception.bookmark.TagException;
@@ -18,6 +17,8 @@ import java.util.List;
 import static flab.project.jobfinder.enums.bookmark.BookmarkResponseCode.FAILED_CREATE_BOOKMARK;
 import static flab.project.jobfinder.enums.bookmark.CategoryResponseCode.FAILED_CREATE_CATEGORY;
 import static flab.project.jobfinder.enums.bookmark.CategoryResponseCode.FAILED_GET_CATEGORIES;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.FAILED_TAGGING;
+import static flab.project.jobfinder.enums.bookmark.TagResponseCode.FAILED_UNTAGGING;
 
 @Slf4j
 @ResponseBody
@@ -40,9 +41,21 @@ public class BookmarkControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public ResponseDto<List<CategoryResponseDto>> bindingException(BindException e) {
+    public ResponseDto<Object> bindingException(BindException e) {
+        Object target = e.getBindingResult().getTarget();
+
         log.error(e.getMessage());
-        return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_CATEGORY.message(), null);
+        if (target instanceof NewCategoryRequestDto){
+            return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_CATEGORY.message(), null);
+        } else if (target instanceof NewBookmarkRequestDto) {
+            return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_CREATE_BOOKMARK.message(), null);
+        } else if (target instanceof TaggingRequestDto) {
+            return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_TAGGING.message(), null);
+        } else if (target instanceof UnTaggingRequestDto) {
+            return new ResponseDto<>(HttpStatus.BAD_REQUEST, FAILED_UNTAGGING.message(), null);
+        } else {
+            return new ResponseDto<>(HttpStatus.BAD_REQUEST, null, null);
+        }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
