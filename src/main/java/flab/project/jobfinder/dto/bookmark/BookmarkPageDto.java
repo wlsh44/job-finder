@@ -13,6 +13,6 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class BookmarkPageDto {
-    List<BookmarkResponseDto> bookmarkList;
-    PageDto pageDto;
+    private List<BookmarkResponseDto> bookmarkList;
+    private PageDto pageDto;
 }
