@@ -2,6 +2,7 @@ version: "3"
 
 services:
     mysqldb:
+        container_name: mysqldb
         image: mysql:5.7
         environment:
             - MYSQL_DATABASE=job_finder
@@ -15,7 +16,8 @@ services:
         restart: always
         volumes:
             - ./db:/var/lib/mysql
-    job-finder:
+    job-finder-app:
+        container_name: job-finder
         build: .
         environment:
             - MYSQL_HOST=mysqldb
