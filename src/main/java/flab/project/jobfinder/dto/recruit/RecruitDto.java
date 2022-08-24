@@ -1,14 +1,18 @@
 package flab.project.jobfinder.dto.recruit;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import flab.project.jobfinder.entity.recruit.Category;
+import flab.project.jobfinder.entity.recruit.Recruit;
+import flab.project.jobfinder.entity.user.User;
+import flab.project.jobfinder.enums.Platform;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Builder
-@ToString
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecruitDto {
     private String title;
     private String corp;
@@ -21,4 +25,34 @@ public class RecruitDto {
     private LocalDate dueDate;
     private boolean isAlwaysRecruiting;
     private String platform;
+
+    public RecruitDto(Recruit recruit) {
+        this.title = recruit.getTitle();
+        this.corp = recruit.getCorp();
+        this.url = recruit.getUrl();
+        this.location = recruit.getLocation();
+        this.techStack = recruit.getTechStack();
+        this.jobType = recruit.getJobType();
+        this.career = recruit.getCareer();
+        this.dueDate = recruit.getDueDate();
+        this.isAlwaysRecruiting = recruit.isAlwaysRecruiting();
+        this.platform = recruit.getPlatform().koreaName();
+    }
+
+    public Recruit toEntity(Category category, User user) {
+        return Recruit.builder()
+                .title(title)
+                .url(url)
+                .location(location)
+                .techStack(techStack)
+                .corp(corp)
+                .dueDate(dueDate)
+                .isAlwaysRecruiting(isAlwaysRecruiting)
+                .platform(Platform.of(platform))
+                .jobType(jobType)
+                .category(category)
+                .user(user)
+                .recruitTagList(new ArrayList<>())
+                .build();
+    }
 }
