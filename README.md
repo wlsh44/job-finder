@@ -44,8 +44,15 @@ job-finder
 
 # 실행
 
+
 ### 데이터베이스 세팅
 
 - `job_finder` 테이블 생성 -> src/main/java/resources/sql/ddl.sql 실행
 - application.properties에 맞게 user, password 설정
 
+
+### 도커 실행
+
+```
+docker-compose up
+```
