@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragment/head.html :: fragment-head"></div>
+    <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/tag.css}" rel="stylesheet" type="text/css">
+    <title>Job-Finder</title>
+</head>
+<body>
+<div class="container" style="max-width: 800px">
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <table class="table" id="bookmarkList" th:fragment="bookmarkList">
+        <tr th:each="bookmark, idx: ${bookmarkList}" th:with="recruit=${bookmark.recruitDto}">
+            <td>
+                <div th:text="${recruit.corp}"></div>
+                <div th:text="${recruit.platform}"></div>
+            </td>
+            <td>
+                <div>
+                    <a th:href="${recruit.url}" th:text="${recruit.title}" target="_blank"></a>
+                    <div>
+                        <span th:text="'| ' + ${recruit.location} + ' | '"></span>
+                        <span th:text="${recruit.jobType} + ' | '"></span>
+                        <span th:text="${recruit.career} + ' | '"></span>
+                        <span th:if="${recruit.isAlwaysRecruiting}">상시 채용</span>
+                        <span th:unless="${recruit.isAlwaysRecruiting}" th:text="'~' + ${recruit.getDueDate.getMonthValue} + '/' + ${recruit.getDueDate.getDayOfMonth}"></span>
+                    </div>
+                </div>
+                <div th:text="${recruit.techStack}"></div>
+                <div>
+                    <span th:each="tag: ${bookmark.tagList}" class="tag">
+                        <span  th:text="|${tag.name} |"></span>
+                        <a th:onclick="untag([[${bookmark.id}]], [[${tag.id}]])" th:text="'x'"></a>
+                    </span>
+                    <button class="btn btn-secondary btn-sm" th:id="|tag-btn${bookmark.id}|" th:onclick="addTagForm([[${bookmark.id}]])" th:text="'+'"></button>
+                </div>
+            </td>
+            <td>
+                <button class="btn btn-secondary" th:onclick="deleteBookmark([[${bookmark.id}]], [[${categoryId}]], [[${currentPage}]])" th:text="'x'"></button>
+            </td>
+        </tr>
+    </table>
+    <nav style="text-align: center;">
+        <ul class="pagination" th:with="lastPage=(${startPage + 9 < totalPage ? startPage + 9 : totalPage})">
+            <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${1}} + '\''" th:text="First"></button>
+            </li>
+            <li class="page-item" th:style="${currentPage == 1} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${currentPage - 1}} + '\''" th:text="Prev"></button>
+            </li>
+            <li th:each="page: ${#numbers.sequence(startPage, lastPage)}" class="page-item">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${page}} + '\''" th:classappend="${page == currentPage} ? 'btn-primary'" th:text="${page}"></button>
+            </li>
+            <li class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${currentPage + 1}} + '\''" th:text="Next"></button>
+            </li>
+            <li th:class="page-item" th:style="${currentPage == totalPage} ? 'display : none'">
+                <button class="btn" th:onclick="'location.href = \'' + @{'/my-page/bookmark/' + ${categoryId} + '?page=' + ${totalPage}} + '\''" th:text="Last"></button>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var isUserExists = [[ ${user != null} ]]
+    var bookmarkDtoList = [[ ${bookmarkDtoList} ]]
+</script>
+</body>

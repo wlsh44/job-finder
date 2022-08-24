@@ -1,8 +1,21 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="fragment-header">
-    <meta charset="UTF-8">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>form</title>
-</head>
-</html>
+<div th:fragment="fragment-header">
+    <div id="header">
+        <div class="container">
+            <div class = "header">
+                <div class="header-menu">
+                    <div th:if="${user != null}">
+                        <a th:href="@{/}">홈</a>
+                        <span th:text="|${user.name} 님|"></span>
+                        <a th:href="@{/user/my-page}">마이페이지</a>
+                        <a th:href="@{/logout}">로그아웃</a>
+                    </div>
+                    <div th:unless="${user != null}">
+                        <a th:href="@{/}">홈</a>
+                        <a th:href="@{/login}">로그인</a>
+                        <a th:href="@{/sign-up}">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

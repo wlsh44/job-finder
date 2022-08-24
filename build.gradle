@@ -29,6 +29,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.14.3'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'mysql:mysql-connector-java'
+    implementation 'org.springframework.security:spring-security-crypto:5.7.2'
 }
 
 tasks.named('test') {

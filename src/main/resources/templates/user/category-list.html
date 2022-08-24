@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragment/head.html :: fragment-head"></div>
+    <link th:href="@{/css/formError.css}" rel="stylesheet" type="text/css">
+    <title>Job-Finder</title>
+</head>
+<body>
+<div class="container" style="max-width: 800px">
+    <div th:replace="fragment/header.html :: fragment-header"></div>
+    <table id="categoryList" class="table" th:fragment="categoryList" >
+        <tr>
+            <th>카테고리</th>
+            <th style="width: 10%" ></th>
+        </tr>
+        <tr th:each="category : ${categoryList}">
+            <td>
+                <a th:href="@{'/my-page/bookmark/' + ${category.id}}" th:text="${category.name}"></a>
+            </td>
+            <td>
+                <button class="btn btn-secondary" th:onclick="deleteCategory([[${category.id}]])" th:text="'x'"></button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript" th:src="@{/js/bookmark.js}"></script>
+</body>

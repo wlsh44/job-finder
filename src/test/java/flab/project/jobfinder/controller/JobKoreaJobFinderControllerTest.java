@@ -1,14 +1,11 @@
 package flab.project.jobfinder.controller;
 
-import flab.project.jobfinder.dto.PageDto;
-import flab.project.jobfinder.dto.RecruitDto;
-import flab.project.jobfinder.dto.RecruitPageDto;
-import flab.project.jobfinder.dto.SearchFormDto;
-import flab.project.jobfinder.enums.CareerType;
-import flab.project.jobfinder.enums.Location;
-import flab.project.jobfinder.enums.PayType;
-import flab.project.jobfinder.enums.Platform;
-import flab.project.jobfinder.service.JobFindFactory;
+import flab.project.jobfinder.dto.page.PageDto;
+import flab.project.jobfinder.dto.recruit.RecruitDto;
+import flab.project.jobfinder.dto.page.RecruitPageDto;
+import flab.project.jobfinder.dto.form.SearchFormDto;
+import flab.project.jobfinder.enums.*;
+import flab.project.jobfinder.service.jobfind.JobFindFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -52,7 +50,7 @@ class JobKoreaJobFinderControllerTest {
         recruitDto = RecruitDto.builder()
                 .title("test title")
                 .jobType("test jobType")
-                .dueDate("test dueDate")
+                .dueDate(LocalDate.now())
                 .corp("test corp")
                 .career("test career")
                 .location("test loc")
