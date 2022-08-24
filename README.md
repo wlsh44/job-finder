@@ -49,10 +49,3 @@ job-finder
 - `job_finder` 테이블 생성 -> src/main/java/resources/sql/ddl.sql 실행
 - application.properties에 맞게 user, password 설정
 
-### 도커 실행
-
-```
-docker login
-docker pull k87913j/job-finder
-docker-compose up -d
-```
