@@ -78,7 +78,7 @@ public class RocketPunchQueryParamGenerator implements QueryParamGenerator {
         Integer payMax = pay.getPayMax();
         payParam.append(payMin * PAY_UNIT).append("-");
         if (payMax != null) {
-            payParam.append(payMax);
+            payParam.append(payMax * PAY_UNIT);
         }
         return payParam.toString();
     }

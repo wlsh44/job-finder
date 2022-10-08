@@ -84,7 +84,10 @@ public class RocketPunchParserService implements ParserService {
         if (dueDate == null || alwaysRecruit) {
             return null;
         }
-        return dueDateParser.parseDueDate(dueDate.text(), config.getDueDateFormat());
+        String dueDateStr = dueDate
+                .text()
+                .substring(0, 5);
+        return dueDateParser.parseDueDate(dueDateStr, config.getDueDateFormat());
     }
 
     private String parseCareer(Element recruitDetail) throws Exception {

@@ -80,7 +80,10 @@ public class JobKoreaParserService implements ParserService {
         if (optionElement == null || alwaysRecruit) {
             return null;
         }
-        String dueDateStr = optionElement.select("span.date").text();
+        String dueDateStr = optionElement
+                .select("span.date")
+                .text()
+                .substring(0, 6);
         return dueDateParser.parseDueDate(dueDateStr, config.getDueDateFormat());
     }
 

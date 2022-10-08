@@ -39,14 +39,14 @@ class DueDateParserTest {
     @DisplayName("모집 기간 내년인 경우")
     void parsingNextYearDueDateTest(String platform, String dueDateFormat, String platformDueDate) {
         //given
-        LocalDate lastSunday = LocalDate.now().with(TemporalAdjusters.previous(DayOfWeek.SUNDAY));
-        String dueDateStr = String.format(platformDueDate, lastSunday.getMonthValue(), lastSunday.getDayOfMonth());
+        LocalDate nextYear = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        String dueDateStr = String.format(platformDueDate, nextYear.getMonthValue(), nextYear.getDayOfMonth());
 
         //when
         LocalDate dueDate = dueDateParser.parseDueDate(dueDateStr, dueDateFormat);
 
         //then
-        assertThat(dueDate).isEqualTo(lastSunday.plusYears(1));
+        assertThat(dueDate).isEqualTo(nextYear.plusYears(1));
     }
 
     @ParameterizedTest(name = "{index} => {0}")
@@ -73,8 +73,8 @@ class DueDateParserTest {
 
     private Stream<Arguments> provideFormat() {
         return Stream.of(
-                Arguments.of("잡코리아 파싱", "~MM/dd(E)", "~%02d/%02d(일)"),
-                Arguments.of("로켓펀치 파싱", "MM/dd 마감", "%02d/%02d 마감")
+                Arguments.of("잡코리아 파싱", "MM/dd", "%02d/%02d"),
+                Arguments.of("로켓펀치 파싱", "MM/dd", "%02d/%02d")
         );
     }
 }
