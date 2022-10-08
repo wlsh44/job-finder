@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/category")
+    @PostMapping(value = "/category", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String createCategory(
             @SessionAttribute(name = LOGIN_SESSION_ID, required = false) User user,
             @RequestBody @Valid NewCategoryRequestDto requestDto, Model model) {
@@ -52,7 +53,7 @@ public class BookmarkController {
                                      Model model) {
         List<CategoryResponseDto> categoryList = bookmarkService.findAllCategoryByUser(user);
         model.addAttribute("categoryList", categoryList);
-        return "/user/category-list";
+        return "user/category-list";
     }
 
     @DeleteMapping("/my-page/bookmark/")
@@ -80,7 +81,7 @@ public class BookmarkController {
         model.addAttribute("currentPage", page);
         model.addAttribute("startPage", pageDto.getStartPage());
         model.addAttribute("totalPage", pageDto.getTotalPage());
-        return "/user/bookmark-list";
+        return "user/bookmark-list";
     }
 
     @ResponseBody

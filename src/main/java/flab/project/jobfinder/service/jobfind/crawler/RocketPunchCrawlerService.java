@@ -26,7 +26,7 @@ public class RocketPunchCrawlerService implements CrawlerService {
     @Override
     public Document crawl(DetailedSearchDto dto, int pageNum) {
         URI uri = makeUri(dto, pageNum);
-
+        log.info("url = {}", uri);
         try {
             String htmlTemplate = webClient
                     .get()
@@ -49,9 +49,6 @@ public class RocketPunchCrawlerService implements CrawlerService {
         rocketPunchQueryParamGenerator.toQueryParams(dto, pageNum)
                                         .forEach((key, value) -> value
                                                 .forEach(param -> uriBuilder.queryParam(key, param)));
-
-        log.info("url = {}", url);
-
         return uriBuilder.build().encode().toUri();
     }
 
